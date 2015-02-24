@@ -1,0 +1,5 @@
+/*
+
+This script is intended for INSEAD
+
+*/

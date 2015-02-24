@@ -1,0 +1,39 @@
+<!-- Styling of the page -->
+<style type="text/css"></style>
+<!-- Content of the page -->
+<div class="row">
+	<div class="col-md-8 col-md-offset-2">
+		<p></p>
+		<form id="surveyPage1">
+			<div class="form-group">
+				<label for="formCompany">What is the name of the venture that you have founded or the name of the venture that you are currently working for? (e.g. &#34;<b>APPLE COMPUTERS</b>&#34;)</label>
+				<input type="text" class="form-control" id="formCompany" name="fomrCompany" placeholder="Enter your company name">
+			</div>
+			<center><button class="btn btn-success btn-block" id="nextPage">Next</button></center>
+		</form>
+	</div>
+</div>
+<!-- Script of the page -->
+<script>
+jQuery.validator.setDefaults({
+  debug: true,
+  success: "valid"
+});
+
+$("#nextPage").click(function(){
+	$("#surveyPage1").validate({
+		submitHandler:function(){
+			mycompanydata.push($("#formCompany").val());
+			stageJump();
+		}
+	});
+	$("#formCompany").rules("add", {
+		required: true,
+		minlength: 2,
+		messages: {
+            required: "Please fill in your company name",
+            minlength: jQuery.validator.format("Please, at least {0} characters are necessary")
+        }
+	});
+});
+</script>

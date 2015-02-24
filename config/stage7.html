@@ -1,0 +1,32 @@
+<!-- Styling of the page -->
+<style>
+a.stage7-contactus{
+	text-decoration: none;
+	color: green;
+}
+a.stage7-contactus:hover{
+	text-decoration: none;
+	color: red;
+}
+</style>
+<!-- Content of the page -->
+<div class="row">
+	<div class="col-md-8 col-md-offset-2">
+		<center>
+			<h2>Thank you for you time and patience! To get a copy of you results, please click on the link to download the file in CSV.</h2>
+			<br><br><br>
+			<p id="stage7-downloadbutton"></p>
+			<br><br><br>
+			<p>To reach us click here: <a class=".stage7-contactus" href="mailto:founder@ventureevolution.com">Contact us</a></p>
+		</center>
+	</div>
+</div>
+<!-- Script of the page -->
+<script>
+$(document).ready(function() {
+
+	//Generate CSV download link
+	outputAllDataCSVFile("#stage7-downloadbutton");
+	
+});
+</script>

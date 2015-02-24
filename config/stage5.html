@@ -1,0 +1,151 @@
+<!-- Styling of the page -->
+<style>
+	#stage5-example-attribute{
+		font-weight: bold;
+	}
+	.ui-dialog {
+	    z-index: 3000;
+    }
+</style>
+<!-- Dialog Message Area -->
+<!-- Proceed message -->
+<div id="stage5-dialog-nextMessage" title="Proceed?">
+  <p>
+    <span class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 50px 0;"></span>
+    Are you sure that the you are satisfied with the attributes?
+  </p>
+</div>
+<!-- Error Message -->
+<div id="stage5-dialog-errorMessage" title="Insufficient information">
+  <p>
+    <span class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 50px 0;"></span>
+    Some fields are empty, hence we are unable to proceed. Please fill up the appropriate fills in order to proceed.
+  </p>
+</div>
+<!-- Content of the page -->
+<div class="row">
+	<div class="col-md-8 col-md-offset-2">
+		<p>To you, what is the contrast to each of these likeness dimensions?  If you had to say that these two firms are similar because each &#34;<span id="stage5-example-attribute"></span>&#34;,
+they would be similar in contrast to what?</p>
+		<p>An example answer is &#34;<b>aggressive</b>&#34; in contrast to &#34;<b>conservative</b>&#34;. Feel free to reword or elaborate a dimension by clicking on it.</p><br><br>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-8 col-md-offset-2" id="stage5-form">
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-8 col-md-offset-2">
+		<p>If you are done adding the opposites please proceed to the next step</p>
+		<br>
+		<button class="btn btn-success" id="nextPage">Next Page</button>
+	</div>
+</div>
+<!-- Script of the page -->
+<script>
+$( document ).ready(function() {
+
+	//Display the first example attribute
+	$("#stage5-example-attribute").append(attributedata[0]);
+	
+	//Display each attribute as a row and input using a loop
+	var stage5MaxAttributeNumber = attributedata.length;
+	
+	var stage5Counter = 0;
+	
+	while(stage5Counter < stage5MaxAttributeNumber){
+		$("#stage5-form").append('<div class="row" id="stage5-form-attribute-'+stage5Counter+'"><div class="col-md-5"><div class="form-group"><input type="text" class="form-control attribute-original" placeholder="Enter a term" value="'+attributedata[stage5Counter]+'"></div></div><div class="col-md-2"><center><p>VS</p></center></div><div class="col-md-5"><div class="form-group"><input type="text" class="form-control attribute-opposite" placeholder="Enter an opposite polarity"></div></div></div>');
+		stage5Counter++;
+	}
+	
+	//Enable the next page button
+	$("#nextPage").click(function(){
+		
+		if(stage5CheckAllAttributesFilled()){
+		
+			//Save all the attributes both original and opposite
+			stage5SaveAttributes();
+			
+			//Open the dialog confirmation message
+			$( "#stage5-dialog-nextMessage" ).dialog( "open" );
+			
+			//Change stage count and jump to next stage
+			stageCurrentStage++;
+			runStage(stages[stageCurrentStage]);
+			
+		}else{
+			$( "#stage5-dialog-errorMessage" ).dialog( "open" );
+			console.log("some fields are empty, hence unable to proceed");
+		}
+		
+	});
+	
+	//Dialog function
+	$(function() {
+		//Open next page confirmation message
+		$( "#stage5-dialog-nextMessage" ).dialog({
+			autoOpen: false,
+			modal: true,
+			buttons: {
+				Yes: function() {
+					$(this).dialog( "close" );
+					stageCurrentStage++;
+					runStage(stages[stageCurrentStage]);
+				}
+			}
+		});
+		//Open error: incomplete information message
+		$( "#stage5-dialog-errorMessage" ).dialog({
+			autoOpen: false,
+			modal: true,
+			buttons: {
+				Ok: function() {
+					$(this).dialog( "close" );
+				}
+			}
+		});
+	});
+	
+	function stage5CheckAllAttributesFilled(){
+	
+		console.log("stage5CheckAllAttributesFilled() running");
+		
+		var confirmFilled = true;
+	
+		$("#stage5-form .row").each(function(){
+			
+			//Store the attributes
+			var attributeOriginal = $(this).find(".attribute-original").val();
+			var attributeOpposite = $(this).find(".attribute-opposite").val();
+			
+			if((attributeOriginal == "") || (attributeOpposite == "")){
+				confirmFilled = false;
+			}
+			
+			console.log("stage5CheckAllAttributesFilled() - confirmFilled: "+confirmFilled);
+			
+		});
+		
+		return confirmFilled;
+	}
+	
+	function stage5SaveAttributes(){
+
+		console.log("stage5SaveAttributes() running");	
+	
+		$("#stage5-form .row").each(function(){
+			
+			//Get the attributes
+			var stage5AttributeId = parseInt($(this).attr("id").substring(22));
+			
+			//Store the attributes
+			attributedata[stage5AttributeId] = $(this).find(".attribute-original").val();
+			console.log("stage5SaveAttributes() - attributedata: "+attributedata[stage5AttributeId]);
+			
+			attributedataopp[stage5AttributeId] = $(this).find(".attribute-opposite").val();
+			console.log("stage5SaveAttributes() - attributedataopp: "+attributedataopp[stage5AttributeId]);
+		});
+	}
+	
+});
+</script>
