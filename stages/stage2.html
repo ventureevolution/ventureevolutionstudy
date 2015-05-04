@@ -1,0 +1,44 @@
+<!-- Styling of the page -->
+<style type="text/css"></style>
+<!-- Content of the page -->
+<div class="row">
+	<div class="col-md-8 col-md-offset-2">
+		<p></p>
+		<form id="surveyPage1">
+			<div class="form-group">
+				<label for="formCompany"><div id="S2P1" class="textreplace"></div></label>
+				<input type="text" class="form-control" id="formCompany" name="formCompany">
+			</div>
+			<center><button class="btn btn-success btn-block" id="nextPage"><div id="S2P2" class="textreplace"></div></button></center>
+		</form>
+	</div>
+</div>
+<!-- Script of the page -->
+<script>
+languageReplace();
+
+//Form placeholder text
+$("#formCompany").attr("placeholder",languageReplacement['S2P5']);
+
+jQuery.validator.setDefaults({
+  debug: true,
+  success: "valid"
+});
+
+$("#nextPage").click(function(){
+	$("#surveyPage1").validate({
+		submitHandler:function(){
+			mycompanydata.push($("#formCompany").val());
+			stageJump();
+		}
+	});
+	$("#formCompany").rules("add", {
+		required: true,
+		minlength: 2,
+		messages: {
+            required: languageReplacement['S2P3'],
+            minlength: jQuery.validator.format(languageReplacement['S2P4'])
+        }
+	});
+});
+</script>

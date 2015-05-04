@@ -1,0 +1,230 @@
+<!-- Styling of the page -->
+<style type="text/css">
+    #stage3-drawingBoard
+    {
+       width: 400px;
+       height:400px;
+       border: solid 1px black;
+       position: relative;
+       margin: 0 auto 0 auto;
+    }
+    .point{
+        width:20px;
+        height:20px;
+        border-radius: 50%;
+        position: absolute;
+    }
+    .point span{
+	    font-size: 0.7em;
+	    margin: 0px 0 0 24px;
+	    white-space: nowrap;
+    }
+    .dot-initial{
+    	color: #000000;
+	    background-color: #ffffff;
+    }
+    .referencepoint{
+        width:20px;
+        height:20px;
+        border-radius: 50%;
+        position: absolute;
+    }
+    .referencepoint span{
+	    font-size: 0.7em;
+	    margin: 0px 0 0 24px;
+	    white-space: nowrap;
+	    overflow: visible;
+    }
+    #reference{
+	    background-color: black;
+	    color: black;
+	    top:190px;
+	    left:190px;
+	    z-index:50;
+    }
+    #stage3-myCompanyName{
+	    font-weight: bold;
+	    text-transform: uppercase;
+    }
+    .ui-dialog {
+	    z-index: 3000;
+    }
+    #stage3-newCompetitor{
+	    color: #000000;
+    }
+    #stage3-newCompetitorButton{
+	    background-color: #000000;
+    }
+    #stage3-drawingHelp{
+    	position: absolute;
+    	float: right;
+	    height: auto;
+	    width: 200px;
+	    color: #474747;
+	    background-color: #B2B2B2 !important;
+	    font-size: 0.8em;
+    }
+    
+</style>
+<!-- Dialog Message Area -->
+<div id="stage3-dialog-message">
+  <p>
+    <span class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 50px 0;"></span>
+    <div id="S3P1" class="textreplace"></div>
+  </p>
+</div>
+<!-- Content of the page -->
+<div class="row">
+	<div class="col-md-8 col-md-offset-2">
+		<p><div id="S3P2" class="textreplace"></div></p>
+		<div id="stage3-drawingBoard">
+			<div id="stage3-drawingHelp" style="display: none;"><div id="S3P13" class="textreplace"></div></div>
+			<div class="referencepoint" id="reference"><span id="stage3-myCompanyName"></span></div>
+		</div>
+	</div>
+</div>
+<form id="stage3-form">
+<div class="row">
+	<div class="col-md-8 col-md-offset-2">
+		<br>
+
+		<p class="form-group">
+			<label for="stage3-newCompetitor"><div id="S3P3" class="textreplace"></div></label>
+			<input type="text" class="form-control" id="stage3-newCompetitor" name="stage3-newCompetitor">
+		</p>
+		<button class="btn btn-success" id="stage3-newCompetitorButton"><div id="S3P4" class="textreplace"></div></button>
+		
+	</div>
+</div>
+<div class="row" id="stage3-next">
+</div>
+</form>
+<!-- Script of the page -->
+<script type="text/javascript">
+languageReplace();
+
+//Form placeholder text
+$("#stage3-newCompetitor").attr("placeholder",languageReplacement['S3P11']);
+$("#stage3-dialog-message").attr("title",languageReplacement['S3P12']);
+
+$( document ).ready(function() {
+
+	//Setting the validation script
+	jQuery.validator.setDefaults({
+	  debug: true,
+	  success: "valid"
+	});
+	
+	//New validation method to identify a unique competitor name
+	jQuery.validator.addMethod(
+		"uniqueCompanyName",
+		function(value, element){
+			return checkValueNotInPointData(value);
+		},
+		languageReplacement['S3P5']
+	);
+
+	//Display my company name in the center of the div box
+	$("#stage3-myCompanyName").append(mycompanydata[0]);
+	
+	//Add competitor counter to simplify referencing
+	var competitorNumber = 0;
+
+	//Upon clicking the "Add Competitor" button, actions to be carried out
+	$("#stage3-newCompetitorButton").click(function(){
+
+		//Ensure that the competitor field is filled and no repeat in names
+		$("#stage3-form").validate();
+		
+		$("#stage3-newCompetitor").rules("add", {
+			required: true,
+			minlength: 2,
+			uniqueCompanyName: true,
+			messages: {
+	            required: languageReplacement['S3P6'],
+	            minlength: jQuery.validator.format(languageReplacement['S3P7']),
+	            uniqueCompanyName: jQuery.validator.format(languageReplacement['S3P8'])
+	        }
+		});
+		
+		//If the competitor name is valid, create the dot
+		if(($("#stage3-newCompetitor").val() != "") && checkValueNotInPointData($("#stage3-newCompetitor").val())){
+
+			//Add help box which will fade out in 10s
+			$("#stage3-drawingHelp").fadeIn(200);
+			$("#stage3-drawingHelp").delay(10000).fadeOut(400);
+
+			//Get a random color from the colorPalette
+			var randomNumber = Math.floor(Math.random() * parseInt(colorPalette.length));
+			lastZindex = lastZindex + 1;
+			competitorNumber = competitorNumber + 1;
+			
+			var positionX = 190 - (competitorNumber * 10);
+			var positionY = 190 - (competitorNumber * 10);
+			
+			//Create the entry into the box
+			var pointdataPosition = pointdata.length;
+			$("#stage3-drawingBoard").append("<div class='point' id='"+pointdataPosition+"' style='background-color:"+colorPalette[randomNumber]+";top:"+positionY+"px;left:"+positionX+"px;z-index:"+lastZindex+";'><span class='dot-initial'>" + $("#stage3-newCompetitor").val() + "</span></div>");
+			
+			//Insert value into the list of competitor array ["competitor", "color",[x location,y location]]
+			var pointlocationXY = $("#"+pointdataPosition).offset();
+			var fixedX = parseInt(pointlocationXY.left);
+			var fixedY = parseInt(pointlocationXY.top);
+			pointdata.push([$("#stage3-newCompetitor").val(), colorPalette[randomNumber],[fixedX, fixedY],[0,0]]);
+			
+			//Remove color from colorPalette to prevent repeats
+			colorPalette.splice(randomNumber,1);	
+			
+			//Empty the input box
+			$("#stage3-newCompetitor").val('');
+			
+			//Make draggable
+			$(function() {
+				var opt = {
+					cursor: "move",
+					containment: "parent",
+					scroll: false,
+					drag: function() {
+						$(this).find('span').removeClass("dot-initial");
+						var offset = $(this).offset();
+			            var xPos = parseInt(offset.left) - fixedX;
+			            var yPos = parseInt(offset.top) - fixedY;
+			            var pointid = $(this).attr("id");
+			            pointdata[pointid][3] = [xPos, yPos];
+					}
+				};
+				$(".point").draggable(opt);
+			});
+			
+			//If competitor added is at least 2, add the next page button
+			if(competitorNumber == 2){
+				$("#stage3-next").append("<div class='col-md-8 col-md-offset-2'><center>"+languageReplacement['S3P9']+"<br><br><button class='btn btn-success' id='nextPage'>"+languageReplacement['S3P10']+"</button></center></div>");
+				
+				//Enable next page function
+				$("#nextPage").click(function(){
+					//alert(pointdata);
+					$( "#stage3-dialog-message" ).dialog( "open" );
+					
+				});
+			}
+	
+		}
+	});
+	
+	//Dialog function
+	$(function() {
+		$( "#stage3-dialog-message" ).dialog({
+			autoOpen: false,
+			modal: true,
+			buttons: {
+				Yes: function() {
+					$(this).dialog( "close" );
+					stageCurrentStage++;
+					runStage(stages[stageCurrentStage]);
+				}
+			}
+		});
+	});
+
+});
+</script>

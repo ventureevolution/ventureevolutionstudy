@@ -1,0 +1,375 @@
+<!-- Styling of the page -->
+<style type="text/css">
+	.selectionButtonSlot{
+		margin-bottom: 15px;
+		white-space: normal; 
+	}
+	.stage4-remove {
+		font-size: 2em;
+		color: #768393;
+		line-height: 34px;
+	}
+	.stage4-remove:hover {
+		color: #c7144d;
+	}
+	#stage4-mycompany {
+		text-transform: uppercase;
+	}
+	#stage4-competitor {
+		text-transform: uppercase;
+	}
+</style>
+<!-- Content of the page -->
+<div class="row">
+	<div class="col-md-8 col-md-offset-2">
+		<p><div id="S4P1" class="textreplace"></div></p>
+		<p><span style="color: green;"><b id="stage4-mycompany"></b><div id="S4P2" class="textreplace"></div><b id="stage4-competitor"></b><div id="S4P3" class="textreplace"></div></span></p>
+		<form id="stage4-form">
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2">
+					<p class="form-group">
+						<input type="text" class="form-control stage4-entry">
+					</p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2">
+					<p class="form-group">
+						<input type="text" class="form-control stage4-entry">
+					</p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2">
+					<p class="form-group">
+						<input type="text" class="form-control stage4-entry">
+					</p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2">
+					<p class="form-group">
+						<input type="text" class="form-control stage4-entry">
+					</p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2">
+					<p class="form-group">
+						<input type="text" class="form-control stage4-entry">
+					</p>
+				</div>
+			</div>
+		</form>
+		<center><button id="stage4-add-likeness" class="btn btn-default"><div id="S4P4" class="textreplace"></button></center>
+	</div>
+</div>
+<div class="row" id="stage4-selection">
+</div>
+<div class="row" id ="stage4-next">
+</div>
+<!-- Script of the page -->
+<script>
+languageReplace();
+
+//Form placeholder text
+$(".stage4-entry").attr("placeholder",languageReplacement['S4P13']);
+
+$( document ).ready(function() {
+
+	//Start page count
+	var stage4pageCount = 0;
+
+	//Check pointdata length for maximum number of pages
+	var maxPageNumber = parseInt(pointdata.length);
+
+	//Determine the order of the competitors to be compared
+	var tempOrderingArray = pointdata.slice();
+	
+	//Initialize code
+	stage4runPage(stage4pageCount);
+	
+	debug("Stage4 - global - pointdata: "+pointdata);
+
+
+	//Run page: Load all the page elements and clear page or data if necessary
+	function stage4runPage(pageNumber){
+
+		debug("Stage4 - pointdata: "+tempOrderingArray);
+
+		//Get the reference ID
+		var tempDisplayReferenceID = findSmallestPointData(tempOrderingArray);
+		
+		debug("Stage4 - tempDisplayReferenceID: "+tempDisplayReferenceID);
+		
+		//Display layer: company names
+		
+		//Step 1: clear the div
+		$("#stage4-mycompany").empty();
+		$("#stage4-competitor").empty();
+		
+		//Step 2: populate the div
+		$("#stage4-mycompany").append(mycompanydata[0]);
+		$("#stage4-competitor").append(tempOrderingArray[tempDisplayReferenceID][0]);
+		
+		//Pop the reference out of the array
+		tempOrderingArray.splice(tempDisplayReferenceID, 1);
+
+		//Step 3: ensure that when inputs are filled, the cross button is added
+		enableStage4Remove();
+	
+		//Step 4: Add new input fields when Add Likeness Dimension button is clicked
+		$("#stage4-add-likeness").one("click",function(){
+			$("#stage4-form").append('<div class="row"><div class="col-md-8 col-md-offset-2"><p class="form-group"><input type="text" class="form-control stage4-entry" placeholder="'+languageReplacement['S4P5']+'"></p></div></div>');
+			enableStage4Remove();
+		});
+
+		//Step 5: Load Next Button with Conditions
+		if((pageNumber >= 0) && (pageNumber < (maxPageNumber - 1))){
+
+			//Step 5.1: Add Next Step Button
+			$("#stage4-next").append('<div class="col-md-8 col-md-offset-2"><center>'+languageReplacement['S4P6']+'<br><br><button class="btn btn-success" id="nextPage">'+languageReplacement['S4P7']+'</button></center></div>');
+		
+			//Refresh page and load next step
+			$("#nextPage").click(function(){
+				
+				if(stage4CheckTypeAttributeNotEmpty()){
+					
+					//Save all new attributes into [attributedata]
+					stage4SaveAttributeData();
+					
+					//Reset the display
+					stage4ResetPageDisplay();
+					
+					//Increament to the global variable
+					stage4pageCount++;
+					
+					//Re-run the page
+					stage4runPage(stage4pageCount);
+				}else{
+					debug("Stage4 - clicked on next when empty");
+				}
+				
+			});
+			
+		}else if(pageNumber == (maxPageNumber - 1)){
+		
+			//Step 5.1: Enable next page button to go to the next stage
+			$("#stage4-next").append('<div class="col-md-8 col-md-offset-2"><center>'+languageReplacement['S4P8']+'<br><br><button class="btn btn-success" id="nextPage">Next Step</button></center></div>');
+			
+			//Go to next stage function
+			$("#nextPage").click(function(){
+			
+				if(stage4CheckTypeAttributeNotEmpty()){
+					
+					//Save all new attributes into [attributedata]
+					stage4SaveAttributeData();
+					
+					//Change stage count and jump to next stage
+					stageCurrentStage++;
+					runStage(stages[stageCurrentStage]);
+				}else{
+					debug("Stage4 - clicked on next when empty");
+				}
+
+			});
+		}
+
+	}
+
+	//Validation layer: ensure that the inputs are filled
+	function enableStage4Remove(){
+		$(".stage4-entry").change(function(){
+		
+			//Check if the class & button has already been added, if not it will add
+			if(!$(this).parent().hasClass("has-feedback")){
+				$(this).parent().addClass("has-feedback");
+				$('<div class="col-md-2"><span class="glyphicon glyphicon-remove-circle stage4-remove" aria-hidden="true"></span></div>').insertAfter($(this).parent().parent());
+				$(".stage4-remove").one("click",function(){
+					$(this).parent().parent().remove();
+				});
+			}
+		});		
+	}
+	
+	//Attribute addition layer: ensure that the attributes are inserted into the list for clicking
+	function enableStage4Attributes(){
+	
+		debug("Stage4 - enableStage4Attributes() running");
+		
+		//Insert the header text
+		$("#stage4-selection").append('<div class="col-md-8 col-md-offset-2"><br><br><center><p>'+languageReplacement['S4P9']+'</p></center><div class="row"></div></div>');
+	
+		//Loop through [attributedata] to load all the attributes into buttons
+		var countAttribute = attributedata.length;
+		
+		debug("Stage4 - enableStage4Attributes() - countAttribute: "+countAttribute);
+		
+		var enableStage4AttributesCounter = 0;
+		
+		while(enableStage4AttributesCounter < countAttribute){
+			$("#stage4-selection .col-md-8 .row").append('<div class="col-md-4"><button type="button" class="btn btn-danger btn-block selectionButtonSlot" id="stage4-att-btn'+enableStage4AttributesCounter+'">'+attributedata[enableStage4AttributesCounter]+'</button></div>');
+			enableStage4AttributesCounter++;
+			
+			debug("Stage4 - enableStage4Attributes() - loop counter: "+enableStage4AttributesCounter);
+		}
+		
+		//Enable the attribute clicks
+		enableStage4AttributeClick();
+		
+	}
+	
+	//Attribute click enablement
+	function enableStage4AttributeClick(enabledAttributeButton){
+		
+		debug("Stage4 - enableStage4AttributeClick() running");		
+		
+		enabledAttributeButton = typeof enabledAttributeButton !== 'undefined' ? enabledAttributeButton : 'all';
+		
+		//OPTIONS: "all" or any specific id
+		
+		if(enabledAttributeButton == 'all'){
+			$(".selectionButtonSlot").each(function(){
+				
+				//Enable the click event for adding new 
+				$(this).one("click",function(){
+					
+					//Get the ID
+					var theSelectedID = parseInt($(this).attr("id").substring(14));
+					
+					debug("Stage4 - enableStage4AttributeClick() - theSelectedID: "+theSelectedID);
+			
+					//Insert the item into the selection list
+					$("#stage4-form").prepend('<div class="row" id="stage4-form-row-'+attributedata[theSelectedID]+'"><div class="col-md-8 col-md-offset-2"><p class="form-group"><input type="text" class="form-control stage4-entry" placeholder="'+languageReplacement['S4P10']+'" value="'+attributedata[theSelectedID]+'"></p></div><div class="col-md-2"><span class="glyphicon glyphicon-remove-circle stage4-remove" aria-hidden="true"></span></div></div>');
+					
+					//Enable the remove function
+					$("#stage4-form-row-"+attributedata[theSelectedID]+" .stage4-remove").one("click",function(){
+					
+						debug("Stage4 - enableStage4AttributeClick() remove - theSelectedID:"+theSelectedID);
+						debug("Stage4 - enableStage4AttributeClick() remove - attributedata[theSelectedID]: "+attributedata[theSelectedID]);
+						
+						//Remove the whole row in the form
+						$(this).parent().parent().remove();
+						
+						//Add the button back into the stage
+						$("#stage4-selection .col-md-8 .row").append('<div class="col-md-4"><button type="button" class="btn btn-danger btn-block selectionButtonSlot" id="stage4-att-btn'+theSelectedID+'">'+attributedata[theSelectedID]+'</button></div>');
+						
+						//Enable the button click function
+						enableStage4AttributeClick("#stage4-att-btn"+theSelectedID);
+					});
+					
+					//Remove the attribute button
+					$(this).parent().remove();
+					
+				});
+			});
+		}else if(enabledAttributeButton != ''){
+			
+			$(enabledAttributeButton).one("click", function(){
+				
+				//Get the ID
+				var theSelectedID = parseInt($(this).attr("id").substring(14));
+				
+				debug("Stage4 - enableStage4AttributeClick() - theSelectedID: "+theSelectedID);
+				
+				//Insert the item into the selection list
+				$("#stage4-form").prepend('<div class="row"><div class="col-md-8 col-md-offset-2"><p class="form-group"><input type="text" class="form-control stage4-entry" placeholder="'+languageReplacement['S4P11']+'" value="'+attributedata[theSelectedID]+'"></p></div><div class="col-md-2"><span class="glyphicon glyphicon-remove-circle stage4-remove" aria-hidden="true"></span></div></div>');
+				
+				//Enable the remove button
+				$(".stage4-remove").one("click",function(){
+				
+					debug("Stage4 - enableStage4AttributeClick() remove - theSelectedID:"+theSelectedID);
+					debug("Stage4 - enableStage4AttributeClick() remove - attributedata[theSelectedID]: "+attributedata[theSelectedID]);
+					
+					//Remove the whole row in the form
+					$(this).parent().parent().remove();
+					
+					//Add the button back into the stage
+					$("#stage4-selection .col-md-8 .row").append('<div class="col-md-4"><button type="button" class="btn btn-danger btn-block selectionButtonSlot" id="stage4-att-btn'+theSelectedID+'">'+attributedata[theSelectedID]+'</button></div>');
+					
+					//Enable the button click function
+					enableStage4AttributeClick("#stage4-att-btn"+theSelectedID);
+				});
+				
+				//Remove the attribute button
+				$(this).parent().remove();
+			});
+		}
+	}
+	
+	//Save Attribute data
+	function stage4SaveAttributeData(){
+		
+		debug("Stage4 - stage4SaveAttributeData() running");
+		
+		$(".stage4-entry").each(function(){
+		
+			var theValue = $(this).val();
+			
+			debug("Stage4 - stage4SaveAttributeData() - theValue: "+theValue);
+			
+			debug("Stage4 - stage4SaveAttributeData() - inArray: "+$.inArray(theValue, attributedata));
+			
+			debug("Stage4 - stage4SaveAttributeData() - check NOT empty: "+(theValue != ""));
+			
+			//Add to attributedata if it does not already exist and value is not empty
+			if(($.inArray(theValue, attributedata) < 0) && (theValue != "")){
+				attributedata.push(theValue);
+			}
+			
+			debug("Stage4 - stage4SaveAttributeData() - attributedata array: " + attributedata);
+		});
+	}
+	
+	//Reset page display
+	function stage4ResetPageDisplay(){
+		
+		debug("Stage4 - stage4ResetPageDisplay() running");
+		
+		//Clear the stage form
+		$("#stage4-form").empty();
+		
+		//Insert the stage form items
+		var stage4ResetPageDisplayCounter = 0;
+		while(stage4ResetPageDisplayCounter < 5){
+			$("#stage4-form").append('<div class="row"><div class="col-md-8 col-md-offset-2"><p class="form-group"><input type="text" class="form-control stage4-entry" placeholder="'+languageReplacement['S4P12']+'"></p></div></div>');
+			stage4ResetPageDisplayCounter++;
+		}
+		
+		//Clear the attribute stage selction area
+		$("#stage4-selection").empty();
+		$("#stage4-next").empty();
+		
+		//Insert the stage4 selection attributes
+		enableStage4Attributes();
+	}
+	
+	//Check if the attribute entry are empty
+	function stage4CheckTypeAttributeNotEmpty() {
+		
+		debug("Stage4 - checkTypeAttributeNotEmpty() running");
+		
+		//By default the attribute inputs are assumed to be empty
+		var confirmEmpty = false;
+		
+		$(".stage4-entry").each(function(){
+			
+			var theValue = $(this).val();
+			
+			if(theValue !=""){
+				//Should any of the attribute inputs not be empty, change the status to true
+				confirmEmpty = true;
+			}
+			
+			debug("Stage4 - checkTypeAttributeNotEmpty() - theValue: "+theValue);
+			debug("Stage4 - checkTypeAttributeNotEmpty() - confirmEmpty: "+confirmEmpty);
+			
+		});
+		
+		//Return final status for validation
+		return confirmEmpty;
+		
+	}
+	
+});
+</script>

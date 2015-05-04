@@ -1,0 +1,76 @@
+<!-- Styling of the page -->
+<style type="text/css"></style>
+<!-- Content of the page -->
+<div class="row">
+	<div class="col-md-4 col-md-offset-4"><center><img src="image/insead-logo.jpg"/></center></div>
+</div>
+<div class="row">
+	<div class="col-md-8 col-md-offset-2">
+		<center><h1><div id="S1P1" class="textreplace"></div></h1></center><br>
+		<p><div id="S1P2" class="textreplace"></div></p><br><br>
+		<center><p><div id="S1P3" class="textreplace"></div></p></center>
+		<hr>
+		<form id="registrationForm" method="get" action="">
+			<p class="form-group">
+				<label for="formFirstName"><div id="S1P4" class="textreplace"></div></label>
+				<input type="text" class="form-control" id="formFirstName" name="formFirstName">
+			</p>
+			<p class="form-group">
+				<label for="formLastName"><div id="S1P5" class="textreplace"></div></label>
+				<input type="text" class="form-control" id="formLastName" name="formLastName">
+			</p>
+			<p class="form-group">
+				<label for="formEmail"><div id="S1P6" class="textreplace"></div></label>
+				<input type="email" class="form-control" id="formEmail" name="formEmail">
+			</p>
+			<button class="btn btn-success btn-block" id="nextPage"><div id="S1P7" class="textreplace"></div></button>
+		</form>
+	</div>
+</div>
+<!-- Script of the page -->
+<script>
+languageReplace();
+
+//Form placeholder text
+$("#formFirstName").attr("placeholder",languageReplacement['S1P12']);
+$("#formLastName").attr("placeholder",languageReplacement['S1P13']);
+$("#formEmail").attr("placeholder",languageReplacement['S1P14']);
+
+jQuery.validator.setDefaults({
+  debug: true,
+  success: "valid"
+});
+$("#nextPage").click(function(){
+	$("#registrationForm").validate({
+		submitHandler:function(){
+			personal.push($("#formFirstName").val());
+			personal.push($("#formLastName").val());
+			personal.push($("#formEmail").val());
+			stageJump();
+		}
+	});
+	$("#formFirstName").rules("add", {
+		required: true,
+		minlength: 2,
+		messages: {
+            required: languageReplacement['S1P8'],
+            minlength: jQuery.validator.format(languageReplacement['S1P9'])
+        }
+	});
+	$("#formLastName").rules("add", {
+		required: true,
+		minlength: 2,
+		messages: {
+            required: "Please fill in your last name",
+            minlength: jQuery.validator.format(languageReplacement['S1P10'])
+        }
+	});
+	$("#formEmail").rules("add", {
+		required: true,
+		email: true,
+		messages:{
+			required: languageReplacement['S1P11']
+		}
+	});
+});
+</script>

@@ -4,6 +4,12 @@ This script is intended for Venture Evolution Study
 
 */
 
+//Fixed variables
+var stagePath = "stages/";
+var languagePath = "language/";
+var stageCurrentStage = 0;
+
+
 //Storage for data
 var personal = [];
 var mycompanydata = [];
@@ -11,32 +17,32 @@ var pointdata = [];
 var attributedata = [];
 var attributedataopp = [];
 var attributeOrder = [];
+var attributeSequence = [];
+var companySequence = [];
 var finalScale = [];
+var languageReplacement = [];
 
-
-//Excluding BLACK which is already used as the standard color
-var colorPalette = ["AliceBlue","Aqua","Aquamarine","Azure","Beige","Bisque","BlanchedAlmond","Blue","BlueViolet","Brown","BurlyWood","CadetBlue","Chartreuse","Chocolate","Coral","CornflowerBlue","Cornsilk","Crimson","Cyan","DarkBlue","DarkCyan","DarkGoldenRod","DarkGray","DarkGreen","DarkKhaki","DarkMagenta","DarkOliveGreen","DarkOrange","DarkOrchid","DarkRed","DarkSalmon","DarkSeaGreen","DarkSlateBlue","DarkSlateGray","DarkTurquoise","DarkViolet","DeepPink","DeepSkyBlue","DimGray","DodgerBlue","FireBrick","FloralWhite","ForestGreen","Fuchsia","Gainsboro","GhostWhite","Gold","GoldenRod","Gray","Green","GreenYellow","HoneyDew","HotPink","IndianRed ","Indigo ","Ivory","Khaki","Lavender","LavenderBlush","LawnGreen","LemonChiffon","Lime","LimeGreen","Linen","Magenta","Maroon","MediumAquaMarine","MediumBlue","MediumOrchid","MediumPurple","MediumSeaGreen","MediumSlateBlue","MediumSpringGreen","MediumTurquoise","MediumVioletRed","MidnightBlue","MintCream","MistyRose","Moccasin","NavajoWhite","Navy","OldLace","Olive","OliveDrab","Orange","OrangeRed","Orchid","PaleGoldenRod","PaleGreen","PaleTurquoise","PaleVioletRed","PapayaWhip","PeachPuff","Peru","Pink","Plum","PowderBlue","Purple","RebeccaPurple","Red","RosyBrown","RoyalBlue","SaddleBrown","Salmon","SandyBrown","SeaGreen","SeaShell","Sienna","Silver","SkyBlue","SlateBlue","SlateGray","Snow","SpringGreen","SteelBlue","Tan","Teal","Thistle","Tomato","Turquoise","Violet","Wheat","White","WhiteSmoke","Yellow","YellowGreen"];
-
-var lastZindex = 2000;
-
-var stages = ["stage1.html","stage2.html","stage3.html","stage4.html","stage5.html","stage6.html","stage7.html"];
-
-//Fixed variables
-var configPath = "config/";
-var stageCurrentStage = 0;
 
 //Functions
+
+function debug(data){
+
+	if(debugging_enabled){
+		console.log(data);
+	}
+}
+
 function runStage(stageSelected){
 	
 	var stageDetermineMax = parseInt(stages.length) - 1 - stageCurrentStage;
 	
 	if(stageDetermineMax <= 0){
-		$.get(configPath + stages[stages.length - 1], function(data){
+		$.get(stagePath + stages[stages.length - 1], function(data){
 		    $("#tabling").empty();
 		    $("#tabling").html("<script src='js/logics.js'></script>" + data);
 		});
 	}else{
-		$.get(configPath + stageSelected, function(data){
+		$.get(stagePath + stageSelected, function(data){
 		    $("#tabling").empty();
 		    $("#tabling").html("<script src='js/logics.js'></script>" + data);
 		});
@@ -73,9 +79,9 @@ function checkValueNotInPointData(searchValue){
 
 function findSmallestPointData(tempPointData){
 	
-	console.log("findSmallestPointData() running");
+	debug("findSmallestPointData() running");
 	
-	console.log("findSmallestPointData() - tempPointData/pointdata length: "+tempPointData.length);
+	debug("findSmallestPointData() - tempPointData/pointdata length: "+tempPointData.length);
 	
 	var smallestRefID = "";
 	
@@ -83,34 +89,34 @@ function findSmallestPointData(tempPointData){
 
 	while(loopCounter < tempPointData.length){
 		
-		console.log("findSmallestPointData() - loop running - smallestRefID: "+smallestRefID);
+		debug("findSmallestPointData() - loop running - smallestRefID: "+smallestRefID);
 		
 		if(smallestRefID === ""){
 			//Take small reference to be point 0 if there is no reference yet
 			smallestRefID = loopCounter;
 			
-			console.log("findSmallestPointData() - loop empty clause - smallestRefID: "+smallestRefID);
+			debug("findSmallestPointData() - loop empty clause - smallestRefID: "+smallestRefID);
 			
 		}else{
 			//compare length of the existing point reference
 			
-			console.log("findSmallestPointData() - loop NOT empty clause");
+			debug("findSmallestPointData() - loop NOT empty clause");
 			
 			//Step 1: Loop counter's length
 			var tempLengthLC = Math.sqrt(tempPointData[loopCounter][3][0]*tempPointData[loopCounter][3][0] + tempPointData[loopCounter][3][1]*tempPointData[loopCounter][3][1]);
 			
-			console.log("findSmallestPointData() - loop tempLengthLC: "+tempLengthLC);
+			debug("findSmallestPointData() - loop tempLengthLC: "+tempLengthLC);
 			
 			//Step 2: Small reference's length
 			var tempLengthSR = Math.sqrt(tempPointData[smallestRefID][3][0]*tempPointData[smallestRefID][3][0] + tempPointData[smallestRefID][3][1]*tempPointData[smallestRefID][3][1]);
 			
-			console.log("findSmallestPointData() - loop tempLengthSR: "+tempLengthSR);
+			debug("findSmallestPointData() - loop tempLengthSR: "+tempLengthSR);
 			
 			//Step 3: Compare replace small reference ID if necessary
 			if(tempLengthLC < tempLengthSR){
 				smallestRefID = loopCounter;
 				
-				console.log("findSmallestPointData() - smallrefID: "+smallestRefID);
+				debug("findSmallestPointData() - smallrefID: "+smallestRefID);
 			}
 		}
 		//Loop toward the end of the point data
@@ -122,7 +128,7 @@ function findSmallestPointData(tempPointData){
 
 function outputAllDataCSVFile(presentationDiv){
 	
-	console.log("outputAllDataCSVFile() running");
+	debug("outputAllDataCSVFile() running");
 	
 	//Create the download button
 	$(presentationDiv).append('<button class="btn btn-success" id="mainfeature-downloadLink">Download Results</button><a href="" id="mainfeature-dataLink" download="data.csv"></a>');
@@ -131,7 +137,7 @@ function outputAllDataCSVFile(presentationDiv){
 	
 	$("#mainfeature-downloadLink").on("click", function(e) {
 	
-		console.log("outputAllDataCSVFile() - test finalScale: "+JSON.stringify(finalScale));
+		debug("outputAllDataCSVFile() - test finalScale: "+JSON.stringify(finalScale));
 		
 		var csv = "";
 		
@@ -212,7 +218,7 @@ function outputAllDataCSVFile(presentationDiv){
 				//Append the finalScale[] data
 				csv += finalScale[k][j] + ",";
 				
-				console.log("outputAllDataCSVFile() - j-k loop - finalScale: "+finalScale[k][j]);
+				debug("outputAllDataCSVFile() - j-k loop - finalScale: "+finalScale[k][j]);
 				
 				//Append the opposite attribute on the last column
 				if(k == (pointdata.length -1)){
@@ -222,12 +228,72 @@ function outputAllDataCSVFile(presentationDiv){
 			
 		}
 		
-		console.log("outputAllDataCSVFile() - csv: "+csv);
+		debug("outputAllDataCSVFile() - csv: "+csv);
 		
 		$link.attr("href", 'data:Application/octet-stream,' + encodeURIComponent(csv))[0].click();
 	});
 	
 }
 
+function languageLoad(){
+	$.get(languagePath + currentLanguage + ".ini", function(data){
+		
+		tempReplacementLoader = $.csv.toArrays(data);
+		
+		//alert(tempReplacementLoader);
+		
+		for(var i = 0; i < tempReplacementLoader.length; i++){
+			
+			var tempReplacePointer = tempReplacementLoader[i][0];
+			var tempReplaceValue = tempReplacementLoader[i][1];
+			
+			languageReplacement[tempReplacePointer] = tempReplaceValue;
+			
+		}
+		
+		//debug("languageLoad() Sample value S1P3: " + languageReplacement['S1P3']);
+		
+		debug(languageReplacement);
+	});
+}
+
+function languageReplace(){
+	
+	var tempClassArray = document.getElementsByClassName('textreplace');
+	
+	var tempfillClassArray = [];
+	
+	var tempCounterLength = tempClassArray.length;
+	
+	for(var tempcounterI = 0; tempcounterI < tempCounterLength; tempcounterI++){
+		
+		tempfillClassArray.push(tempClassArray[tempcounterI].id);
+		
+	}
+	
+	for(var tempcounterJ = 0; tempcounterJ < tempCounterLength; tempcounterJ++){
+		
+		var tempIDholder = tempfillClassArray[tempcounterJ];
+		
+		debug("languageReplace() Temp counter ID: " + tempIDholder);
+				
+		if(languageReplacement[tempIDholder]){
+			//Replace the div
+			var tempReplaceString = languageReplacement[tempIDholder];
+			var tempID = "#" + tempIDholder;
+			
+			debug("tempReplaceString: "+tempReplaceString);
+			debug("tempID: "+tempID);
+			
+			$(tempID).replaceWith(tempReplaceString);
+
+			debug("tempcounterI:" + tempcounterJ);
+			debug("tempCounterLength:" + tempCounterLength);
+		}
+	}
+}
+
 //Initialisation
+languageLoad();
+window.onbeforeunload = function() { return languageReplacement['SYS1']; };
 runStage(stages[stageCurrentStage]);

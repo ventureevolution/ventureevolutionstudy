@@ -101,7 +101,7 @@
             // slider's handle actually goes to that label!
             // - without this code the label is just treated like a part
             // - of the slider and there's no accuracy in the selected value
-            function labelClick( label ) {
+            /*function labelClick( label ) {
 
                 var val = $(label).data("value"),
                     $thisSlider = slider.element;
@@ -156,7 +156,7 @@
 
                 }
 
-            }
+            }*/
 
             function createPip( which ) {
 
@@ -309,8 +309,10 @@
             // append the collection of pips.
             slider.element.append( collection );
 
+            //Remove from project due to request
             slider.element.on( "mouseup", ".ui-slider-label", function() {
-                labelClick( this );
+	            $(this).click(false);
+                //labelClick( this );
             });
 
             slider.element.on( "slide.selectPip slidechange.selectPip", function(e,ui) {
