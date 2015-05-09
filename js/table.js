@@ -238,9 +238,12 @@ function outputAllDataCSVFile(presentationDiv){
 function languageLoad(){
 
 	debug("Language file loading..");
-	debug(window.location.protocol + "//" + window.location.host + "/" + languagePath + currentLanguage + ".ini");
+	debug("Generate URL..");
+	var CurrentPageLocationURL = window.location.href;
+	
+	debug(CurrentPageLocationURL.substring(0, CurrentPageLocationURL.lastIndexOf("/") + 1) + languagePath + currentLanguage + ".ini");
 	$.ajax({
-		url: window.location.protocol + "//" + window.location.host + "/" + languagePath + currentLanguage + ".ini",
+		url: CurrentPageLocationURL.substring(0, CurrentPageLocationURL.lastIndexOf("/") + 1) + languagePath + currentLanguage + ".ini",
 		success: function(data){
 		
 					debug("Language file loaded");
