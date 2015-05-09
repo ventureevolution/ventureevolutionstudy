@@ -241,9 +241,9 @@ function languageLoad(){
 	debug("Generate URL..");
 	var CurrentPageLocationURL = window.location.href;
 	
-	debug(CurrentPageLocationURL.substring(0, CurrentPageLocationURL.lastIndexOf("/") + 1) + languagePath + currentLanguage + ".ini");
+	debug(CurrentPageLocationURL.substring(0, CurrentPageLocationURL.lastIndexOf("/") + 1) + languagePath + currentLanguage + ".lang");
 	$.ajax({
-		url: CurrentPageLocationURL.substring(0, CurrentPageLocationURL.lastIndexOf("/") + 1) + languagePath + currentLanguage + ".ini",
+		url: CurrentPageLocationURL.substring(0, CurrentPageLocationURL.lastIndexOf("/") + 1) + languagePath + currentLanguage + ".lang",
 		success: function(data){
 		
 					debug("Language file loaded");
