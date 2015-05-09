@@ -237,6 +237,7 @@ function outputAllDataCSVFile(presentationDiv){
 
 function languageLoad(){
 
+	debug("Language file loading..");
 	$.ajax({
 		url: languagePath + currentLanguage + ".ini",
 		success: function(data){
