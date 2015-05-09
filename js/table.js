@@ -301,5 +301,6 @@ function languageReplace(){
 
 //Initialisation
 languageLoad();
+debug('Is language loading ok?');
 window.onbeforeunload = function() { return languageReplacement['SYS1']; };
 runStage(stages[stageCurrentStage]);
