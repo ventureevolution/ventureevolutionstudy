@@ -242,8 +242,10 @@ function languageLoad(){
 		url: languagePath + currentLanguage + ".ini",
 		success: function(data){
 		
+					debug("Language file loaded");
 					tempReplacementLoader = $.csv.toArrays(data);
 					
+					debug("Language file pushed to array and loading to languageReplacement");
 					//alert(tempReplacementLoader);
 					
 					for(var i = 0; i < tempReplacementLoader.length; i++){
