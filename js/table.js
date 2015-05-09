@@ -265,6 +265,9 @@ function languageLoad(){
 					
 					debug(languageReplacement);
 				},
+		fail: function(){
+					debug("Retrieval failed");
+				},
 		async: false
 	});
 }
