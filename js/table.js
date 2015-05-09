@@ -6,7 +6,7 @@ This script is intended for Venture Evolution Study
 
 //Fixed variables
 var stagePath = "stages/";
-var languagePath = "./language/";
+var languagePath = "language/";
 var stageCurrentStage = 0;
 
 
@@ -238,9 +238,9 @@ function outputAllDataCSVFile(presentationDiv){
 function languageLoad(){
 
 	debug("Language file loading..");
-	debug(languagePath + currentLanguage + ".ini");
+	debug(window.location.protocol + "//" + window.location.host + "/" + languagePath + currentLanguage + ".ini");
 	$.ajax({
-		url: languagePath + currentLanguage + ".ini",
+		url: window.location.protocol + "//" + window.location.host + "/" + languagePath + currentLanguage + ".ini",
 		success: function(data){
 		
 					debug("Language file loaded");
