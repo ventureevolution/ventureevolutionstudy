@@ -236,24 +236,29 @@ function outputAllDataCSVFile(presentationDiv){
 }
 
 function languageLoad(){
-	$.get(languagePath + currentLanguage + ".ini", function(data){
+
+	$.ajax({
+		url: languagePath + currentLanguage + ".ini",
+		success: function(data){
 		
-		tempReplacementLoader = $.csv.toArrays(data);
-		
-		//alert(tempReplacementLoader);
-		
-		for(var i = 0; i < tempReplacementLoader.length; i++){
-			
-			var tempReplacePointer = tempReplacementLoader[i][0];
-			var tempReplaceValue = tempReplacementLoader[i][1];
-			
-			languageReplacement[tempReplacePointer] = tempReplaceValue;
-			
-		}
-		
-		//debug("languageLoad() Sample value S1P3: " + languageReplacement['S1P3']);
-		
-		debug(languageReplacement);
+					tempReplacementLoader = $.csv.toArrays(data);
+					
+					//alert(tempReplacementLoader);
+					
+					for(var i = 0; i < tempReplacementLoader.length; i++){
+						
+						var tempReplacePointer = tempReplacementLoader[i][0];
+						var tempReplaceValue = tempReplacementLoader[i][1];
+						
+						languageReplacement[tempReplacePointer] = tempReplaceValue;
+						
+					}
+					
+					//debug("languageLoad() Sample value S1P3: " + languageReplacement['S1P3']);
+					
+					debug(languageReplacement);
+				},
+		async: false
 	});
 }
 
