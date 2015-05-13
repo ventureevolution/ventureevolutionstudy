@@ -244,6 +244,7 @@ function languageLoad(){
 	debug(CurrentPageLocationURL.substring(0, CurrentPageLocationURL.lastIndexOf("/") + 1) + languagePath + currentLanguage + ".lang");
 	$.ajax({
 		url: CurrentPageLocationURL.substring(0, CurrentPageLocationURL.lastIndexOf("/") + 1) + languagePath + currentLanguage + ".lang",
+		dataType: "text",
 		success: function(data){
 		
 					debug("Language file loaded");
