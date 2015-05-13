@@ -248,6 +248,7 @@ function languageLoad(){
 		success: function(data){
 		
 					debug("Language file loaded");
+					debug(data);
 					tempReplacementLoader = $.csv.toArrays(data);
 					
 					debug("Language file pushed to array and loading to languageReplacement");
