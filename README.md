@@ -11,4 +11,4 @@ Download or clone the project into a local computer
 Step 2:
 Double click or Open the file "Index.html" in the project folder; and you are DONE!
 
-This project is open sourced and sponsored by the Venture Evolution Studies team in INSEADasdas
+This project is open sourced and sponsored by the Venture Evolution Studies team in INSEAD
