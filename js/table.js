@@ -13,6 +13,7 @@ var stageCurrentStage = 0;
 //Storage for data
 var personal = [];
 var mycompanydata = [];
+var relatedBusiness = [];
 var pointdata = [];
 var attributedata = [];
 var attributedataopp = [];
@@ -21,6 +22,7 @@ var attributeSequence = [];
 var companySequence = [];
 var finalScale = [];
 var languageReplacement = [];
+var comparisonData = [];
 
 
 //Functions
@@ -51,6 +53,8 @@ function runStage(stageSelected){
 }
 
 function stageJump(){
+	$("#nextPage").empty();
+	$("#nextPage").append('<span class="glyphicon glyphicon-cog next-rotation-animate"></span> Loading');
 	stageCurrentStage++;
 	runStage(stages[stageCurrentStage]);
 }
@@ -236,24 +240,41 @@ function outputAllDataCSVFile(presentationDiv){
 }
 
 function languageLoad(){
-	$.get(languagePath + currentLanguage + ".ini", function(data){
+
+	debug("Language file loading..");
+	debug("Generate URL..");
+	var CurrentPageLocationURL = window.location.href;
+	
+	debug(CurrentPageLocationURL.substring(0, CurrentPageLocationURL.lastIndexOf("/") + 1) + languagePath + currentLanguage + ".ini");
+	$.ajax({
+		url: CurrentPageLocationURL.substring(0, CurrentPageLocationURL.lastIndexOf("/") + 1) + languagePath + currentLanguage + ".ini",
+		dataType: "html",
+		success: function(data){
 		
-		tempReplacementLoader = $.csv.toArrays(data);
-		
-		//alert(tempReplacementLoader);
-		
-		for(var i = 0; i < tempReplacementLoader.length; i++){
-			
-			var tempReplacePointer = tempReplacementLoader[i][0];
-			var tempReplaceValue = tempReplacementLoader[i][1];
-			
-			languageReplacement[tempReplacePointer] = tempReplaceValue;
-			
-		}
-		
-		//debug("languageLoad() Sample value S1P3: " + languageReplacement['S1P3']);
-		
-		debug(languageReplacement);
+					debug("Language file loaded");
+					debug(data);
+					tempReplacementLoader = $.csv.toArrays(data);
+					
+					debug("Language file pushed to array and loading to languageReplacement");
+					//alert(tempReplacementLoader);
+					
+					for(var i = 0; i < tempReplacementLoader.length; i++){
+						
+						var tempReplacePointer = tempReplacementLoader[i][0];
+						var tempReplaceValue = tempReplacementLoader[i][1];
+						
+						languageReplacement[tempReplacePointer] = tempReplaceValue;
+						
+					}
+					
+					//debug("languageLoad() Sample value S1P3: " + languageReplacement['S1P3']);
+					
+					debug(languageReplacement);
+				},
+		fail: function(){
+					debug("Retrieval failed");
+				},
+		async: false
 	});
 }
 
@@ -295,5 +316,6 @@ function languageReplace(){
 
 //Initialisation
 languageLoad();
+debug('Is language loading ok?');
 window.onbeforeunload = function() { return languageReplacement['SYS1']; };
 runStage(stages[stageCurrentStage]);
