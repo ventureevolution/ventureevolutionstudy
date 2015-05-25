@@ -6,10 +6,18 @@
 <!-- Content of the page -->
 <div class="row">
 	<div class="col-md-8 col-md-offset-2">
+<<<<<<< HEAD
 		<form id="stage3b-form">
 		<div id="stage3b-content"></div>
 		</form>
 		<button class="btn btn-success" id="nextPage"><div id="S5P7" class="textreplace"></div></button>
+=======
+		<p><div id="S3BP1" class="textreplace"></div><span id="stage3b-company-name"></span><div id="S3BP2" class="textreplace"></div></p>
+		<form id="stage3b-form">
+		<div id="stage3b-content"></div>
+		</form>
+		<button class="btn btn-success" id="nextPage"><div id="S3BP3" class="textreplace"></div></button>
+>>>>>>> web-deployment
 	</div>
 </div>
 <!-- Script of the page -->
@@ -18,11 +26,36 @@ languageReplace();
 
 $( document ).ready(function() {
 
+<<<<<<< HEAD
 	var stage3bLoopCounter = pointdata.length;
 	
 	for(var stage3bLoop; stage3bLoop < stage3bLoopCounter; stage3bLoop++){
 		$("#stage3b-content").append("");
 	}
 
+=======
+	$("#stage3b-company-name").append(mycompanydata[0]);
+
+	var stage3bLoopCounter = pointdata.length;
+	
+	for(var stage3bLoop = 0; stage3bLoop < stage3bLoopCounter; stage3bLoop++){
+		$("#stage3b-content").append('<div class="checkbox"><label><input type="checkbox" value="'+pointdata[stage3bLoop][0]+'">'+pointdata[stage3bLoop][0]+'</label></div><br>');
+	}
+
+	 $("#nextPage").click(function(){
+        $('input[type=checkbox]').each(function () {
+                   if (this.checked) {
+                       relatedBusiness.push($(this).val());
+                   }
+        });
+        
+        //Change the loading image
+        $("#nextPage").empty();
+        $("#nextPage").append('<span class="glyphicon glyphicon-cog next-rotation-animate"></span> Loading');
+        //Change stage count and jump to next stage
+        stageCurrentStage++;
+        runStage(stages[stageCurrentStage]);
+    });
+>>>>>>> web-deployment
 });
 </script>
