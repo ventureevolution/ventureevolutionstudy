@@ -177,10 +177,10 @@ $( document ).ready(function() {
 					//Save the data for this page
 					stage6SaveScaleData(stage6PageNumber);
 					
-                    //Change the loading image
+					//Change the loading image
                     $("#nextPage").empty();
                     $("#nextPage").append('<span class="glyphicon glyphicon-cog next-rotation-animate"></span> Loading');
-                    
+					
 					//Make increament to go to next page
 					stage6PageNumber++;
 					
@@ -246,7 +246,7 @@ $( document ).ready(function() {
 		
 		//If its equals to the ideal self
 		if(tempArraySelectedID == idealSelfid){
-			$(".stage6-competitor-name").append(languageReplacement['S6P8']+mycompanydata[0]+languageReplacement['S6P8B']);
+			$(".stage6-competitor-name").append(languageReplacement['S6P8']);
 		}else{
 			$(".stage6-competitor-name").append(pointdata[tempArraySelectedID][0]);
 		}

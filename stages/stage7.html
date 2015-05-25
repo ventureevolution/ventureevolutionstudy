@@ -136,10 +136,6 @@ $( document ).ready(function() {
 					//Save all new attributes into [comparisonData]
 					stage7SavecomparisonData();
 					
-                    //Change the loading image
-                    $("#nextPage").empty();
-                    $("#nextPage").append('<span class="glyphicon glyphicon-cog next-rotation-animate"></span> Loading');
-                    
 					//Change stage count and jump to next stage
 					stageCurrentStage++;
 					runStage(stages[stageCurrentStage]);

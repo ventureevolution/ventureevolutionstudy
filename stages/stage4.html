@@ -24,7 +24,7 @@
 <!-- Content of the page -->
 <div class="row">
 	<div class="col-md-8 col-md-offset-2">
-		<p><div id="S4P1" class="textreplace"></div><span id="stage4-mycompany"></span><div id="S4P2" class="textreplace"></div><span id="stage4-competitor"></span><div id="S4P3" class="textreplace"></div></p>
+		<p><div id="S4P1" class="textreplace"></div><b id="stage4-mycompany"></b><div id="S4P2" class="textreplace"></div><b id="stage4-competitor"></b><div id="S4P3" class="textreplace"></div></p>
 		<form id="stage4-form">
 			<div class="row">
 				<div class="col-md-8 col-md-offset-2">
@@ -166,10 +166,6 @@ $( document ).ready(function() {
 					//Save all new attributes into [attributedata]
 					stage4SaveAttributeData();
 					
-                    //Change the loading image
-                    $("#nextPage").empty();
-                    $("#nextPage").append('<span class="glyphicon glyphicon-cog next-rotation-animate"></span> Loading');
-                    
 					//Change stage count and jump to next stage
 					stageCurrentStage++;
 					runStage(stages[stageCurrentStage]);
@@ -213,7 +209,7 @@ $( document ).ready(function() {
 		var enableStage4AttributesCounter = 0;
 		
 		while(enableStage4AttributesCounter < countAttribute){
-			$("#stage4-selection .col-md-8 .row").append('<div class="col-md-4"><button type="button" class="btn btn-primary btn-block selectionButtonSlot" id="stage4-att-btn'+enableStage4AttributesCounter+'">'+attributedata[enableStage4AttributesCounter]+'</button></div>');
+			$("#stage4-selection .col-md-8 .row").append('<div class="col-md-4"><button type="button" class="btn btn-danger btn-block selectionButtonSlot" id="stage4-att-btn'+enableStage4AttributesCounter+'">'+attributedata[enableStage4AttributesCounter]+'</button></div>');
 			enableStage4AttributesCounter++;
 			
 			debug("Stage4 - enableStage4Attributes() - loop counter: "+enableStage4AttributesCounter);
@@ -257,7 +253,7 @@ $( document ).ready(function() {
 						$(this).parent().parent().remove();
 						
 						//Add the button back into the stage
-						$("#stage4-selection .col-md-8 .row").append('<div class="col-md-4"><button type="button" class="btn btn-primary btn-block selectionButtonSlot" id="stage4-att-btn'+theSelectedID+'">'+attributedata[theSelectedID]+'</button></div>');
+						$("#stage4-selection .col-md-8 .row").append('<div class="col-md-4"><button type="button" class="btn btn-danger btn-block selectionButtonSlot" id="stage4-att-btn'+theSelectedID+'">'+attributedata[theSelectedID]+'</button></div>');
 						
 						//Enable the button click function
 						enableStage4AttributeClick("#stage4-att-btn"+theSelectedID);
@@ -290,7 +286,7 @@ $( document ).ready(function() {
 					$(this).parent().parent().remove();
 					
 					//Add the button back into the stage
-					$("#stage4-selection .col-md-8 .row").append('<div class="col-md-4"><button type="button" class="btn btn-primary btn-block selectionButtonSlot" id="stage4-att-btn'+theSelectedID+'">'+attributedata[theSelectedID]+'</button></div>');
+					$("#stage4-selection .col-md-8 .row").append('<div class="col-md-4"><button type="button" class="btn btn-danger btn-block selectionButtonSlot" id="stage4-att-btn'+theSelectedID+'">'+attributedata[theSelectedID]+'</button></div>');
 					
 					//Enable the button click function
 					enableStage4AttributeClick("#stage4-att-btn"+theSelectedID);

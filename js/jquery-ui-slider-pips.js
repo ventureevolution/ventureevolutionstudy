@@ -253,6 +253,7 @@
                 // add this current pip to the collection
                 return  "<span class=\""+classes+"\" style=\""+css+"\">"+
                             "<span class=\"ui-slider-line\"></span>"+
+                            "<span class=\"ui-slider-label\" data-value=\""+labelValue+"\">"+ options.formatLabel(label) +"</span>"+
                         "</span>";
 
             }
