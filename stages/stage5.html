@@ -25,7 +25,7 @@
 <!-- Content of the page -->
 <div class="row">
 	<div class="col-md-8 col-md-offset-2">
-		<p><div id="S5P3" class="textreplace"></div><span id="stage5-example-attribute"></span><div id="S5P4" class="textreplace"></div></p>
+		<p><div id="S5P3" class="textreplace"></div><b class="stage5-company-name"></b><div id="S5P4" class="textreplace"></div></p>
 		<p><div id="S5P5" class="textreplace"></div></p><br><br>
 	</div>
 </div>
@@ -45,13 +45,13 @@
 languageReplace();
 
 //Form placeholder text
-$("#stage5-dialog-nextMessage").attr("title",languageReplacement['S1P12']);
-$("#stage5-dialog-errorMessage").attr("title",languageReplacement['S1P13']);
+$("#stage5-dialog-nextMessage").attr("title",languageReplacement['S5P12']);
+$("#stage5-dialog-errorMessage").attr("title",languageReplacement['S5P13']);
 
 $( document ).ready(function() {
 
 	//Display the first example attribute
-	$("#stage5-example-attribute").append(attributedata[0]);
+	$("#stage5-company-name").append(mycompanydata[0]);
 	
 	//Display each attribute as a row and input using a loop
 	var stage5MaxAttributeNumber = attributedata.length;

@@ -20,16 +20,16 @@
 }
 
 .slider-input {
-	width: 10%;
-	display: inline-block;
-	*display: inline;
-	vertical-align: top;
-	margin: 0 0 0 5%;
+	display: none;
 }
 /* End of slider styling */
-#stage6-competitor-name {
+.stage6-competitor-name {
 	font-weight: bold;
 	text-transform: uppercase;
+}
+
+.ui-slider-label {
+	display: none;
 }
 
 .ui-slider-pips .ui-slider-pip-selected-initial-first{
@@ -53,7 +53,7 @@
 <!-- Content of the page -->
 <div class="row">
 	<div class="col-md-8 col-md-offset-2">
-		<center><p><div id="S6P1" class="textreplace"></div><span id="stage6-competitor-name"></span><div id="S6P2" class="textreplace"></div></p><p><div id="S6P3" class="textreplace"></div></p></center><br><br><br>
+		<center><p><div id="S6P1" class="textreplace"></div><span class="stage6-competitor-name"></span><div id="S6P2" class="textreplace"></div><span class="stage6-competitor-name"></span><div id="S6P3" class="textreplace"></div></p></center><br><br><br>
 	</div>
 </div>
 <div class="row">
@@ -177,6 +177,10 @@ $( document ).ready(function() {
 					//Save the data for this page
 					stage6SaveScaleData(stage6PageNumber);
 					
+					//Change the loading image
+                    $("#nextPage").empty();
+                    $("#nextPage").append('<span class="glyphicon glyphicon-cog next-rotation-animate"></span> Loading');
+					
 					//Make increament to go to next page
 					stage6PageNumber++;
 					
@@ -230,7 +234,7 @@ $( document ).ready(function() {
 		debug("Stage6 - stage6ResetDisplay() - reset display: "+pageNumber);
 		
 		//Clear the fields
-		$("#stage6-competitor-name").empty();
+		$(".stage6-competitor-name").empty();
 		$("#stage6-form").empty();
 		$("#stage6-next").empty();
 		
@@ -242,9 +246,9 @@ $( document ).ready(function() {
 		
 		//If its equals to the ideal self
 		if(tempArraySelectedID == idealSelfid){
-			$("#stage6-competitor-name").append(languageReplacement['S6P8']);
+			$(".stage6-competitor-name").append(languageReplacement['S6P8']);
 		}else{
-			$("#stage6-competitor-name").append(pointdata[tempArraySelectedID][0]);
+			$(".stage6-competitor-name").append(pointdata[tempArraySelectedID][0]);
 		}
 	}
 	
@@ -264,7 +268,7 @@ $( document ).ready(function() {
 			
 			var displayTextPair = stage6DisplayScaleOrderingOutput(stage6AttributeOrderArray[stage6DisplayScaleCounter], stage6DisplayScaleCounter);
 			
-			$("#stage6-form").append('<div class="row slider-row" id="attribute-slider-'+attributeSequence[stage6DisplayScaleCounter]+'"><div class="col-md-2">'+displayTextPair[0]+'</div><div class="col-md-8"><div class="slider-group"><div class="slider"></div><input id="attribute-slider-input-'+attributeSequence[stage6DisplayScaleCounter]+'" class="slider-input form-control" type="text" disabled></div></div><div class="col-md-2">'+displayTextPair[1]+'</div></div>');
+			$("#stage6-form").append('<div class="row slider-row" id="attribute-slider-'+attributeSequence[stage6DisplayScaleCounter]+'"><div class="col-md-2">'+displayTextPair[0]+'</div><div class="col-md-8"><center><div class="slider-group"><div class="slider"></div><input id="attribute-slider-input-'+attributeSequence[stage6DisplayScaleCounter]+'" class="slider-input form-control" type="text" disabled></div></center></div><div class="col-md-2">'+displayTextPair[1]+'</div></div>');
 			
 			stage6DisplayScaleCounter++;
 		}

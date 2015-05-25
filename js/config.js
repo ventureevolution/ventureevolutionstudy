@@ -10,6 +10,6 @@ var colorPalette = ["rgb(228,26,28)","rgb(55,126,184)","rgb(77,175,74)","rgb(152
 
 var lastZindex = 2000;
 
-var stages = ["stage1.html","stage2.html","stage3.html","stage4.html","stage5.html","stage6.html","stage7.html"];
+var stages = ["stage1.html","stage2.html","stage3.html","stage3b.html","stage4.html","stage5.html","stage6.html","stage7.html","stage8.html"];
 
 /* END OF SETTINGS */

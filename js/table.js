@@ -13,6 +13,7 @@ var stageCurrentStage = 0;
 //Storage for data
 var personal = [];
 var mycompanydata = [];
+var relatedBusiness = [];
 var pointdata = [];
 var attributedata = [];
 var attributedataopp = [];
@@ -21,6 +22,7 @@ var attributeSequence = [];
 var companySequence = [];
 var finalScale = [];
 var languageReplacement = [];
+var comparisonData = [];
 
 
 //Functions
@@ -51,6 +53,8 @@ function runStage(stageSelected){
 }
 
 function stageJump(){
+	$("#nextPage").empty();
+	$("#nextPage").append('<span class="glyphicon glyphicon-cog next-rotation-animate"></span> Loading');
 	stageCurrentStage++;
 	runStage(stages[stageCurrentStage]);
 }

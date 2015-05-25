@@ -56,38 +56,67 @@
 	    background-color: #000000;
     }
     #stage3-drawingHelp{
+    	bottom: 0;
+    	left: 0;
     	position: absolute;
-    	float: right;
 	    height: auto;
 	    width: 200px;
+    }
+    .stage3-drawing-corner{
+    	position: absolute;
+    	height: auto;
+    	width: auto;
 	    color: #474747;
 	    background-color: #B2B2B2 !important;
 	    font-size: 0.8em;
+	    bottom: 0;
+	    left: 0;
+    }
+    .stage3-drawing-line{
+	    top: 0;
+	    right: 0;
+	    width: 50px;
+	    height: 60px;
     }
     
 </style>
 <!-- Dialog Message Area -->
-<div id="stage3-dialog-message">
+<div id="stage3-dialog-message-proceed">
   <p>
     <span class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 50px 0;"></span>
     <div id="S3P1" class="textreplace"></div>
   </p>
 </div>
+<div id="stage3-dialog-message-error">
+  <p>
+    <span class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 50px 0;"></span>
+    <div id="S3P14" class="textreplace"></div>
+  </p>
+</div>
 <!-- Content of the page -->
 <div class="row">
 	<div class="col-md-8 col-md-offset-2">
-		<p><div id="S3P2" class="textreplace"></div></p>
+		<p><div id="S3P2A" class="textreplace"></div><span class="stage3-myCompanyName"></span><div id="S3P2B" class="textreplace"></div><span class="stage3-myCompanyName"></span><div id="S3P2C" class="textreplace"></div><span class="stage3-myCompanyName"></span><div id="S3P2D" class="textreplace"></div></p>
 		<div id="stage3-drawingBoard">
-			<div id="stage3-drawingHelp" style="display: none;"><div id="S3P13" class="textreplace"></div></div>
-			<div class="referencepoint" id="reference"><span id="stage3-myCompanyName"></span></div>
+			<div id="stage3-drawingHelp" style="display: none;">
+				<div id="S3P13" class="textreplace stage3-drawing-corner"></div>
+				<svg height="60" width="50" class="stage3-drawing-line">
+				  <line x1="0" y1="50" x2="50" y2="0" style="stroke:rgb(84,84,84);stroke-width:2" />
+				</svg>
+			</div>
+			<div class="referencepoint" id="reference"><span class="stage3-myCompanyName"></span></div>
 		</div>
 	</div>
+</div>
+<div class="row">
+    <div class="col-md-8 col-md-offset-2" id="stage3-delete-buttons">
+        <!-- Add the delete competitor button -->
+    </div>
 </div>
 <form id="stage3-form">
 <div class="row">
 	<div class="col-md-8 col-md-offset-2">
 		<br>
-
 		<p class="form-group">
 			<label for="stage3-newCompetitor"><div id="S3P3" class="textreplace"></div></label>
 			<input type="text" class="form-control" id="stage3-newCompetitor" name="stage3-newCompetitor">
@@ -125,7 +154,7 @@ $( document ).ready(function() {
 	);
 
 	//Display my company name in the center of the div box
-	$("#stage3-myCompanyName").append(mycompanydata[0]);
+	$(".stage3-myCompanyName").append(mycompanydata[0]);
 	
 	//Add competitor counter to simplify referencing
 	var competitorNumber = 0;
@@ -159,8 +188,12 @@ $( document ).ready(function() {
 			lastZindex = lastZindex + 1;
 			competitorNumber = competitorNumber + 1;
 			
-			var positionX = 190 - (competitorNumber * 10);
-			var positionY = 190 - (competitorNumber * 10);
+			var positionX = 190;
+			var positionY = 190;
+			
+			//OLD Code, change in position when created
+			//var positionX = 190 - (competitorNumber * 10);
+			//var positionY = 190 - (competitorNumber * 10);
 			
 			//Create the entry into the box
 			var pointdataPosition = pointdata.length;
@@ -202,8 +235,15 @@ $( document ).ready(function() {
 				
 				//Enable next page function
 				$("#nextPage").click(function(){
-					//alert(pointdata);
-					$( "#stage3-dialog-message" ).dialog( "open" );
+				
+					//IF non of the points were moved, DO NOT proceed
+					if(checkPointDataChanges()){
+						$( "#stage3-dialog-message-proceed" ).dialog( "open" );
+						$("#nextPage").empty();
+						$("#nextPage").append('<span class="glyphicon glyphicon-cog next-rotation-animate"></span> Loading');
+					}else{
+						$( "#stage3-dialog-message-error" ).dialog( "open" );
+					}
 					
 				});
 			}
@@ -213,7 +253,7 @@ $( document ).ready(function() {
 	
 	//Dialog function
 	$(function() {
-		$( "#stage3-dialog-message" ).dialog({
+		$( "#stage3-dialog-message-proceed" ).dialog({
 			autoOpen: false,
 			modal: true,
 			buttons: {
@@ -225,6 +265,33 @@ $( document ).ready(function() {
 			}
 		});
 	});
+	$(function() {
+		$( "#stage3-dialog-message-error" ).dialog({
+			autoOpen: false,
+			modal: true,
+			buttons: {
+				Yes: function() {
+					$(this).dialog( "close" );
+				}
+			}
+		});
+	});
+
+	function checkPointDataChanges(){
+		
+		var maxLoop = pointdata.length;
+		var setReturnValue = true;
+		
+		for(var LoopCounter = 0; LoopCounter < maxLoop; LoopCounter++){
+			
+			debug('X: '+pointdata[LoopCounter][3][0].toString()+' Y: '+pointdata[LoopCounter][3][1].toString());
+			if((pointdata[LoopCounter][3][0] == 0) && (pointdata[LoopCounter][3][1] == 0)){
+				setReturnValue = false;
+			}
+		}
+		
+		return setReturnValue;
+	}
 
 });
 </script>
