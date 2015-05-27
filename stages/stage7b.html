@@ -1,0 +1,396 @@
+<!-- Styling of the page -->
+<style>
+
+/* Slider styling */      
+#steps-fivepercent-slider .ui-slider-tip {
+    visibility: visible;
+    opacity: 1;
+    top: -30px;
+}
+
+.slider-row{
+	margin: 0 0 20px 0;	
+}
+
+.slider{
+	width:80%;
+	display: inline-block;
+	*display: inline;
+	vertical-align: top;
+}
+
+.slider-input {
+	display: none;
+}
+/* End of slider styling */
+.stage7b-competitor-name {
+	font-weight: bold;
+	text-transform: uppercase;
+}
+
+.ui-slider-label {
+	display: none;
+}
+
+.ui-slider-pips .ui-slider-pip-selected-initial-first{
+	color: #999 !important;
+	font-weight: normal !important;
+}
+
+.ui-slider-pips .ui-slider-pip-selected-first {
+	color: #999 !important;
+	font-weight: normal !important;	
+}
+
+</style>
+<!-- Dialog Message Area -->
+<div id="stage7b-dialog-message">
+  <p>
+    <span class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 50px 0;"></span>
+    <div id="S7BP9" class="textreplace"></div>
+  </p>
+</div>
+<!-- Content of the page -->
+<div class="row">
+	<div class="col-md-8 col-md-offset-2">
+		<center><p><div id="S7BP1" class="textreplace"></div><span class="stage7b-competitor-name"></span><div id="S7BP2" class="textreplace"></div><span class="stage7b-competitor-name"></span><div id="S7BP3" class="textreplace"></div></p></center><br><br><br>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-8 col-md-offset-2" id="stage7b-form">
+	</div>
+</div>
+<div class="row" id ="stage7b-next">
+</div>
+<!-- Script of the page -->
+<!-- This is for sliders -->
+<script src="js/jquery-2.1.1.js"></script>
+<script src="js/jquery-ui.min.js"></script>
+<script src="js/jquery-ui-slider-pips.js"></script>
+<script>
+
+languageReplace();
+$("#stage7b-dialog-message").attr("title",languageReplacement['S7BP10']);
+
+$( document ).ready(function() {
+	
+	//Step 1: Set construct order
+	//Get number of attributes
+	var stage7bAttributeNumber = attributedata.length;
+	
+	var stage7bAttributeOrderArray = [];
+
+	var stage7bGlobalAttributeCounter = 0;
+
+	while(stage7bGlobalAttributeCounter < stage7bAttributeNumber){
+		
+		//Insert into array either 1 or 2 (1: will be used for order Original Attribute vs Opposite Attribute, 2: will be used for order Opposite Attribute vs Original Attribute)
+		stage7bAttributeOrderArray.push(Math.floor((Math.random() * 2) + 1));
+		
+		stage7bGlobalAttributeCounter++;
+	}
+	
+	//Store in global order attribute array
+	attributeOrder = stage7bAttributeOrderArray.slice();
+	
+	//Randomize the attribute display sequence
+	debug("Stage 6 - generate attribute sequence");
+	attributeSequence = generateRandomSequenceArray(attributedata.length);
+	
+	debug("Stage 6 attribute sequence: " + attributeSequence.join(","));
+	
+	//Randomize the company display sequence
+	debug("Stage 6 - generate company sequence");
+	companySequence = generateRandomSequenceArray(parseInt(pointdata.length) + 1);
+	
+	debug("Stage 6 company sequence: " + companySequence.join(","));
+	
+	//Store the Ideal Self ID
+	idealSelfid = parseInt(pointdata.length);
+	
+	debug("Stage 6 ideal self id: " + idealSelfid);
+	
+	//Step 2: create pagination
+	//Set initial page number
+	var stage7bPageNumber = 0;
+	
+	var stage7bMaxPageNumber = pointdata.length;
+	
+	debug("stage7b - stage7b - stage7bMaxPageNumber: "+stage7bMaxPageNumber);
+	
+	stage7bRunPage(stage7bPageNumber);
+	
+	
+	//Generate random sequence array in which attributes will appear
+	function generateRandomSequenceArray(anArrayLength){
+		
+		var tempArray = new Array();
+		
+		debug("stage7b - generateRandomSequenceArray: populate array");
+		//Populate the array
+		for(i = 0; i < anArrayLength; i++){
+			tempArray.push(i);
+		}
+		
+		debug("stage7b - generateRandomSequenceArray shuffle array");
+		for(j = anArrayLength - 1; j >= 0; j--){
+			
+			var tempValue, tempIndex;
+			
+			tempIndex = Math.floor(Math.random() * j);
+			
+			tempValue = tempArray[j];
+			tempArray[j] = tempArray[tempIndex];
+			tempArray[tempIndex] = tempValue;
+			
+		}
+		
+		debug("stage7b - generateRandomSequenceArray shuffle array result: " + tempArray.join(","));
+		
+		return tempArray;
+	}
+	
+	//Switch page function
+	function stage7bRunPage(pageNumber){
+		
+		debug("stage7b - stage7bRunPage() running");
+		
+		//Reset the display
+		stage7bResetDisplay(pageNumber);
+		
+		stage7bDisplayScale();
+		
+		//Display next button trigger
+		if((stage7bPageNumber >= 0) && (stage7bPageNumber <= (stage7bMaxPageNumber - 1))){
+			
+			//Display next button
+			$("#stage7b-next").append('<div class="col-md-8 col-md-offset-2"><center>'+languageReplacement['S7BP4']+'<br><br><button class="btn btn-success" id="nextPage">'+languageReplacement['S7BP5']+'</button></center></div>');
+			
+			//Enable the next page function
+			$("#nextPage").click(function(){
+				
+				var stage7bCheckSlidersOption = stage7bCheckSliders();
+				
+				if(stage7bCheckSlidersOption == 1){
+					debug("stage7b - stage7bRunPage() - next stage");
+				
+					//Save the data for this page
+					stage7bSaveScaleData(stage7bPageNumber);
+					
+                    //Change the loading image
+                    $("#nextPage").empty();
+                    $("#nextPage").append('<span class="glyphicon glyphicon-cog next-rotation-animate"></span> Loading');
+                    
+					//Make increament to go to next page
+					stage7bPageNumber++;
+					
+					//Go to next page
+					stage7bRunPage(stage7bPageNumber);	
+				}else{
+					//Pop up dialog box to prompt user input
+					debug("stage7b - Dialog box prompted");
+					stage7bRunDialog();
+				}
+				
+			});
+			
+		}else if(stage7bPageNumber > (stage7bMaxPageNumber - 1)){
+			
+			$("#stage7b-next").append('<div class="col-md-8 col-md-offset-2"><center>'+languageReplacement['S7BP6']+'<br><br><button class="btn btn-success" id="nextPage">'+languageReplacement['S7BP7']+'</button></center></div>');
+			
+			//Enable the complete button
+			$("#nextPage").click(function(){
+				
+				var stage7bCheckSlidersOption = stage7bCheckSliders();
+				
+				if(stage7bCheckSlidersOption == 1){
+				
+					debug("stage7b - stage7bRunPage() - Quiz completed!");
+					
+					//Save the data for this page
+					stage7bSaveScaleData(stage7bPageNumber);
+					
+					//Change stage count and jump to next stage
+					stageCurrentStage++;
+					runStage(stages[stageCurrentStage]);
+				
+				}else{
+					//Pop up dialog box to prompt user input
+					debug("stage7b - Dialog box prompted");
+					stage7bRunDialog();
+				}
+				
+			});
+			
+		}
+		
+	}
+	
+	//Reset the display
+	function stage7bResetDisplay(pageNumber){
+		
+		debug("stage7b - stage7bResetDisplay() running");
+		
+		debug("stage7b - stage7bResetDisplay() - reset display: "+pageNumber);
+		
+		//Clear the fields
+		$(".stage7b-competitor-name").empty();
+		$("#stage7b-form").empty();
+		$("#stage7b-next").empty();
+		
+		debug("stage7b - stage7bResetDisplay() - pointdata: "+pointdata);
+		
+		var tempArraySelectedID = companySequence[parseInt(pageNumber)];
+		
+		debug("stage7b - stage7bResetDisplay() - tempArraySelectedID: " + tempArraySelectedID);
+		
+		//If its equals to the ideal self
+		if(tempArraySelectedID == idealSelfid){
+			$(".stage7b-competitor-name").append(languageReplacement['S7BP8']+mycompanydata[0]+languageReplacement['S7BP8B']);
+		}else{
+			$(".stage7b-competitor-name").append(pointdata[tempArraySelectedID][0]);
+		}
+	}
+	
+	
+	
+	//Display the scales
+	function stage7bDisplayScale(){
+		
+		debug("stage7b - stage7bDisplayScale() running");
+		
+		var stage7bDisplayScaleCounter = 0;
+		
+		//Use a loop to load each row individually
+		while(stage7bDisplayScaleCounter < stage7bAttributeNumber){
+			
+			debug("stage7b - stage7bDisplayScale() - loop: "+stage7bDisplayScaleCounter);
+			
+			var displayTextPair = stage7bDisplayScaleOrderingOutput(stage7bAttributeOrderArray[stage7bDisplayScaleCounter], stage7bDisplayScaleCounter);
+			
+			$("#stage7b-form").append('<div class="row slider-row" id="attribute-slider-'+attributeSequence[stage7bDisplayScaleCounter]+'"><div class="col-md-2">'+displayTextPair[0]+'</div><div class="col-md-8"><center><div class="slider-group"><div class="slider"></div><input id="attribute-slider-input-'+attributeSequence[stage7bDisplayScaleCounter]+'" class="slider-input form-control" type="text" disabled></div></center></div><div class="col-md-2">'+displayTextPair[1]+'</div></div>');
+			
+			stage7bDisplayScaleCounter++;
+		}
+		
+		//Activate the sliders
+		stage7bActivateSliders();
+	}
+	
+	function stage7bDisplayScaleOrderingOutput(order, AttributePosition){
+		
+		debug("stage7b - stage7bDisplayScaleOrderingOutput() running");
+		
+		//Prepare the output array
+		var output = [];
+		
+		//(1: will be used for order Original Attribute vs Opposite Attribute, 2: will be used for order Opposite Attribute vs Original Attribute)
+		if(order == 1){
+			output[0] = attributedata[attributeSequence[AttributePosition]];
+			output[1] = attributedataopp[attributeSequence[AttributePosition]];
+		}else if(order == 2){
+			output[0] = attributedataopp[attributeSequence[AttributePosition]];
+			output[1] = attributedata[attributeSequence[AttributePosition]];			
+		}
+		
+		return output;
+		
+	}
+	
+	
+	function stage7bActivateSliders(){
+	
+		debug("stage7b - stage7bActivateSliders() running");
+	
+		$(".slider-input").val("");
+		$(".slider")
+		                
+		.slider({
+			step: 0.1,
+			min: 0, 
+			max: 10,
+			values: [5.0],
+			slide: function(event, ui){
+				$(this).parent().children(".slider-input").val(ui.value.toFixed(1));
+				
+				debug("stage7b - handler works");
+				$(this).find(".ui-slider-handle").show();
+			} 
+		})
+		                
+		.slider("pips", {
+			rest: "label",
+			step: 10
+		})
+		                
+		.slider("float");
+
+		//first hide the scale
+		$(".ui-slider-handle").hide();
+	}
+	
+	function stage7bSaveScaleData(PageNumber){
+		
+		//Parse actual company sequence
+		var tempArraySelectedID = companySequence[parseInt(PageNumber)];
+
+		
+		debug("stage7b - stage7bSaveScaleData() running, tempArraySelectedID: " + tempArraySelectedID);
+		
+		//Create the empty array
+		finalScale[tempArraySelectedID] = [];
+		
+		//Push all the values into the empty array
+		$(".slider-input").each(function(){
+			
+			var thisInternalValue = $(this).val();
+			var thisLocationIDAttribute = parseInt($(this).attr('id').replace(/attribute-slider-input-/,''),10);
+			
+			//finalScale[tempArraySelectedID].push(thisInternalValue);
+			
+			finalScale[tempArraySelectedID][thisLocationIDAttribute] = thisInternalValue;
+			
+			debug("stage7b - stage7bSaveScaleData() for location:" + thisLocationIDAttribute + ", slider-input value: "+thisInternalValue);
+		});
+		
+		debug("stage7b - stage7bSaveScaleData() sub-final array: "+JSON.stringify(finalScale));
+		
+	}
+	
+	function stage7bCheckSliders(){
+		
+		//Check all the inputs
+		debug("stage7b - stage7bCheckSliders() checking all sliders for value");
+		
+		debug("Stage 6 - stage7bCheckSliders() by default no missing value until found");
+		var stage7bCheckSlidersDefault = 1;
+		
+		$(".slider-input").each(function(){
+			var thisInternalValue = $(this).val();
+			
+			if(!thisInternalValue){
+				debug("Stage 6 - stage7bCheckSliders() missing value found");
+				stage7bCheckSlidersDefault = 0;
+			}
+		});
+		
+		return stage7bCheckSlidersDefault;
+	}
+	
+	function stage7bRunDialog(){
+		$( "#stage7b-dialog-message" ).dialog( "open" );
+	}
+	
+	$(function(){
+		$( "#stage7b-dialog-message" ).dialog({
+			autoOpen: false,
+			modal: true,
+			buttons: {
+				Ok: function() {
+					$(this).dialog( "close" );
+				}
+			}
+		});
+	});
+});
+</script>

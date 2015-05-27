@@ -8,7 +8,7 @@ This script is intended for Venture Evolution Study
 var stagePath = "stages/";
 var languagePath = "language/";
 var stageCurrentStage = 0;
-
+var competitorNumber = 0;
 
 //Storage for data
 var personal = [];
@@ -23,6 +23,7 @@ var companySequence = [];
 var finalScale = [];
 var languageReplacement = [];
 var comparisonData = [];
+var comparisonDataPair = [];
 
 
 //Functions
@@ -67,7 +68,7 @@ function checkValueNotInPointData(searchValue){
 	
 	var ArrayMaxPoint = pointdata.length;
 	
-	var counter = 0;
+	var counter = 1;
 	
 	while(counter < ArrayMaxPoint){
 		tempArray.push(pointdata[counter][0]);

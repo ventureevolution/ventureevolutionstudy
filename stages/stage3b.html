@@ -1,23 +1,23 @@
 <!-- Styling of the page -->
 <style type="text/css">
-	
+	.stage3-button {
+        width: 50%;
+        overflow:hidden;
+    }
+    #stage3b-company-name{
+        font-weight: bold;
+	    text-transform: uppercase;
+    }
 </style>
 <!-- Dialog Message Area -->
 <!-- Content of the page -->
 <div class="row">
 	<div class="col-md-8 col-md-offset-2">
-<<<<<<< HEAD
+		<p><div id="S3BP1" class="textreplace"></div><span id="stage3b-company-name"></span><div id="S3BP2" class="textreplace"></div></p><br>
 		<form id="stage3b-form">
 		<div id="stage3b-content"></div>
 		</form>
-		<button class="btn btn-success" id="nextPage"><div id="S5P7" class="textreplace"></div></button>
-=======
-		<p><div id="S3BP1" class="textreplace"></div><span id="stage3b-company-name"></span><div id="S3BP2" class="textreplace"></div></p>
-		<form id="stage3b-form">
-		<div id="stage3b-content"></div>
-		</form>
-		<button class="btn btn-success" id="nextPage"><div id="S3BP3" class="textreplace"></div></button>
->>>>>>> web-deployment
+		<center><button class="btn btn-success" id="nextPage"><div id="S3BP3" class="textreplace"></div></button></center>
 	</div>
 </div>
 <!-- Script of the page -->
@@ -26,25 +26,38 @@ languageReplace();
 
 $( document ).ready(function() {
 
-<<<<<<< HEAD
-	var stage3bLoopCounter = pointdata.length;
-	
-	for(var stage3bLoop; stage3bLoop < stage3bLoopCounter; stage3bLoop++){
-		$("#stage3b-content").append("");
-	}
-
-=======
 	$("#stage3b-company-name").append(mycompanydata[0]);
 
-	var stage3bLoopCounter = pointdata.length;
+	var stage3bLoopCounter = competitorNumber;
 	
+    
+    //ADD RANDOMIZATION LATER TO ORDER OF NAMES & ADD RANDOMIZATION TO SAVE FEATURE
+    
 	for(var stage3bLoop = 0; stage3bLoop < stage3bLoopCounter; stage3bLoop++){
-		$("#stage3b-content").append('<div class="checkbox"><label><input type="checkbox" value="'+pointdata[stage3bLoop][0]+'">'+pointdata[stage3bLoop][0]+'</label></div><br>');
-	}
+        if(!(pointdata[stage3bLoop])){
+            //DO NOTHING
+        }else{
+            $("#stage3b-content").append('<center><button class="btn btn-danger btn-lg stage3-button" id="stage3b-button-'+stage3bLoop+'">'+pointdata[stage3bLoop][0]+'</button></center><br>');
+
+            $("#stage3b-button-"+stage3bLoop).click(function(){
+                $("#stage3b-button-"+stage3bLoop).removeClass('btn-danger');
+                $("#stage3b-button-"+stage3bLoop).addClass('btn-success');
+                $("#stage3b-button-"+stage3bLoop).append('<span class="glyphicon glyphicon-ok"></span>');
+
+                $("#stage3b-button-"+stage3bLoop).click(function(){
+                    $("#stage3b-button-"+stage3bLoop).removeClass('btn-success');
+                    $("#stage3b-button-"+stage3bLoop).addClass('btn-danger');
+                    $(this).find('.glyphicon').remove();
+                });
+
+            });
+        }
+    }
 
 	 $("#nextPage").click(function(){
         $('input[type=checkbox]').each(function () {
                    if (this.checked) {
+                       //SAVE DATA
                        relatedBusiness.push($(this).val());
                    }
         });
@@ -56,6 +69,5 @@ $( document ).ready(function() {
         stageCurrentStage++;
         runStage(stages[stageCurrentStage]);
     });
->>>>>>> web-deployment
 });
 </script>

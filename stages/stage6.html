@@ -42,6 +42,17 @@
 	font-weight: normal !important;	
 }
 
+.slider-overlay{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+    background-color: rgba(192,192,192,0.3);
+}
+.stage6-col-left-align{
+    text-align: right;
+}
+
 </style>
 <!-- Dialog Message Area -->
 <div id="stage6-dialog-message">
@@ -246,7 +257,7 @@ $( document ).ready(function() {
 		
 		//If its equals to the ideal self
 		if(tempArraySelectedID == idealSelfid){
-			$(".stage6-competitor-name").append(languageReplacement['S6P8']);
+			$(".stage6-competitor-name").append(languageReplacement['S6P8']+mycompanydata[0]);
 		}else{
 			$(".stage6-competitor-name").append(pointdata[tempArraySelectedID][0]);
 		}
@@ -268,8 +279,18 @@ $( document ).ready(function() {
 			
 			var displayTextPair = stage6DisplayScaleOrderingOutput(stage6AttributeOrderArray[stage6DisplayScaleCounter], stage6DisplayScaleCounter);
 			
-			$("#stage6-form").append('<div class="row slider-row" id="attribute-slider-'+attributeSequence[stage6DisplayScaleCounter]+'"><div class="col-md-2">'+displayTextPair[0]+'</div><div class="col-md-8"><center><div class="slider-group"><div class="slider"></div><input id="attribute-slider-input-'+attributeSequence[stage6DisplayScaleCounter]+'" class="slider-input form-control" type="text" disabled></div></center></div><div class="col-md-2">'+displayTextPair[1]+'</div></div>');
+			$("#stage6-form").append('<div class="row slider-row" id="attribute-slider-'+attributeSequence[stage6DisplayScaleCounter]+'"><div class="col-md-2 stage6-col-left-align">'+displayTextPair[0]+'</div><div class="col-md-7"><center><div class="slider-group"><div class="slider"></div><input id="attribute-slider-input-'+attributeSequence[stage6DisplayScaleCounter]+'" class="slider-input form-control" type="text" disabled></div></center></div><div class="col-md-2">'+displayTextPair[1]+'</div><div class="col-md-1"><div class="checkbox"><label><input type="checkbox" id="attribute-available-input-'+attributeSequence[stage6DisplayScaleCounter]+'" value="na">N.A.</label></div></div></div>');
 			
+            //To hide the slider
+            $("attribute-available-input-"+attributeSequence[stage6DisplayScaleCounter]).change(function(){
+                if(this.checked){
+                    $(this).parent().parent().parent().append("<div class='slider-overlay'></div>");
+                }else{
+                    $(this).parent().parent().parent().find('.slider-overlay');
+                }
+            
+            });
+            
 			stage6DisplayScaleCounter++;
 		}
 		
@@ -341,16 +362,28 @@ $( document ).ready(function() {
 		finalScale[tempArraySelectedID] = [];
 		
 		//Push all the values into the empty array
-		$(".slider-input").each(function(){
+		$(".slider-row").each(function(){
 			
-			var thisInternalValue = $(this).val();
-			var thisLocationIDAttribute = parseInt($(this).attr('id').replace(/attribute-slider-input-/,''),10);
-			
-			//finalScale[tempArraySelectedID].push(thisInternalValue);
-			
-			finalScale[tempArraySelectedID][thisLocationIDAttribute] = thisInternalValue;
-			
-			debug("Stage6 - stage6SaveScaleData() for location:" + thisLocationIDAttribute + ", slider-input value: "+thisInternalValue);
+            var checkBoxValue = $(this).find('input[type=checkbox]');
+            
+            if(checkBoxValue.checked){
+                //DO NOT SAVE VALUE, SAVE 'NA'
+                var thisInternalValue = 'NA';
+                var thisLocationIDAttribute = parseInt($(this).find('.slider-input').attr('id').replace(/attribute-slider-input-/,''),10);
+                
+                finalScale[tempArraySelectedID][thisLocationIDAttribute] = thisInternalValue;
+                
+                debug("Stage6 - stage6SaveScaleData() for location:" + thisLocationIDAttribute + ", slider-input value: "+thisInternalValue);
+            }else{
+                //SAVE VALUE
+                var thisInternalValue = $(this).find('.slider-input').val();
+                var thisLocationIDAttribute = parseInt($(this).find('.slider-input').attr('id').replace(/attribute-slider-input-/,''),10);
+                
+                finalScale[tempArraySelectedID][thisLocationIDAttribute] = thisInternalValue;
+                
+                debug("Stage6 - stage6SaveScaleData() for location:" + thisLocationIDAttribute + ", slider-input value: "+thisInternalValue);
+            }
+            
 		});
 		
 		debug("Stage6 - stage6SaveScaleData() sub-final array: "+JSON.stringify(finalScale));
@@ -365,13 +398,20 @@ $( document ).ready(function() {
 		debug("Stage 6 - stage6CheckSliders() by default no missing value until found");
 		var stage6CheckSlidersDefault = 1;
 		
-		$(".slider-input").each(function(){
-			var thisInternalValue = $(this).val();
-			
-			if(!thisInternalValue){
-				debug("Stage 6 - stage6CheckSliders() missing value found");
-				stage6CheckSlidersDefault = 0;
-			}
+        //CONTINUE!!!!!
+        
+		$(".slider-row").each(function(){
+            
+            var checkBoxValue = $(this).find('input[type=checkbox]');
+            var thisInternalValue = $(this).find('.slider-input').val();
+            
+            if(!(thisInternalValue)){
+                if(!(checkBoxValue.checked)){
+                    debug("Stage 6 - stage6CheckSliders() missing value found");
+                    stage6CheckSlidersDefault = 0;
+                }
+            }
+ 
 		});
 		
 		return stage6CheckSlidersDefault;

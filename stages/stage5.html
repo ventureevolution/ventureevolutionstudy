@@ -2,9 +2,14 @@
 <style>
 	#stage5-example-attribute{
 		font-weight: bold;
+        text-transform: uppercase;
 	}
 	.ui-dialog {
 	    z-index: 3000;
+    }
+    .stage5-company-name{
+        font-weight: bold;
+        text-transform: uppercase;
     }
 </style>
 <!-- Dialog Message Area -->
@@ -35,9 +40,9 @@
 </div>
 <div class="row">
 	<div class="col-md-8 col-md-offset-2">
-		<p><div id="S5P6" class="textreplace"></div></p>
+		<center><p><div id="S5P6" class="textreplace"></div></p>
 		<br>
-		<button class="btn btn-success" id="nextPage"><div id="S5P7" class="textreplace"></div></button>
+		<button class="btn btn-success" id="nextPage"><div id="S5P7" class="textreplace"></div></button></center>
 	</div>
 </div>
 <!-- Script of the page -->
@@ -51,7 +56,7 @@ $("#stage5-dialog-errorMessage").attr("title",languageReplacement['S5P13']);
 $( document ).ready(function() {
 
 	//Display the first example attribute
-	$("#stage5-company-name").append(mycompanydata[0]);
+	$(".stage5-company-name").append(mycompanydata[0]);
 	
 	//Display each attribute as a row and input using a loop
 	var stage5MaxAttributeNumber = attributedata.length;
@@ -94,6 +99,11 @@ $( document ).ready(function() {
 			buttons: {
 				Yes: function() {
 					$(this).dialog( languageReplacement['S5P10'] );
+					
+					//Change the loading image
+                    $("#nextPage").empty();
+                    $("#nextPage").append('<span class="glyphicon glyphicon-cog next-rotation-animate"></span> Loading');
+					
 					stageCurrentStage++;
 					runStage(stages[stageCurrentStage]);
 				}

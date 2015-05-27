@@ -18,6 +18,12 @@
 	#stage7-competitor-name {
 		text-transform: uppercase;
 	}
+    .stage7-term {
+        width: 50%;
+    }
+    .stage7-percentage {
+        width: 10%;
+    }
 </style>
 <!-- Content of the page -->
 <div class="row">
@@ -91,7 +97,7 @@ $( document ).ready(function() {
         debug("stage7 - new input field when clicked");
 		//Step 4: Add new input fields when Add button is clicked
 		$("#stage7-add-more").one("click",function(){
-			$("#stage7-form").append('<div class="row"><div class="col-md-8 col-md-offset-2"><p class="form-group"><div class="stage7-entry">'+languageReplacement['S7P4']+'<input type="text" >'+languageReplacement['S7P5']+'<b>'+mycompanydata[0]+'</b>'+languageReplacement['S7P6']+'<b>'+tempCompetitorNameIs+'</b>'+languageReplacement['S7P7']+'</div></p></div></div>');
+			$("#stage7-form").append('<div class="row"><div class="col-md-12"><p class="form-group"><div class="stage7-entry">'+languageReplacement['S7P4']+'<input type="text" class="stage7-term">'+languageReplacement['S7P5']+'<b>'+mycompanydata[0]+'</b>'+languageReplacement['S7P6']+'<b>'+tempCompetitorNameIs+'</b>'+languageReplacement['S7P7']+'<input type="text" class="stage7-percentage">'+languageReplacement['S7P7B']+'</div></p></div></div>');
 			enablestage7Remove();
 		});
 
@@ -136,6 +142,10 @@ $( document ).ready(function() {
 					//Save all new attributes into [comparisonData]
 					stage7SavecomparisonData();
 					
+					//Change the loading image
+                    $("#nextPage").empty();
+                    $("#nextPage").append('<span class="glyphicon glyphicon-cog next-rotation-animate"></span> Loading');
+                    
 					//Change stage count and jump to next stage
 					stageCurrentStage++;
 					runStage(stages[stageCurrentStage]);
@@ -211,7 +221,7 @@ $( document ).ready(function() {
 					debug("stage7 - enablestage7ComparisonClick() - theSelectedID: "+theSelectedID);
 			
 					//Insert the item into the selection list
-					$("#stage7-form").prepend('<div class="row" id="stage7-form-row-'+comparisonData[theSelectedID]+'"><div class="col-md-8 col-md-offset-2"><p class="form-group"><div class="stage7-entry">'+languageReplacement['S7P4']+'<input type="text"  value="'+comparisonData[theSelectedID]+'">'+languageReplacement['S7P5']+'<b>'+mycompanydata[0]+'</b>'+languageReplacement['S7P6']+'<b>'+stage7CompetitorNameIs+'</b>'+languageReplacement['S7P7']+'</div></p></div></div>');
+					$("#stage7-form").prepend('<div class="row" id="stage7-form-row-'+comparisonData[theSelectedID]+'"><div class="col-md-12"><p class="form-group"><div class="stage7-entry">'+languageReplacement['S7P4']+'<input type="text"  value="'+comparisonData[theSelectedID]+'" class="stage7-term">'+languageReplacement['S7P5']+'<b>'+mycompanydata[0]+'</b>'+languageReplacement['S7P6']+'<b>'+stage7CompetitorNameIs+'</b>'+languageReplacement['S7P7']+'<input type="text" class="stage7-percentage">'+languageReplacement['S7P7B']+'</div></p></div></div>');
 					
 					//Enable the remove function
 					$("#stage7-form-row-"+comparisonData[theSelectedID]+" .stage7-remove").one("click",function(){
@@ -244,7 +254,7 @@ $( document ).ready(function() {
 				debug("stage7 - enablestage7ComparisonClick() - theSelectedID: "+theSelectedID);
 				
 				//Insert the item into the selection list
-				$("#stage7-form").prepend('<div class="row" id="stage7-form-row-'+comparisonData[theSelectedID]+'"><div class="col-md-8 col-md-offset-2"><p class="form-group"><div class="stage7-entry">'+languageReplacement['S7P4']+'<input type="text"  value="'+comparisonData[theSelectedID]+'">'+languageReplacement['S7P5']+'<b>'+mycompanydata[0]+'</b>'+languageReplacement['S7P6']+'<b>'+stage7CompetitorNameIs+'</b>'+languageReplacement['S7P7']+'</div></p></div></div>');
+				$("#stage7-form").prepend('<div class="row" id="stage7-form-row-'+comparisonData[theSelectedID]+'"><div class="col-md-12"><p class="form-group"><div class="stage7-entry">'+languageReplacement['S7P4']+'<input type="text"  value="'+comparisonData[theSelectedID]+'" class="stage7-term">'+languageReplacement['S7P5']+'<b>'+mycompanydata[0]+'</b>'+languageReplacement['S7P6']+'<b>'+stage7CompetitorNameIs+'</b>'+languageReplacement['S7P7']+'<input type="text" class="stage7-percentage">'+languageReplacement['S7P7B']+'</div></p></div></div>');
 				
 				//Enable the remove button
 				$(".stage7-remove").one("click",function(){
@@ -274,18 +284,20 @@ $( document ).ready(function() {
 		debug("stage7 - stage7SavecomparisonData() running");
 		
 		$(".stage7-entry").each(function(){
-		
-			var theValue = $(this).val();
+
+			var theValue1 = $(this).find(".stage7-term").val();
+			var theValue2 = $(this).find(".stage7-percentage").val();
 			
-			debug("stage7 - stage7SavecomparisonData() - theValue: "+theValue);
+			debug("stage7 - stage7SavecomparisonData() - theValues: "+theValue1+" and "+theValue2);
 			
-			debug("stage7 - stage7SavecomparisonData() - inArray: "+$.inArray(theValue, comparisonData));
+			debug("stage7 - stage7SavecomparisonData() - inArray: "+$.inArray(theValue1, comparisonData));
 			
-			debug("stage7 - stage7SavecomparisonData() - check NOT empty: "+(theValue != ""));
+			debug("stage7 - stage7SavecomparisonData() - check NOT empty: "+(theValue1 != ""));
 			
 			//Add to comparisonData if it does not already exist and value is not empty
-			if(($.inArray(theValue, comparisonData) < 0) && (theValue != "")){
-				comparisonData.push(theValue);
+			if(($.inArray(theValue1, comparisonData) < 0) && (theValue1 != "") && (theValue2 != "")){
+				comparisonData.push(theValue1);
+				comparisonDataPair.push(theValue2);
 			}
 			
 			debug("stage7 - stage7SavecomparisonData() - comparisonData array: " + comparisonData);
@@ -303,7 +315,7 @@ $( document ).ready(function() {
 		//Insert the stage form items
 		var stage7ResetPageDisplayCounter = 0;
 		while(stage7ResetPageDisplayCounter < 5){
-			$("#stage7-form").append('<div class="row"><div class="col-md-8 col-md-offset-2"><p class="form-group"><div class="stage7-entry">'+languageReplacement['S7P4']+'<input type="text">'+languageReplacement['S7P5']+'<b>'+mycompanydata[0]+'</b>'+languageReplacement['S7P6']+'<b>'+Stage7CompetitorNameDisplay+'</b>'+languageReplacement['S7P7']+'</div></p></div></div>');
+			$("#stage7-form").append('<div class="row"><div class="col-md-12"><p class="form-group"><div class="stage7-entry">'+languageReplacement['S7P4']+'<input type="text" class="stage7-term">'+languageReplacement['S7P5']+'<b>'+mycompanydata[0]+'</b>'+languageReplacement['S7P6']+'<b>'+Stage7CompetitorNameDisplay+'</b>'+languageReplacement['S7P7']+'<input type="text" class="stage7-percentage">'+languageReplacement['S7P7B']+'</div></p></div></div>');
 			stage7ResetPageDisplayCounter++;
 		}
         enablestage7Remove();
@@ -324,16 +336,17 @@ $( document ).ready(function() {
 		//By default the attribute inputs are assumed to be empty
 		var confirmEmpty = false;
 		
-		$(".stage7-entry input").each(function(){
+		$(".stage7-entry").each(function(){
+
+			var theValue1 = $(this).find(".stage7-term").val();
+			var theValue2 = $(this).find(".stage7-percentage").val();
 			
-			var theValue = $(this).val();
-			
-			if(theValue !=""){
+			if((theValue1 !="") && (theValue2 !="")){
 				//Should any of the attribute inputs not be empty, change the status to true
 				confirmEmpty = true;
 			}
 			
-			debug("stage7 - checkTypeAttributeNotEmpty() - theValue: "+theValue);
+			debug("stage7 - checkTypeAttributeNotEmpty() - theValues: "+theValue1+" and "+theValue2);
 			debug("stage7 - checkTypeAttributeNotEmpty() - confirmEmpty: "+confirmEmpty);
 			
 		});
