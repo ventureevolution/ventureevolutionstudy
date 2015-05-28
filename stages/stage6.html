@@ -9,11 +9,11 @@
 }
 
 .slider-row{
-	margin: 0 0 20px 0;	
+	margin: 0 0 18px 0;
 }
 
 .slider{
-	width:80%;
+	width:95%;
 	display: inline-block;
 	*display: inline;
 	vertical-align: top;
@@ -51,6 +51,15 @@
 }
 .stage6-col-left-align{
     text-align: right;
+    padding-right: 0;
+    padding-left: 0;
+}
+.stage6-col-right-align{
+    padding-right: 0;
+    padding-left: 0;
+}
+.stage6-col-na-box{
+    padding-right: 0;
 }
 
 </style>
@@ -279,7 +288,7 @@ $( document ).ready(function() {
 			
 			var displayTextPair = stage6DisplayScaleOrderingOutput(stage6AttributeOrderArray[stage6DisplayScaleCounter], stage6DisplayScaleCounter);
 			
-			$("#stage6-form").append('<div class="row slider-row" id="attribute-slider-'+attributeSequence[stage6DisplayScaleCounter]+'"><div class="col-md-2 stage6-col-left-align">'+displayTextPair[0]+'</div><div class="col-md-7"><center><div class="slider-group"><div class="slider"></div><input id="attribute-slider-input-'+attributeSequence[stage6DisplayScaleCounter]+'" class="slider-input form-control" type="text" disabled></div></center></div><div class="col-md-2">'+displayTextPair[1]+'</div><div class="col-md-1"><div class="checkbox"><label><input type="checkbox" id="attribute-available-input-'+attributeSequence[stage6DisplayScaleCounter]+'" value="na">N.A.</label></div></div></div>');
+			$("#stage6-form").append('<div class="row slider-row" id="attribute-slider-'+attributeSequence[stage6DisplayScaleCounter]+'"><div class="col-md-2 stage6-col-left-align">'+displayTextPair[0]+'</div><div class="col-md-7"><center><div class="slider-group"><div class="slider"></div><input id="attribute-slider-input-'+attributeSequence[stage6DisplayScaleCounter]+'" class="slider-input form-control" type="text" disabled></div></center></div><div class="col-md-2 stage6-col-right-align">'+displayTextPair[1]+'</div><div class="col-md-1 stage6-col-na-box"><div class="checkbox"><label><input type="checkbox" id="attribute-available-input-'+attributeSequence[stage6DisplayScaleCounter]+'" value="na">N.A.</label></div></div></div>');
 			
             //To hide the slider
             $("attribute-available-input-"+attributeSequence[stage6DisplayScaleCounter]).change(function(){

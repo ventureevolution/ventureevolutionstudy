@@ -14,9 +14,9 @@
 <div class="row">
 	<div class="col-md-8 col-md-offset-2">
 		<p><div id="S3BP1" class="textreplace"></div><span id="stage3b-company-name"></span><div id="S3BP2" class="textreplace"></div></p><br>
-		<form id="stage3b-form">
+		<div id="stage3b-form">
 		<div id="stage3b-content"></div>
-		</form>
+		</div>
 		<center><button class="btn btn-success" id="nextPage"><div id="S3BP3" class="textreplace"></div></button></center>
 	</div>
 </div>
@@ -37,30 +37,16 @@ $( document ).ready(function() {
         if(!(pointdata[stage3bLoop])){
             //DO NOTHING
         }else{
-            $("#stage3b-content").append('<center><button class="btn btn-danger btn-lg stage3-button" id="stage3b-button-'+stage3bLoop+'">'+pointdata[stage3bLoop][0]+'</button></center><br>');
+            $("#stage3b-content").append('<center><button class="btn btn-danger btn-lg stage3-button" id="stage3b-button-'+stage3bLoop+'" value="'+pointdata[stage3bLoop][0]+'">'+pointdata[stage3bLoop][0]+'</button></center><br>');
 
-            $("#stage3b-button-"+stage3bLoop).click(function(){
-                $("#stage3b-button-"+stage3bLoop).removeClass('btn-danger');
-                $("#stage3b-button-"+stage3bLoop).addClass('btn-success');
-                $("#stage3b-button-"+stage3bLoop).append('<span class="glyphicon glyphicon-ok"></span>');
-
-                $("#stage3b-button-"+stage3bLoop).click(function(){
-                    $("#stage3b-button-"+stage3bLoop).removeClass('btn-success');
-                    $("#stage3b-button-"+stage3bLoop).addClass('btn-danger');
-                    $(this).find('.glyphicon').remove();
-                });
-
-            });
+            stage3BEnableButton('stage3b-button-'+stage3bLoop);
         }
     }
 
 	 $("#nextPage").click(function(){
-        $('input[type=checkbox]').each(function () {
-                   if (this.checked) {
-                       //SAVE DATA
-                       relatedBusiness.push($(this).val());
-                   }
-        });
+	 
+	 	//Save the data
+        saveStage3Bdata();
         
         //Change the loading image
         $("#nextPage").empty();
@@ -69,5 +55,51 @@ $( document ).ready(function() {
         stageCurrentStage++;
         runStage(stages[stageCurrentStage]);
     });
+    
+    function stage3BEnableButton(DIVidentifier){
+        
+        debug("stage3b stage3BEnableButton() running");
+        
+        $("#"+DIVidentifier).one("click", function(){
+            
+            debug("stage3BEnableButton() - click activated");
+            
+            var checkAvailbility = $("#"+DIVidentifier).hasClass('btn-danger');
+            
+            if(checkAvailbility){
+            	debug("btn-danger detected");
+                $("#"+DIVidentifier).removeClass('btn-danger');
+                $("#"+DIVidentifier).addClass('btn-success');
+                $("#"+DIVidentifier).append('<span class="glyphicon glyphicon-ok"></span>');
+                
+                stage3BEnableButton(DIVidentifier);
+            }else{
+            	debug("btn-success detected");
+                $("#"+DIVidentifier).removeClass('btn-success');
+                $("#"+DIVidentifier).addClass('btn-danger');
+                $("#"+DIVidentifier).find('.glyphicon').remove();
+                
+                stage3BEnableButton(DIVidentifier);
+            }
+        });
+    }
+    
+    function saveStage3Bdata(){
+	    
+	    debug("stage3B saveStage3Bdata() running");
+	    
+	    $('button').each(function(){
+		    
+		    var checkTypeOfStatus = $(this).hasClass('btn-danger');
+		    
+		    if(checkTypeOfStatus){
+		    	debug($(this).attr('value')+" is 0");
+			    relatedBusiness.push([$(this).attr('value'),0]);
+		    }else{
+		    	debug($(this).attr('value')+" is 1");
+			    relatedBusiness.push([$(this).attr('value'),1]);
+		    }
+	    });
+    }
 });
 </script>

@@ -64,7 +64,7 @@ $( document ).ready(function() {
 	var stage5Counter = 0;
 	
 	while(stage5Counter < stage5MaxAttributeNumber){
-		$("#stage5-form").append('<div class="row" id="stage5-form-attribute-'+stage5Counter+'"><div class="col-md-5"><div class="form-group"><input type="text" class="form-control attribute-original" placeholder="'+languageReplacement['S5P8']+'" value="'+attributedata[stage5Counter]+'"></div></div><div class="col-md-2"><center><p>VS</p></center></div><div class="col-md-5"><div class="form-group"><input type="text" class="form-control attribute-opposite" placeholder="'+languageReplacement['S5P9']+'"></div></div></div>');
+		$("#stage5-form").append('<div class="row" id="stage5-form-attribute-'+stage5Counter+'"><div class="col-md-5"><div class="form-group"><input type="text" class="form-control attribute-original" placeholder="'+languageReplacement['S5P8']+'" value="'+attributedata[stage5Counter]+'"></div></div><div class="col-md-2"><center><p>vs.</p></center></div><div class="col-md-5"><div class="form-group"><input type="text" class="form-control attribute-opposite" placeholder="'+languageReplacement['S5P9']+'"></div></div></div>');
 		stage5Counter++;
 	}
 	
