@@ -10,6 +10,12 @@
     }
 </style>
 <!-- Dialog Message Area -->
+<div id="stage3B-dialog-message-proceed">
+  <p>
+    <span class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 50px 0;"></span>
+    <div id="S3BP4" class="textreplace"></div>
+  </p>
+</div>
 <!-- Content of the page -->
 <div class="row">
 	<div class="col-md-8 col-md-offset-2">
@@ -37,7 +43,7 @@ $( document ).ready(function() {
         if(!(pointdata[stage3bLoop])){
             //DO NOTHING
         }else{
-            $("#stage3b-content").append('<center><button class="btn btn-danger btn-lg stage3-button" id="stage3b-button-'+stage3bLoop+'" value="'+pointdata[stage3bLoop][0]+'">'+pointdata[stage3bLoop][0]+'</button></center><br>');
+            $("#stage3b-content").append('<center><button class="btn btn-danger btn-lg stage3-button" id="stage3b-button-'+stage3bLoop+'" value="'+pointdata[stage3bLoop][0]+'">'+pointdata[stage3bLoop][0]+'&nbsp;</button></center><br>');
 
             stage3BEnableButton('stage3b-button-'+stage3bLoop);
         }
@@ -45,16 +51,37 @@ $( document ).ready(function() {
 
 	 $("#nextPage").click(function(){
 	 
-	 	//Save the data
-        saveStage3Bdata();
-        
-        //Change the loading image
-        $("#nextPage").empty();
-        $("#nextPage").append('<span class="glyphicon glyphicon-cog next-rotation-animate"></span> Loading');
-        //Change stage count and jump to next stage
-        stageCurrentStage++;
-        runStage(stages[stageCurrentStage]);
+	 	$( "#stage3B-dialog-message-proceed" ).dialog( "open" );
+	 	
     });
+    
+    //Dialog function
+	$(function() {
+		$( "#stage3B-dialog-message-proceed" ).dialog({
+			autoOpen: false,
+			modal: true,
+			buttons: {
+				Yes: function() {
+					//Save the data
+			        saveStage3Bdata();
+			        
+			        //Close the dialog
+			        $(this).dialog( "close" );
+			        
+			        //Change the loading image
+			        $("#nextPage").empty();
+			        $("#nextPage").append('<span class="glyphicon glyphicon-cog next-rotation-animate"></span> Loading');
+			        //Change stage count and jump to next stage
+			        stageCurrentStage++;
+			        runStage(stages[stageCurrentStage]);
+				}
+			},
+			beforeClose: function(){
+				$("#nextPage").empty();
+				$("#nextPage").append(languageReplacement['S3BP3']);
+			}
+		});
+	});
     
     function stage3BEnableButton(DIVidentifier){
         

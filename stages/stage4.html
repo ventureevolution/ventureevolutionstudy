@@ -12,24 +12,29 @@
 	.stage4-remove:hover {
 		color: #c7144d;
 	}
-	#stage4-mycompany {
+	.stage4-mycompany {
 		text-transform: uppercase;
-		color: #006E51;
         font-weight: bold;
 	}
-	#stage4-competitor {
+	.stage4-competitor {
 		text-transform: uppercase;
-		color: #006E51;
         font-weight: bold;
 	}
     #stage4-form{
         margin-bottom: 0;
     }
 </style>
+<!-- Dialog Message Area -->
+<div id="stage4-dialog-message-proceed">
+  <p>
+    <span class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 50px 0;"></span>
+    <p><div id="S4P14" class="textreplace"></div><span class="stage4-competitor"></span><div id="S4P15" class="textreplace"></div><span class="stage4-mycompany"></span><div id="S4P16" class="textreplace"></div></p>
+  </p>
+</div>
 <!-- Content of the page -->
 <div class="row">
 	<div class="col-md-8 col-md-offset-2">
-		<p><div id="S4P1" class="textreplace"></div><span id="stage4-mycompany"></span><div id="S4P2" class="textreplace"></div><span id="stage4-competitor"></span><div id="S4P3" class="textreplace"></div></p>
+		<p><div id="S4P1" class="textreplace"></div><span class="stage4-mycompany"></span><div id="S4P2" class="textreplace"></div><span class="stage4-competitor"></span><div id="S4P3" class="textreplace"></div></p>
 		<form id="stage4-form">
 			<div class="row">
 				<div class="col-md-8 col-md-offset-2">
@@ -115,12 +120,12 @@ $( document ).ready(function() {
 		//Display layer: company names
 		
 		//Step 1: clear the div
-		$("#stage4-mycompany").empty();
-		$("#stage4-competitor").empty();
+		$(".stage4-mycompany").empty();
+		$(".stage4-competitor").empty();
 		
 		//Step 2: populate the div
-		$("#stage4-mycompany").append(mycompanydata[0]);
-		$("#stage4-competitor").append(tempOrderingArray[tempDisplayReferenceID][0]);
+		$(".stage4-mycompany").append(mycompanydata[0]);
+		$(".stage4-competitor").append(tempOrderingArray[tempDisplayReferenceID][0]);
 		
 		//Pop the reference out of the array
 		tempOrderingArray.splice(tempDisplayReferenceID, 1);
@@ -129,7 +134,7 @@ $( document ).ready(function() {
 		enableStage4Remove();
 	
 		//Step 4: Add new input fields when Add Likeness Dimension button is clicked
-		$("#stage4-add-likeness").one("click",function(){
+		$("#stage4-add-likeness").click(function(){
 			$("#stage4-form").append('<div class="row"><div class="col-md-8 col-md-offset-2"><p class="form-group"><input type="text" class="form-control stage4-entry" placeholder="'+languageReplacement['S4P5']+'"></p></div></div>');
 			enableStage4Remove();
 		});
@@ -158,6 +163,8 @@ $( document ).ready(function() {
 					stage4runPage(stage4pageCount);
 				}else{
 					debug("Stage4 - clicked on next when empty");
+					
+					$("#stage4-dialog-message-proceed").dialog("open");
 				}
 				
 			});
@@ -184,12 +191,27 @@ $( document ).ready(function() {
 					runStage(stages[stageCurrentStage]);
 				}else{
 					debug("Stage4 - clicked on next when empty");
+					
+					$("#stage4-dialog-message-proceed").dialog("open");
 				}
 
 			});
 		}
 
 	}
+	
+	//Dialog function
+	$(function() {
+		$( "#stage4-dialog-message-proceed" ).dialog({
+			autoOpen: false,
+			modal: true,
+			buttons: {
+				Close: function() {
+					$(this).dialog( "close" );
+				}
+			}
+		});
+	});
 
 	//Validation layer: ensure that the inputs are filled
 	function enableStage4Remove(){

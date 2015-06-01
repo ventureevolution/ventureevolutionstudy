@@ -19,6 +19,7 @@ var attributedata = [];
 var attributedataopp = [];
 var attributeOrder = [];
 var attributeSequence = [];
+var attributeSequenceStage5 = [];
 var companySequence = [];
 var finalScale = [];
 var languageReplacement = [];
@@ -157,6 +158,11 @@ function outputAllDataCSVFile(presentationDiv){
 		//Extract pointdata[] data
 		//Add header for pointdata
 		csv += "Below is the positioning data for each competitor: " + "\n\n";
+		csv += "\n";
+		csv += ",Width,Height\n";
+		csv += "Box Size (in pixel),400,400\n\n";
+		csv += ",X,Y\n";
+		csv += "Starting position,0,0\n\n";
 		csv += "Competitor name:" + "," + "Color Selected:" + "," + "Starting X position:" + "," + "Starting Y position:" + "," + "Final X position from center:" + "," + "Final Y position from center" + "\n";
 		//print all pointdata
 		for(var i = 0; i < pointdata.length; i++){

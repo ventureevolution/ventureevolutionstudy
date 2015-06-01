@@ -53,7 +53,6 @@
 	    color: #000000;
     }
     #stage3-newCompetitorButton{
-	    background-color: #000000;
     }
     #stage3-drawingHelp{
     	bottom: 0;
@@ -84,6 +83,9 @@
     }
     .stage3-remove-button {
         color: #990000;
+    }
+    .stage3-button-margin {
+	    margin: auto 15px;
     }
     
 </style>
@@ -123,7 +125,6 @@
 <form id="stage3-form">
 <div class="row">
 	<div class="col-md-8 col-md-offset-2">
-		<br>
 		<p class="form-group">
 			<label for="stage3-newCompetitor"><div id="S3P3" class="textreplace"></div></label>
 			<input type="text" class="form-control" id="stage3-newCompetitor" name="stage3-newCompetitor">
@@ -215,10 +216,10 @@ $( document ).ready(function() {
 			
 			//Create entry into the remove competitor area
             if(pointdataPosition == 0){
-                $("#stage3-delete-buttons").append('<br><p>'+languageReplacement['S3P15']+'</p><br>');
+                $("#stage3-delete-buttons").append('<br><p>'+languageReplacement['S3P15']+'</p>');
             }
             
-			$("#stage3-delete-buttons").append("<button class='btn btn-default' id='removeButton-"+pointdataPosition+"'>"+$("#stage3-newCompetitor").val()+"<span class='glyphicon glyphicon-remove-circle stage3-remove-button'></button>");
+			$("#stage3-delete-buttons").append("<button class='btn btn-default stage3-button-margin' id='removeButton-"+pointdataPosition+"'>"+$("#stage3-newCompetitor").val()+"&nbsp;<span class='glyphicon glyphicon-remove-circle stage3-remove-button'></button>");
 			
 			var fixedCompetitorName = $("#stage3-newCompetitor").val();
 			
@@ -301,6 +302,10 @@ $( document ).ready(function() {
 					stageCurrentStage++;
 					runStage(stages[stageCurrentStage]);
 				}
+			},
+			beforeClose: function(){
+				$("#nextPage").empty();
+				$("#nextPage").append(languageReplacement['S3P10']);
 			}
 		});
 	});
