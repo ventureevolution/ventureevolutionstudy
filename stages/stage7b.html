@@ -1,33 +1,355 @@
 <!-- Styling of the page -->
-<style>
-
+<style type="text/css">
+	.selectionButtonSlot{
+		margin-bottom: 15px;
+		white-space: normal; 
+	}
+	.stage7B-remove {
+		font-size: 2em;
+		color: #768393;
+		line-height: 34px;
+	}
+	.stage7B-remove:hover {
+		color: #c7144d;
+	}
+	#stage7B-mycompany-name {
+		text-transform: uppercase;
+	}
+	#stage7B-competitor-name {
+		text-transform: uppercase;
+	}
+    .stage7B-term {
+        width: 50%;
+    }
+    .stage7B-percentage {
+        width: 10%;
+    }
 </style>
-<!-- Dialog Message Area -->
-<div id="stage7b-dialog-message">
-</div>
 <!-- Content of the page -->
 <div class="row">
 	<div class="col-md-8 col-md-offset-2">
-		<center><p><div id="S7BP1" class="textreplace"></div><span class="stage7b-competitor-name"></span><div id="S7BP2" class="textreplace"></div><span class="stage7b-competitor-name"></span><div id="S7BP3" class="textreplace"></div></p></center><br><br><br>
+		<p><div id="S7BP1" class="textreplace"></div><b id="stage7B-mycompany-name"></b><div id="S7BP2" class="textreplace"></div></p><br>
+        <p><div id="S7BP3" class="textreplace"></div></p>
+		<form id="stage7B-form"></form>
 	</div>
 </div>
-<div class="row">
-	<div class="col-md-8 col-md-offset-2" id="stage7b-form">
-	</div>
+<div class="row" id="stage7B-selection">
 </div>
-<div class="row" id ="stage7b-next">
+<div class="row" id ="stage7B-next">
 </div>
 <!-- Script of the page -->
-<!-- This is for sliders -->
-<script src="js/jquery-2.1.1.js"></script>
-<script src="js/jquery-ui.min.js"></script>
-<script src="js/jquery-ui-slider-pips.js"></script>
 <script>
-
 languageReplace();
 
 $( document ).ready(function() {
 
+	//Start page count
+	var stage7BpageCount = 0;
+    var stage7BCompetitorNameIs = '';
 
+	//Check pointdata length for maximum number of pages
+	var maxPageNumber = parseInt(pointdata.length);
+
+	//Determine the order of the competitors to be compared
+	var tempOrderingArraystage7B = pointdata.slice();
+	
+	//Initialize code
+	stage7BrunPage(stage7BpageCount);
+	
+	debug("stage7B - global - pointdata: "+pointdata);
+
+
+	//Run page: Load all the page elements and clear page or data if necessary
+	function stage7BrunPage(pageNumber){
+
+		debug("stage7B - pointdata: "+tempOrderingArraystage7B);
+
+		//Get the reference ID
+		var tempDisplayReferenceID = findSmallestPointData(tempOrderingArraystage7B);
+		
+		debug("stage7B - tempDisplayReferenceID: "+tempDisplayReferenceID);
+		
+		//Display layer: company names
+		
+		//Step 1: clear the div
+		$("#stage7B-mycompany-name").empty();
+		$("#stage7B-competitor-name").empty();
+		
+		//Step 2: populate the div
+		$("#stage7B-mycompany-name").append(mycompanydata[0]);
+		
+        var tempCompetitorNameIs = tempOrderingArraystage7B[tempDisplayReferenceID][0];
+        stage7BCompetitorNameIs = tempCompetitorNameIs;
+        $("#stage7B-competitor-name").append(tempCompetitorNameIs);
+		
+        
+        
+        debug("stage7B - splice tempDisplayReferenceID");
+		//Pop the reference out of the array
+		tempOrderingArraystage7B.splice(tempDisplayReferenceID, 1);
+
+        
+		//Step 3: empty the form an add new rows
+        debug("stage7B - reset display");
+        stage7BResetPageDisplay(tempCompetitorNameIs);
+	
+        debug("stage7B - new input field when clicked");
+		//Step 4: Nothing
+
+		//Step 5: Load Next Button with Conditions
+		if((pageNumber >= 0) && (pageNumber < (maxPageNumber - 1))){
+
+			//Step 5.1: Add Next Step Button
+			$("#stage7B-next").append('<div class="col-md-8 col-md-offset-2"><center>'+languageReplacement['S7P9']+'<br><br><button class="btn btn-success" id="nextPage">'+languageReplacement['S7P10']+'</button></center></div>');
+		
+			//Refresh page and load next step
+			$("#nextPage").click(function(){
+				
+				if(stage7BCheckTypeComparisonNotEmpty()){
+					
+					//Save all new attributes into [comparisonData]
+					stage7BSavecomparisonData();
+					
+					//Reset the display
+					stage7BResetPageDisplay(tempCompetitorNameIs);
+					
+					//Increament to the global variable
+					stage7BpageCount++;
+					
+					//Re-run the page
+					stage7BrunPage(stage7BpageCount);
+				}else{
+					debug("stage7B - clicked on next when empty");
+				}
+				
+			});
+			
+		}else if(pageNumber == (maxPageNumber - 1)){
+		
+			//Step 5.1: Enable next page button to go to the next stage
+			$("#stage7B-next").append('<div class="col-md-8 col-md-offset-2"><center>'+languageReplacement['S7P11']+'<br><br><button class="btn btn-success" id="nextPage">'+languageReplacement['S7P12']+'</button></center></div>');
+			
+			//Go to next stage function
+			$("#nextPage").click(function(){
+			
+				if(stage7BCheckTypeComparisonNotEmpty()){
+					
+					//Save all new attributes into [comparisonData]
+					stage7BSavecomparisonData();
+					
+					//Change the loading image
+                    $("#nextPage").empty();
+                    $("#nextPage").append('<span class="glyphicon glyphicon-cog next-rotation-animate"></span> Loading');
+                    
+					//Change stage count and jump to next stage
+					stageCurrentStage++;
+					runStage(stages[stageCurrentStage]);
+				}else{
+					debug("stage7B - clicked on next when empty");
+				}
+
+			});
+		}
+
+	}
+
+	//Validation layer: ensure that the inputs are filled
+	function enablestage7BRemove(){
+		$(".stage7B-entry").change(function(){
+		
+			//Check if the class & button has already been added, if not it will add
+			if(!$(this).parent().hasClass("has-feedback")){
+				$(this).parent().addClass("has-feedback");
+				$('<div class="col-md-2"><span class="glyphicon glyphicon-remove-circle stage7B-remove" aria-hidden="true"></span></div>').insertAfter($(this).parent());
+				$(".stage7B-remove").one("click",function(){
+					$(this).parent().parent().remove();
+				});
+			}
+		});		
+	}
+	
+	//Attribute addition layer: ensure that the attributes are inserted into the list for clicking
+	function enablestage7BComparison(){
+	
+		debug("stage7B - enablestage7BComparison() running");
+		
+		//Insert the header text
+		$("#stage7B-selection").append('<div class="col-md-8 col-md-offset-2"><br><br><center><p>'+languageReplacement['S7P13']+'</p></center><div class="row"></div></div>');
+	
+		//Loop through [comparisonData] to load all the attributes into buttons
+		var countAttribute = comparisonData.length;
+		
+		debug("stage7B - enablestage7BComparison() - countAttribute: "+countAttribute);
+		
+		var enablestage7BComparisonCounter = 0;
+		
+		while(enablestage7BComparisonCounter < countAttribute){
+			$("#stage7B-selection .col-md-8 .row").append('<div class="col-md-4"><button type="button" class="btn btn-danger btn-block selectionButtonSlot" id="stage7B-att-btn'+enablestage7BComparisonCounter+'">'+comparisonData[enablestage7BComparisonCounter]+'</button></div>');
+			enablestage7BComparisonCounter++;
+			
+			debug("stage7B - enablestage7BComparison() - loop counter: "+enablestage7BComparisonCounter);
+		}
+		
+		//Enable the attribute clicks
+		enablestage7BComparisonClick();
+		
+	}
+	
+	//Attribute click enablement
+	function enablestage7BComparisonClick(enabledComparisonButton){
+		
+		debug("stage7B - enablestage7BComparisonClick() running");		
+		
+		enabledComparisonButton = typeof enabledComparisonButton !== 'undefined' ? enabledComparisonButton : 'all';
+		
+		//OPTIONS: "all" or any specific id
+		
+		if(enabledComparisonButton == 'all'){
+			$(".selectionButtonSlot").each(function(){
+				
+				//Enable the click event for adding new 
+				$(this).one("click",function(){
+					
+					//Get the ID
+					var theSelectedID = parseInt($(this).attr("id").substring(14));
+					
+					debug("stage7B - enablestage7BComparisonClick() - theSelectedID: "+theSelectedID);
+			
+					//Insert the item into the selection list
+					$("#stage7B-form").prepend('<div class="row" id="stage7B-form-row-'+comparisonData[theSelectedID]+'"><div class="col-md-12"><p class="form-group"><div class="stage7B-entry">'+languageReplacement['S7P4']+'<input type="text"  value="'+comparisonData[theSelectedID]+'" class="stage7B-term">'+languageReplacement['S7P5']+'<b>'+mycompanydata[0]+'</b>'+languageReplacement['S7P6']+'<b>'+stage7BCompetitorNameIs+'</b>'+languageReplacement['S7P7']+'<input type="text" class="stage7B-percentage">'+languageReplacement['S7P7B']+'</div></p></div></div>');
+					
+					//Enable the remove function
+					$("#stage7B-form-row-"+comparisonData[theSelectedID]+" .stage7B-remove").one("click",function(){
+					
+						debug("stage7B - enablestage7BComparisonClick() remove - theSelectedID:"+theSelectedID);
+						debug("stage7B - enablestage7BComparisonClick() remove - comparisonData[theSelectedID]: "+comparisonData[theSelectedID]);
+						
+						//Remove the whole row in the form
+						$(this).parent().parent().remove();
+						
+						//Add the button back into the stage
+						$("#stage7B-selection .col-md-8 .row").append('<div class="col-md-4"><button type="button" class="btn btn-danger btn-block selectionButtonSlot" id="stage7B-att-btn'+theSelectedID+'">'+comparisonData[theSelectedID]+'</button></div>');
+						
+						//Enable the button click function
+						enablestage7BComparisonClick("#stage7B-att-btn"+theSelectedID);
+					});
+					
+					//Remove the attribute button
+					$(this).parent().remove();
+					
+				});
+			});
+		}else if(enabledComparisonButton != ''){
+			
+			$(enabledComparisonButton).one("click", function(){
+				
+				//Get the ID
+				var theSelectedID = parseInt($(this).attr("id").substring(14));
+				
+				debug("stage7B - enablestage7BComparisonClick() - theSelectedID: "+theSelectedID);
+				
+				//Insert the item into the selection list
+				$("#stage7B-form").prepend('<div class="row" id="stage7B-form-row-'+comparisonData[theSelectedID]+'"><div class="col-md-12"><p class="form-group"><div class="stage7B-entry">'+languageReplacement['S7P4']+'<input type="text"  value="'+comparisonData[theSelectedID]+'" class="stage7B-term">'+languageReplacement['S7P5']+'<b>'+mycompanydata[0]+'</b>'+languageReplacement['S7P6']+'<b>'+stage7BCompetitorNameIs+'</b>'+languageReplacement['S7P7']+'<input type="text" class="stage7B-percentage">'+languageReplacement['S7P7B']+'</div></p></div></div>');
+				
+				//Enable the remove button
+				$(".stage7B-remove").one("click",function(){
+				
+					debug("stage7B - enablestage7BComparisonClick() remove - theSelectedID:"+theSelectedID);
+					debug("stage7B - enablestage7BComparisonClick() remove - comparisonData[theSelectedID]: "+comparisonData[theSelectedID]);
+					
+					//Remove the whole row in the form
+					$(this).parent().parent().remove();
+					
+					//Add the button back into the stage
+					$("#stage7B-selection .col-md-8 .row").append('<div class="col-md-4"><button type="button" class="btn btn-danger btn-block selectionButtonSlot" id="stage7B-att-btn'+theSelectedID+'">'+comparisonData[theSelectedID]+'</button></div>');
+					
+					//Enable the button click function
+					enablestage7BComparisonClick("#stage7B-att-btn"+theSelectedID);
+				});
+				
+				//Remove the attribute button
+				$(this).parent().remove();
+			});
+		}
+	}
+	
+	//Save Attribute data
+	function stage7BSavecomparisonData(){
+		
+		debug("stage7B - stage7BSavecomparisonData() running");
+		
+		$(".stage7B-entry").each(function(){
+
+			var theValue1 = $(this).find(".stage7B-term").val();
+			var theValue2 = $(this).find(".stage7B-percentage").val();
+			
+			debug("stage7B - stage7BSavecomparisonData() - theValues: "+theValue1+" and "+theValue2);
+			
+			debug("stage7B - stage7BSavecomparisonData() - inArray: "+$.inArray(theValue1, comparisonData));
+			
+			debug("stage7B - stage7BSavecomparisonData() - check NOT empty: "+(theValue1 != ""));
+			
+			//Add to comparisonData if it does not already exist and value is not empty
+			if(($.inArray(theValue1, comparisonData) < 0) && (theValue1 != "") && (theValue2 != "")){
+				comparisonData.push(theValue1);
+				comparisonDataPair.push(theValue2);
+			}
+			
+			debug("stage7B - stage7BSavecomparisonData() - comparisonData array: " + comparisonData);
+		});
+	}
+	
+	//Reset page display
+	function stage7BResetPageDisplay(stage7BCompetitorNameDisplay){
+		
+		debug("stage7B - stage7BResetPageDisplay() running");
+		
+		//Clear the stage form
+		$("#stage7B-form").empty();
+        
+		//Insert the stage form items
+		var stage7BResetPageDisplayCounter = 0;
+		while(stage7BResetPageDisplayCounter < 5){
+			$("#stage7B-form").append('<div class="row"><div class="col-md-12"><p class="form-group"><div class="stage7B-entry">'+languageReplacement['S7P4']+'<input type="text" class="stage7B-term">'+languageReplacement['S7P5']+'<b>'+mycompanydata[0]+'</b>'+languageReplacement['S7P6']+'<b>'+stage7BCompetitorNameDisplay+'</b>'+languageReplacement['S7P7']+'<input type="text" class="stage7B-percentage">'+languageReplacement['S7P7B']+'</div></p></div></div>');
+			stage7BResetPageDisplayCounter++;
+		}
+        enablestage7BRemove();
+		
+		//Clear the attribute stage selction area
+		$("#stage7B-selection").empty();
+		$("#stage7B-next").empty();
+		
+		//Insert the stage7B selection attributes
+		enablestage7BComparison();
+	}
+	
+	//Check if the attribute entry are empty
+	function stage7BCheckTypeComparisonNotEmpty() {
+		
+		debug("stage7B - checkTypeAttributeNotEmpty() running");
+		
+		//By default the attribute inputs are assumed to be empty
+		var confirmEmpty = false;
+		
+		$(".stage7B-entry").each(function(){
+
+			var theValue1 = $(this).find(".stage7B-term").val();
+			var theValue2 = $(this).find(".stage7B-percentage").val();
+			
+			if((theValue1 !="") && (theValue2 !="")){
+				//Should any of the attribute inputs not be empty, change the status to true
+				confirmEmpty = true;
+			}
+			
+			debug("stage7B - checkTypeAttributeNotEmpty() - theValues: "+theValue1+" and "+theValue2);
+			debug("stage7B - checkTypeAttributeNotEmpty() - confirmEmpty: "+confirmEmpty);
+			
+		});
+		
+		//Return final status for validation
+		return confirmEmpty;
+		
+	}
+	
 });
 </script>

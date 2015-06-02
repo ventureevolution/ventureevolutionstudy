@@ -11,13 +11,16 @@
         font-weight: bold;
         text-transform: uppercase;
     }
+    .stage5-vs-text{
+	    padding-top: 7px;
+    }
 </style>
 <!-- Dialog Message Area -->
 <!-- Proceed message -->
 <div id="stage5-dialog-nextMessage">
   <p>
     <span class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 50px 0;"></span>
-    <div id="S5P1" class="textreplace"></div>
+    <p><div id="S5P1" class="textreplace"></div></p>
   </p>
 </div>
 <!-- Error Message -->
@@ -55,6 +58,8 @@ $("#stage5-dialog-errorMessage").attr("title",languageReplacement['S5P13']);
 
 $( document ).ready(function() {
 
+	attributeSequenceStage5 = generateRandomSequenceArrayStage5(attributedata.length);
+
 	//Display the first example attribute
 	$(".stage5-company-name").append(mycompanydata[0]);
 	
@@ -64,7 +69,7 @@ $( document ).ready(function() {
 	var stage5Counter = 0;
 	
 	while(stage5Counter < stage5MaxAttributeNumber){
-		$("#stage5-form").append('<div class="row" id="stage5-form-attribute-'+stage5Counter+'"><div class="col-md-5"><div class="form-group"><input type="text" class="form-control attribute-original" placeholder="'+languageReplacement['S5P8']+'" value="'+attributedata[stage5Counter]+'"></div></div><div class="col-md-2"><center><p>vs.</p></center></div><div class="col-md-5"><div class="form-group"><input type="text" class="form-control attribute-opposite" placeholder="'+languageReplacement['S5P9']+'"></div></div></div>');
+		$("#stage5-form").append('<div class="row" id="stage5-form-attribute-'+attributeSequenceStage5[stage5Counter]+'"><div class="col-md-5"><div class="form-group"><input type="text" class="form-control attribute-original" placeholder="'+languageReplacement['S5P8']+'" value="'+attributedata[attributeSequenceStage5[stage5Counter]]+'"></div></div><div class="col-md-2 stage5-vs-text"><center><p>'+languageReplacement['S5P14']+'</p></center></div><div class="col-md-5"><div class="form-group"><input type="text" class="form-control attribute-opposite" placeholder="'+languageReplacement['S5P9']+'"></div></div></div>');
 		stage5Counter++;
 	}
 	
@@ -120,6 +125,34 @@ $( document ).ready(function() {
 			}
 		});
 	});
+	
+	function generateRandomSequenceArrayStage5(anArrayLength){
+		
+		var tempArray = new Array();
+		
+		debug("Stage5 - generateRandomSequenceArray: populate array");
+		//Populate the array
+		for(i = 0; i < anArrayLength; i++){
+			tempArray.push(i);
+		}
+		
+		debug("Stage5 - generateRandomSequenceArray shuffle array");
+		for(j = anArrayLength - 1; j >= 0; j--){
+			
+			var tempValue, tempIndex;
+			
+			tempIndex = Math.floor(Math.random() * j);
+			
+			tempValue = tempArray[j];
+			tempArray[j] = tempArray[tempIndex];
+			tempArray[tempIndex] = tempValue;
+			
+		}
+		
+		debug("Stage5 - generateRandomSequenceArray shuffle array result: " + tempArray.join(","));
+		
+		return tempArray;
+	}
 	
 	function stage5CheckAllAttributesFilled(){
 	

@@ -96,7 +96,7 @@ $( document ).ready(function() {
 	
         debug("stage7 - new input field when clicked");
 		//Step 4: Add new input fields when Add button is clicked
-		$("#stage7-add-more").one("click",function(){
+		$("#stage7-add-more").click(function(){
 			$("#stage7-form").append('<div class="row"><div class="col-md-12"><p class="form-group"><div class="stage7-entry">'+languageReplacement['S7P4']+'<input type="text" class="stage7-term">'+languageReplacement['S7P5']+'<b>'+mycompanydata[0]+'</b>'+languageReplacement['S7P6']+'<b>'+tempCompetitorNameIs+'</b>'+languageReplacement['S7P7']+'<input type="text" class="stage7-percentage">'+languageReplacement['S7P7B']+'</div></p></div></div>');
 			enablestage7Remove();
 		});
