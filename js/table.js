@@ -161,10 +161,16 @@ function outputAllDataCSVFile(presentationDiv){
 		csv += "\n";
 		csv += ",Width,Height\n";
 		csv += "Box Size (in pixel),400,400\n\n";
+<<<<<<< HEAD
 		csv += "Similar Firm name:" + "," + "Order in which User Entered:" + "," + "Color Selected:" + ",,," + "Starting X position:" + "," + "Starting Y position:" + "," + "Final X position from center:" + "," + "Final Y position from center" + "\n";
 		
 		//print my company
 		csv += mycompanydata[0] + "," + "0" + "," + "Black" + ",,," + "0,0,0,0\n";
+=======
+		csv += ",X,Y\n";
+		csv += "Starting position,0,0\n\n";
+		csv += "Competitor name:" + "," + "Color Selected:" + "," + "Starting X position:" + "," + "Starting Y position:" + "," + "Final X position from center:" + "," + "Final Y position from center" + "\n";
+>>>>>>> origin/web-deployment
 		//print all pointdata
 		for(var t1i = 0; t1i < pointdata.length; t1i++){
 			var subJ = t1i + 1;
