@@ -84,10 +84,6 @@ $( document ).ready(function() {
 			//Open the dialog confirmation message
 			$( "#stage5-dialog-nextMessage" ).dialog( "open" );
 			
-			//Go to next stage
-			stageCurrentStage++;
-			runStage(stages[stageCurrentStage]);
-			
 		}else{
 			$( "#stage5-dialog-errorMessage" ).dialog( "open" );
 			debug("Stage5 - some fields are empty, hence unable to proceed");
