@@ -329,8 +329,63 @@ function outputAllDataCSVFile(presentationDiv){
         //Add new lines
         csv += "\n\n\n";
         
-        //CONTINUE!!!
-		
+        //Order of comparisonData
+        csv += "Below the order by which if-then statements were created by User\n";
+        for(var t7i = 0; t7i < comparisonData.length; t7i++){
+            var t7subJ = t7i + 1;
+            csv += comparisonData[t7i] + "," + t7subJ + "\n";
+        }
+        
+        //Add new lines
+        csv += "\n\n\n";
+        
+        //Order of comparisonDataPair
+        csv += "Below the order by which inputs in the if-then statements were chosen by the User (by similar firm)\n";
+        //Insert all company names
+        for(var t8i = 0; t8i < pointdata.length; t8i++){
+            
+            if(t8i == 0){
+                csv += ",";
+            }
+            //Insert the name of the company
+            csv += pointdata[t8i][0] + ",";
+            
+            if(t8i == pointdata.length - 1){
+                csv += "\n";
+            }
+        }
+        //Insert the comparisonDataPair entries
+		for(var t9i = 0; t9i < comparisonData.length; t9i++){
+            
+            //Add term to the first column
+            csv += comparisonData[t9i] + ",";
+            
+            //Pick company
+            for(var t10i = 0; t10i < pointdata.length; t10i++){
+                
+                //create checking variable
+                var checkt11iInserted = false;
+                
+                //Check within the comparisonDataPair if it exists
+                for(var t11i = 0; t11i < comparisonDataPair.length; t11i++){
+                    //Insert value
+                    if((comparisonDataPair[t11i][1] == comparisonData[t9i]) && (comparisonDataPair[t11i][0] == pointdata[t10i][0])){
+                        csv += comparisonDataPair[t11i][2] + ",";
+                        checkt11iInserted = true;
+                    }
+                }
+                
+                if(checkt11iInserted == false){
+                    csv += "Term Not Chosen" + ",";
+                }
+            }
+            //Next line
+            csv += "\n";
+        }
+        
+        //Add new lines
+        csv += "\n\n\n";
+        
 		debug("outputAllDataCSVFile() - csv: "+csv);
 		
 		$link.attr("href", 'data:Application/octet-stream,' + encodeURIComponent(csv))[0].click();
