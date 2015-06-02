@@ -216,6 +216,7 @@ function outputAllDataCSVFile(presentationDiv){
             //check if attribute exist in pointdata
             for(var t5j = 0; t5j < pointdata.length; t5j++){
                 
+                debug("what is t5j: "+t5j);
                 debug("pointdata[t5j][4]: "+pointdata[t5j][4]);
                 
                 //If exist add the index
