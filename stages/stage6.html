@@ -239,6 +239,10 @@ $( document ).ready(function() {
 					//Save the data for this page
 					stage6SaveScaleData(stage6PageNumber);
 					
+                    //Change the loading image
+                    $("#nextPage").empty();
+                    $("#nextPage").append('<span class="glyphicon glyphicon-cog next-rotation-animate"></span> Loading');
+                    
 					//Change stage count and jump to next stage
 					stageCurrentStage++;
 					runStage(stages[stageCurrentStage]);
