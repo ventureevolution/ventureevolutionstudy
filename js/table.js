@@ -175,9 +175,8 @@ function outputAllDataCSVFile(presentationDiv){
 		debug("relatedBusiness: "+relatedBusiness);
         for(var t2i = 0; t2i < relatedBusiness.length; t2i++){
 			csv += relatedBusiness[t2i][0] + "," + relatedBusiness[t2i][1] + "\n";
-<<<<<<< HEAD
 		}
-		
+
 		//Add spaces
 		csv += "\n\n\n";
 		
@@ -186,23 +185,11 @@ function outputAllDataCSVFile(presentationDiv){
 		for(var t3i = 0; t3i < attributedata.length; t3i++){
 			var subJ = t3i + 1;
 			csv += attributedata[t3i] + "," + subJ + "\n";
-=======
->>>>>>> FETCH_HEAD
 		}
 		
 		//Add spaces
 		csv += "\n\n\n";
 		
-<<<<<<< HEAD
-=======
-		//Attributes order of creation
-		csv += "Below the order in which first pole of likeness dimensions were created by User\n";
-		for(var t3i = 0; t3i < attributedata.length; t3i++){
-			var subJ = t3i + 1;
-			csv += attributedata[t3i] + "," + subJ + "\n";
-		}
-		
->>>>>>> FETCH_HEAD
 		//Showing selected attributes per company
 		csv += "Below the order by which the first pole of the likeness dimensions were chosen by the User (by competitor)\n";
 		
@@ -351,7 +338,6 @@ function outputAllDataCSVFile(presentationDiv){
         //Add new lines
         csv += "\n\n\n";
         
-<<<<<<< HEAD
         csv += "Below the order by which inputs in the if-then statements were chosen by the User (by similar firm)\n";
         
         //Insert all company names
@@ -404,10 +390,6 @@ function outputAllDataCSVFile(presentationDiv){
         
         //Order of comparisonDataPair
         csv += "\"Below the confidence percentages chosen by the User (by similar firm), in percentages\"\n";
-=======
-        //Order of comparisonDataPair
-        csv += "Below the order by which inputs in the if-then statements were chosen by the User (by similar firm)\n";
->>>>>>> FETCH_HEAD
         //Insert all company names
         for(var t8i = 0; t8i < pointdata.length; t8i++){
             
@@ -453,7 +435,6 @@ function outputAllDataCSVFile(presentationDiv){
         //Add new lines
         csv += "\n\n\n";
         
-<<<<<<< HEAD
         //Add stage7B data
         csv += "\"Below which statements the user intends to test, which are given a 1. Those statements the user did not select as to be tested are given a 0\"\n";
         csv += "Company,Term,Percentage,Test\n"
@@ -474,8 +455,6 @@ function outputAllDataCSVFile(presentationDiv){
 	        
         }
         
-=======
->>>>>>> FETCH_HEAD
 		debug("outputAllDataCSVFile() - csv: "+csv);
 		
 		$link.attr("href", 'data:Application/octet-stream,' + encodeURIComponent(csv))[0].click();
