@@ -221,8 +221,6 @@ $( document ).ready(function() {
             
 			$("#stage3-delete-buttons").append("<button class='btn btn-default stage3-button-margin' id='removeButton-"+pointdataPosition+"'>"+$("#stage3-newCompetitor").val()+"&nbsp;<span class='glyphicon glyphicon-remove-circle stage3-remove-button'></button>");
 			
-			var fixedCompetitorName = $("#stage3-newCompetitor").val();
-			
 			//Enable the remove buttons
 			stage3EnableRemoveButton(pointdataPosition);
 			
@@ -230,7 +228,8 @@ $( document ).ready(function() {
 			var pointlocationXY = $("#point-"+pointdataPosition).offset();
 			var fixedX = parseInt(pointlocationXY.left);
 			var fixedY = parseInt(pointlocationXY.top);
-			pointdata.push([fixedCompetitorName, colorPaletteAlt[randomNumber],[0,0],[0,0]]);
+			pointdata.push([$("#stage3-newCompetitor").val(), colorPaletteAlt[randomNumber],[0,0],[0,0]]);
+			debug("add new pointdata debug: "+pointdata);
             debug("pointdataPosition is "+pointdataPosition);
 			
 			//Remove color from colorPaletteAlt to prevent repeats
@@ -255,7 +254,7 @@ $( document ).ready(function() {
                         
                         var getDraggableDotName = $(this).attr('name');
                         for(var draggableCounter in pointdata){
-	                        if(pointdata[draggableCounter][0] = getDraggableDotName){
+	                        if(pointdata[draggableCounter][0] == getDraggableDotName){
 		                        pointdata[draggableCounter][3] = [xPos, yPos];
 	                        }
                         }

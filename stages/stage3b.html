@@ -33,20 +33,14 @@ languageReplace();
 $( document ).ready(function() {
 
 	$("#stage3b-company-name").append(mycompanydata[0]);
-
-	var stage3bLoopCounter = competitorNumber;
 	
     
     //ADD RANDOMIZATION LATER TO ORDER OF NAMES & ADD RANDOMIZATION TO SAVE FEATURE
     
-	for(var stage3bLoop = 0; stage3bLoop < stage3bLoopCounter; stage3bLoop++){
-        if(!(pointdata[stage3bLoop])){
-            //DO NOTHING
-        }else{
-            $("#stage3b-content").append('<center><button class="btn btn-danger btn-lg stage3-button" id="stage3b-button-'+stage3bLoop+'" value="'+pointdata[stage3bLoop][0]+'">'+pointdata[stage3bLoop][0]+'&nbsp;</button></center><br>');
+	for(var stage3bLoop in pointdata){
+        $("#stage3b-content").append('<center><button class="btn btn-danger btn-lg stage3-button" id="stage3b-button-'+stage3bLoop+'" value="'+pointdata[stage3bLoop][0]+'">'+pointdata[stage3bLoop][0]+'&nbsp;</button></center><br>');
 
-            stage3BEnableButton('stage3b-button-'+stage3bLoop);
-        }
+        stage3BEnableButton('stage3b-button-'+stage3bLoop);
     }
 
 	 $("#nextPage").click(function(){
