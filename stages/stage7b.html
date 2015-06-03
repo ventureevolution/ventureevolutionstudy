@@ -57,18 +57,18 @@ $( document ).ready(function() {
     debug("stage7B running");
     debug("stage7B display all selections");
     for(var stage7BCounter = 0; stage7BCounter < comparisonDataPair.length; stage7BCounter++){
-        $("#stage7B-form").append('<div class="row"><div class="col-md-10"><p class="form-group"><div class="stage7-entry">'+languageReplacement['S7BP4']+"<b>"+comparisonDataPair[stage7BCounter][1]+"</b>"+languageReplacement['S7BP5']+mycompanydata[0]+languageReplacement['S7BP6']+'<b>'+comparisonDataPair[stage7BCounter][0]+'</b>'+languageReplacement['S7BP7']+"<b>"+comparisonDataPair[stage7BCounter][2]+"</b>"+languageReplacement['S7BP8']+'</div></p></div><div class="col-md-2"><button class="btn btn-default stage7B-button" id="stage7B-button-id-'+stage7BCounter+'">Intend to test</button></div></div>');
+        $("#stage7B-form").append('<div class="row"><div class="col-md-10"><p class="form-group"><div class="stage7-entry">'+"<b>"+comparisonDataPair[stage7BCounter][1]+"</b>"+'</div></p></div><div class="col-md-2"><button class="btn btn-danger stage7B-button" id="stage7B-button-id-'+stage7BCounter+'">Will Learn about</button></div></div>');
     }
     
     debug("stage7B enable all selections click");
     //Enable all button click
     $(".btn").click(function(){
-       if($(this).hasClass('btn-default')){
-           $(this).removeClass('btn-default');
+       if($(this).hasClass('btn-danger')){
+           $(this).removeClass('btn-danger');
            $(this).addClass('btn-success');
        }else{
            $(this).removeClass('btn-success');
-           $(this).addClass('btn-default');
+           $(this).addClass('btn-danger');
        }
     });
     
