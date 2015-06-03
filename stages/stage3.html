@@ -230,7 +230,11 @@ $( document ).ready(function() {
 			var pointlocationXY = $("#point-"+pointdataPosition).offset();
 			var fixedX = parseInt(pointlocationXY.left);
 			var fixedY = parseInt(pointlocationXY.top);
+<<<<<<< HEAD
 			pointdata.push([fixedCompetitorName, colorPaletteAlt[randomNumber],[0,0],[0,0]]);
+=======
+			pointdata[pointdataPosition] = [fixedCompetitorName, colorPaletteAlt[randomNumber],[0,0],[0,0]];
+>>>>>>> FETCH_HEAD
             debug("pointdataPosition is "+pointdataPosition);
 			
 			//Remove color from colorPaletteAlt to prevent repeats
