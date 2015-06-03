@@ -125,7 +125,8 @@ $( document ).ready(function() {
 		
 		//Step 2: populate the div
 		$(".stage4-mycompany").append(mycompanydata[0]);
-		$(".stage4-competitor").append(tempOrderingArray[tempDisplayReferenceID][0]);
+        var stage4tempCompetitorName = tempOrderingArray[tempDisplayReferenceID][0];
+		$(".stage4-competitor").append(stage4tempCompetitorName);
 		
 		//Pop the reference out of the array
 		tempOrderingArray.splice(tempDisplayReferenceID, 1);
@@ -151,7 +152,7 @@ $( document ).ready(function() {
 				if(stage4CheckTypeAttributeNotEmpty()){
 					
 					//Save all new attributes into [attributedata]
-					stage4SaveAttributeData();
+					stage4SaveAttributeData(stage4tempCompetitorName);
 					
 					//Reset the display
 					stage4ResetPageDisplay();
@@ -180,7 +181,7 @@ $( document ).ready(function() {
 				if(stage4CheckTypeAttributeNotEmpty()){
 					
 					//Save all new attributes into [attributedata]
-					stage4SaveAttributeData();
+					stage4SaveAttributeData(stage4tempCompetitorName);
 					
 					//Change the loading image
                     $("#nextPage").empty();
@@ -334,9 +335,22 @@ $( document ).ready(function() {
 	}
 	
 	//Save Attribute data
-	function stage4SaveAttributeData(){
+	function stage4SaveAttributeData(CompetitorNameRef){
 		
 		debug("Stage4 - stage4SaveAttributeData() running");
+		debug("Stage4 CompetitorNameRef: "+CompetitorNameRef);
+        
+        var stage4FinalCounter = "";
+        
+        //Find the refID of the competitor
+        for(var stage4SaveCounter = 0; stage4SaveCounter < pointdata.length; stage4SaveCounter++){
+            if(pointdata[stage4SaveCounter][0] == CompetitorNameRef){
+                stage4FinalCounter = stage4SaveCounter;
+            }
+        }
+        
+		//Create empty array
+		pointdata[parseInt(stage4FinalCounter)][4] = [];
 		
 		$(".stage4-entry").each(function(){
 		
@@ -352,8 +366,14 @@ $( document ).ready(function() {
 			if(($.inArray(theValue, attributedata) < 0) && (theValue != "")){
 				attributedata.push(theValue);
 			}
+            
+            if(theValue != ""){
+                //Add to the pointdata
+                pointdata[stage4FinalCounter][4].push(theValue);
+            }
 			
 			debug("Stage4 - stage4SaveAttributeData() - attributedata array: " + attributedata);
+            debug("Stage 4 - pointdata["+stage4FinalCounter+"][4]: " + pointdata[stage4FinalCounter][4]);
 		});
 	}
 	

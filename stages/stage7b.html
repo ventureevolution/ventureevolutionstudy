@@ -1,33 +1,126 @@
 <!-- Styling of the page -->
-<style>
-
+<style type="text/css">
+	.selectionButtonSlot{
+		margin-bottom: 15px;
+		white-space: normal; 
+	}
+	.stage7B-remove {
+		font-size: 2em;
+		color: #768393;
+		line-height: 34px;
+	}
+	.stage7B-remove:hover {
+		color: #c7144d;
+	}
+	#stage7B-mycompany-name {
+		text-transform: uppercase;
+	}
+	#stage7B-competitor-name {
+		text-transform: uppercase;
+	}
+    .stage7B-term {
+        width: 50%;
+    }
+    .stage7B-percentage {
+        width: 10%;
+    }
+    .stage7B-button{
+        margin-top: 10px;
+    }
 </style>
 <!-- Dialog Message Area -->
-<div id="stage7b-dialog-message">
+<div id="stage7B-dialog-message-proceed">
+  <p>
+    <span class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 50px 0;"></span>
+    <div id="S7BP10" class="textreplace"></div>
+  </p>
 </div>
 <!-- Content of the page -->
 <div class="row">
 	<div class="col-md-8 col-md-offset-2">
-		<center><p><div id="S7BP1" class="textreplace"></div><span class="stage7b-competitor-name"></span><div id="S7BP2" class="textreplace"></div><span class="stage7b-competitor-name"></span><div id="S7BP3" class="textreplace"></div></p></center><br><br><br>
+		<center><p><div id="S7BP1" class="textreplace"></div><b id="stage7B-mycompany-name"></b><div id="S7BP2" class="textreplace"></div></p>
+<p><div id="S7BP3" class="textreplace"></div></p><br><br></center>
+		<div id="stage7B-form"></div>
 	</div>
 </div>
-<div class="row">
-	<div class="col-md-8 col-md-offset-2" id="stage7b-form">
-	</div>
-</div>
-<div class="row" id ="stage7b-next">
+<div class="row" id ="stage7B-next">
+    <div class="col-md-8 col-md-offset-2">
+        <center><button class="btn btn-success" id="nextPage"><div id="S7BP9" class="textreplace"></div></button></center>
+    </div>
 </div>
 <!-- Script of the page -->
-<!-- This is for sliders -->
-<script src="js/jquery-2.1.1.js"></script>
-<script src="js/jquery-ui.min.js"></script>
-<script src="js/jquery-ui-slider-pips.js"></script>
 <script>
-
 languageReplace();
 
 $( document ).ready(function() {
 
-
+    debug("stage7B running");
+    debug("stage7B display all selections");
+    for(var stage7BCounter = 0; stage7BCounter < comparisonDataPair.length; stage7BCounter++){
+        $("#stage7B-form").append('<div class="row"><div class="col-md-10"><p class="form-group"><div class="stage7-entry">'+languageReplacement['S7BP4']+"<b>"+comparisonDataPair[stage7BCounter][1]+"</b>"+languageReplacement['S7BP5']+mycompanydata[0]+languageReplacement['S7BP6']+'<b>'+comparisonDataPair[stage7BCounter][0]+'</b>'+languageReplacement['S7BP7']+"<b>"+comparisonDataPair[stage7BCounter][2]+"</b>"+languageReplacement['S7BP8']+'</div></p></div><div class="col-md-2"><button class="btn btn-default stage7B-button" id="stage7B-button-id-'+stage7BCounter+'">Intend to test</button></div></div>');
+    }
+    
+    debug("stage7B enable all selections click");
+    //Enable all button click
+    $(".btn").click(function(){
+       if($(this).hasClass('btn-default')){
+           $(this).removeClass('btn-default');
+           $(this).addClass('btn-success');
+       }else{
+           $(this).removeClass('btn-success');
+           $(this).addClass('btn-default');
+       }
+    });
+    
+    debug("stage7B enable nextPage button");
+    //Go to next page
+    $("#nextPage").click(function(){
+        $("#stage7B-dialog-message-proceed").dialog("open");
+    });
+    
+    
+    //Dialog function
+	$(function() {
+		$( "#stage7B-dialog-message-proceed" ).dialog({
+			autoOpen: false,
+			modal: true,
+			buttons: {
+				Yes: function() {
+					$(this).dialog( "close" );
+                    
+                    //Save the stage data
+                    saveStage7BData();
+                    
+                    //Change the loading image
+                    $("#nextPage").empty();
+                    $("#nextPage").append('<span class="glyphicon glyphicon-cog next-rotation-animate"></span> Loading');
+                    
+					//Change stage count and jump to next stage
+					stageCurrentStage++;
+					runStage(stages[stageCurrentStage]);
+				}
+			}
+		});
+	});
+    
+    
+    function saveStage7BData(){
+        
+        debug("stage7B saveStage7BData() save selections");
+        $(".stage7B-button").each(function(){
+            
+            var stage7BButtonID = parseInt($(this).attr('id').replace(/stage7B-button-id-/,''),10);
+            
+            if($(this).hasClass('btn-success')){
+                comparisonDataPair[stage7BButtonID][3] = 1;
+            }else{
+                comparisonDataPair[stage7BButtonID][3] = 0;
+            }
+        
+        });
+        
+        debug("stage7B comparisonDataPair: "+comparisonDataPair);
+    }
+	
 });
 </script>

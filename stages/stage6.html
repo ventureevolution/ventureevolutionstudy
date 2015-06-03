@@ -239,6 +239,10 @@ $( document ).ready(function() {
 					//Save the data for this page
 					stage6SaveScaleData(stage6PageNumber);
 					
+                    //Change the loading image
+                    $("#nextPage").empty();
+                    $("#nextPage").append('<span class="glyphicon glyphicon-cog next-rotation-animate"></span> Loading');
+                    
 					//Change stage count and jump to next stage
 					stageCurrentStage++;
 					runStage(stages[stageCurrentStage]);
@@ -478,9 +482,10 @@ $( document ).ready(function() {
 		//Push all the values into the empty array
 		$(".slider-row").each(function(){
 			
-            var checkBoxValue = $(this).find('input[type=checkbox]');
+            var checkButtonValue = $(this).find('.btn-default').hasClass('active');
+            debug("Stage 6 - checkButtonValue: "+ checkButtonValue);
             
-            if(checkBoxValue.checked){
+            if(checkButtonValue){
                 //DO NOT SAVE VALUE, SAVE 'NA'
                 var thisInternalValue = 'NA';
                 var thisLocationIDAttribute = parseInt($(this).find('.slider-input').attr('id').replace(/attribute-slider-input-/,''),10);
@@ -511,16 +516,16 @@ $( document ).ready(function() {
 		
 		debug("Stage 6 - stage6CheckSliders() by default no missing value until found");
 		var stage6CheckSlidersDefault = 1;
-		
-        //CONTINUE!!!!!
         
 		$(".slider-row").each(function(){
             
-            var checkBoxValue = $(this).find('input[type=checkbox]');
+            var checkButtonValue = $(this).find('.btn-default').hasClass('active');
+            
+            debug("Stage 6 - checkButtonValue: "+ checkButtonValue);
             var thisInternalValue = $(this).find('.slider-input').val();
             
             if(!(thisInternalValue)){
-                if(!(checkBoxValue.checked)){
+                if(!(checkButtonValue)){
                     debug("Stage 6 - stage6CheckSliders() missing value found");
                     stage6CheckSlidersDefault = 0;
                 }

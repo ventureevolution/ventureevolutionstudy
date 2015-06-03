@@ -85,7 +85,7 @@
         color: #990000;
     }
     .stage3-button-margin {
-	    margin: auto 15px;
+	    margin: 5px 15px;
     }
     
 </style>
@@ -212,7 +212,7 @@ $( document ).ready(function() {
 			//var positionY = 190 - (competitorNumber * 10);
 			
 			//Create the entry into the box CONTINUE
-			$("#stage3-drawingBoard").append("<div class='point' id='point-"+pointdataPosition+"' style='background-color:"+colorPaletteAlt[randomNumber]+";top:"+positionY+"px;left:"+positionX+"px;z-index:"+lastZindex+";'><span class='dot-initial'>" + $("#stage3-newCompetitor").val() + "</span></div>");
+			$("#stage3-drawingBoard").append("<div class='point' id='point-"+pointdataPosition+"' style='background-color:"+colorPaletteAlt[randomNumber]+";top:"+positionY+"px;left:"+positionX+"px;z-index:"+lastZindex+";' name='"+$("#stage3-newCompetitor").val()+"'><span class='dot-initial'>" + $("#stage3-newCompetitor").val() + "</span></div>");
 			
 			//Create entry into the remove competitor area
             if(pointdataPosition == 0){
@@ -223,25 +223,14 @@ $( document ).ready(function() {
 			
 			var fixedCompetitorName = $("#stage3-newCompetitor").val();
 			
-			$("#removeButton-"+pointdataPosition).click(function(){
-				
-				var stage3LoopPointDataRemove = 0;
-				while(pointdata[stage3LoopPointDataRemove][0] != ""){
-					if(pointdata[stage3LoopPointDataRemove][0] == fixedCompetitorName){
-						pointdata.splice(stage3LoopPointDataRemove,1);
-						debug(pointdata);
-                        $("#point-"+pointdataPosition).remove();
-				        $("#removeButton-"+pointdataPosition).remove();
-					}
-                    stage3LoopPointDataRemove++;
-				}
-			});
+			//Enable the remove buttons
+			stage3EnableRemoveButton(pointdataPosition);
 			
 			//Insert value into the list of competitor array ["competitor", "color",[x location,y location]]
 			var pointlocationXY = $("#point-"+pointdataPosition).offset();
 			var fixedX = parseInt(pointlocationXY.left);
 			var fixedY = parseInt(pointlocationXY.top);
-			pointdata[pointdataPosition] = [fixedCompetitorName, colorPaletteAlt[randomNumber],[fixedX, fixedY],[0,0]];
+			pointdata.push([fixedCompetitorName, colorPaletteAlt[randomNumber],[0,0],[0,0]]);
             debug("pointdataPosition is "+pointdataPosition);
 			
 			//Remove color from colorPaletteAlt to prevent repeats
@@ -263,7 +252,13 @@ $( document ).ready(function() {
 			            var yPos = parseInt(offset.top) - fixedY;
 			            var pointid = parseInt($(this).attr("id").replace(/point-/,''),10);
                         debug("point data is "+pointid);
-			            pointdata[pointid][3] = [xPos, yPos];
+                        
+                        var getDraggableDotName = $(this).attr('name');
+                        for(var draggableCounter in pointdata){
+	                        if(pointdata[draggableCounter][0] = getDraggableDotName){
+		                        pointdata[draggableCounter][3] = [xPos, yPos];
+	                        }
+                        }
 					}
 				};
 				$(".point").draggable(opt);
@@ -321,6 +316,28 @@ $( document ).ready(function() {
 		});
 	});
 
+	function stage3EnableRemoveButton(PositionDataPoint){
+		
+		debug("stage3 - stage3EnableRemoveButton() is running on: "+PositionDataPoint);
+		
+		$("#removeButton-"+PositionDataPoint).one("click",function(){
+			
+			var NameOfCompetitorPoint = $("#point-"+PositionDataPoint).attr('name');
+			
+			for(var stage3LoopPointDataRemoveIndex in pointdata){
+				debug("stage3 - stage3EnableRemoveButton() looping: "+stage3LoopPointDataRemoveIndex);
+				if(pointdata[stage3LoopPointDataRemoveIndex][0] == NameOfCompetitorPoint){
+					pointdata.splice(stage3LoopPointDataRemoveIndex,1);
+					debug(pointdata);
+                    $("#point-"+PositionDataPoint).remove();
+			        $("#removeButton-"+PositionDataPoint).remove();
+				}
+				
+			}
+		});
+		
+	}			
+	
 	function checkPointDataChanges(){
 		
 		var maxLoop = competitorNumber;

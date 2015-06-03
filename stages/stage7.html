@@ -25,6 +25,13 @@
         width: 10%;
     }
 </style>
+<!-- Dialog Message Area -->
+<div id="stage7-dialog-message-error">
+  <p>
+    <span class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 50px 0;"></span>
+    <div id="S7P14" class="textreplace"></div>
+  </p>
+</div>
 <!-- Content of the page -->
 <div class="row">
 	<div class="col-md-8 col-md-offset-2">
@@ -96,8 +103,8 @@ $( document ).ready(function() {
 	
         debug("stage7 - new input field when clicked");
 		//Step 4: Add new input fields when Add button is clicked
-		$("#stage7-add-more").one("click",function(){
-			$("#stage7-form").append('<div class="row"><div class="col-md-12"><p class="form-group"><div class="stage7-entry">'+languageReplacement['S7P4']+'<input type="text" class="stage7-term">'+languageReplacement['S7P5']+'<b>'+mycompanydata[0]+'</b>'+languageReplacement['S7P6']+'<b>'+tempCompetitorNameIs+'</b>'+languageReplacement['S7P7']+'<input type="text" class="stage7-percentage">'+languageReplacement['S7P7B']+'</div></p></div></div>');
+		$("#stage7-add-more").click(function(){
+			$("#stage7-form").append('<div class="row"><div class="col-md-10"><p class="form-group"><div class="stage7-entry">'+languageReplacement['S7P4']+'<input type="text" class="stage7-term">'+languageReplacement['S7P5']+'<b>'+mycompanydata[0]+'</b>'+languageReplacement['S7P6']+'<b>'+tempCompetitorNameIs+'</b>'+languageReplacement['S7P7']+'<input type="text" class="stage7-percentage">'+languageReplacement['S7P7B']+'</div></p></div></div>');
 			enablestage7Remove();
 		});
 
@@ -113,7 +120,7 @@ $( document ).ready(function() {
 				if(stage7CheckTypeComparisonNotEmpty()){
 					
 					//Save all new attributes into [comparisonData]
-					stage7SavecomparisonData();
+					stage7SavecomparisonData(tempCompetitorNameIs);
 					
 					//Reset the display
 					stage7ResetPageDisplay(tempCompetitorNameIs);
@@ -125,6 +132,8 @@ $( document ).ready(function() {
 					stage7runPage(stage7pageCount);
 				}else{
 					debug("stage7 - clicked on next when empty");
+                    
+                    $("#stage7-dialog-message-error").dialog("open");
 				}
 				
 			});
@@ -140,7 +149,7 @@ $( document ).ready(function() {
 				if(stage7CheckTypeComparisonNotEmpty()){
 					
 					//Save all new attributes into [comparisonData]
-					stage7SavecomparisonData();
+					stage7SavecomparisonData(tempCompetitorNameIs);
 					
 					//Change the loading image
                     $("#nextPage").empty();
@@ -151,12 +160,27 @@ $( document ).ready(function() {
 					runStage(stages[stageCurrentStage]);
 				}else{
 					debug("stage7 - clicked on next when empty");
+                    
+                    $("#stage7-dialog-message-error").dialog("open");
 				}
 
 			});
 		}
 
 	}
+    
+    //Dialog function
+	$(function() {
+		$( "#stage7-dialog-message-error" ).dialog({
+			autoOpen: false,
+			modal: true,
+			buttons: {
+				Close: function() {
+					$(this).dialog( "close" );
+				}
+			}
+		});
+	});
 
 	//Validation layer: ensure that the inputs are filled
 	function enablestage7Remove(){
@@ -182,13 +206,13 @@ $( document ).ready(function() {
 		$("#stage7-selection").append('<div class="col-md-8 col-md-offset-2"><br><br><center><p>'+languageReplacement['S7P13']+'</p></center><div class="row"></div></div>');
 	
 		//Loop through [comparisonData] to load all the attributes into buttons
-		var countAttribute = comparisonData.length;
+		var countComparison = comparisonData.length;
 		
-		debug("stage7 - enablestage7Comparison() - countAttribute: "+countAttribute);
+		debug("stage7 - enablestage7Comparison() - countComparison: "+countComparison);
 		
 		var enablestage7ComparisonCounter = 0;
 		
-		while(enablestage7ComparisonCounter < countAttribute){
+		while(enablestage7ComparisonCounter < countComparison){
 			$("#stage7-selection .col-md-8 .row").append('<div class="col-md-4"><button type="button" class="btn btn-danger btn-block selectionButtonSlot" id="stage7-att-btn'+enablestage7ComparisonCounter+'">'+comparisonData[enablestage7ComparisonCounter]+'</button></div>');
 			enablestage7ComparisonCounter++;
 			
@@ -221,10 +245,10 @@ $( document ).ready(function() {
 					debug("stage7 - enablestage7ComparisonClick() - theSelectedID: "+theSelectedID);
 			
 					//Insert the item into the selection list
-					$("#stage7-form").prepend('<div class="row" id="stage7-form-row-'+comparisonData[theSelectedID]+'"><div class="col-md-12"><p class="form-group"><div class="stage7-entry">'+languageReplacement['S7P4']+'<input type="text"  value="'+comparisonData[theSelectedID]+'" class="stage7-term">'+languageReplacement['S7P5']+'<b>'+mycompanydata[0]+'</b>'+languageReplacement['S7P6']+'<b>'+stage7CompetitorNameIs+'</b>'+languageReplacement['S7P7']+'<input type="text" class="stage7-percentage">'+languageReplacement['S7P7B']+'</div></p></div></div>');
+					$("#stage7-form").prepend('<div class="row" id="stage7-form-row-'+theSelectedID+'"><div class="col-md-10 has-feedback"><p class="form-group"><div class="stage7-entry">'+languageReplacement['S7P4']+'<input type="text"  value="'+comparisonData[theSelectedID]+'" class="stage7-term">'+languageReplacement['S7P5']+'<b>'+mycompanydata[0]+'</b>'+languageReplacement['S7P6']+'<b>'+stage7CompetitorNameIs+'</b>'+languageReplacement['S7P7']+'<input type="text" class="stage7-percentage">'+languageReplacement['S7P7B']+'</div></p></div><div class="col-md-2"><span class="glyphicon glyphicon-remove-circle stage7-remove" aria-hidden="true"></span></div></div>');
 					
 					//Enable the remove function
-					$("#stage7-form-row-"+comparisonData[theSelectedID]+" .stage7-remove").one("click",function(){
+					$("#stage7-form-row-"+theSelectedID+" .stage7-remove").one("click",function(){
 					
 						debug("stage7 - enablestage7ComparisonClick() remove - theSelectedID:"+theSelectedID);
 						debug("stage7 - enablestage7ComparisonClick() remove - comparisonData[theSelectedID]: "+comparisonData[theSelectedID]);
@@ -254,10 +278,10 @@ $( document ).ready(function() {
 				debug("stage7 - enablestage7ComparisonClick() - theSelectedID: "+theSelectedID);
 				
 				//Insert the item into the selection list
-				$("#stage7-form").prepend('<div class="row" id="stage7-form-row-'+comparisonData[theSelectedID]+'"><div class="col-md-12"><p class="form-group"><div class="stage7-entry">'+languageReplacement['S7P4']+'<input type="text"  value="'+comparisonData[theSelectedID]+'" class="stage7-term">'+languageReplacement['S7P5']+'<b>'+mycompanydata[0]+'</b>'+languageReplacement['S7P6']+'<b>'+stage7CompetitorNameIs+'</b>'+languageReplacement['S7P7']+'<input type="text" class="stage7-percentage">'+languageReplacement['S7P7B']+'</div></p></div></div>');
+				$("#stage7-form").prepend('<div class="row" id="stage7-form-row-'+theSelectedID+'"><div class="col-md-10 has-feedback"><p class="form-group"><div class="stage7-entry">'+languageReplacement['S7P4']+'<input type="text"  value="'+comparisonData[theSelectedID]+'" class="stage7-term">'+languageReplacement['S7P5']+'<b>'+mycompanydata[0]+'</b>'+languageReplacement['S7P6']+'<b>'+stage7CompetitorNameIs+'</b>'+languageReplacement['S7P7']+'<input type="text" class="stage7-percentage">'+languageReplacement['S7P7B']+'</div></p></div><div class="col-md-2"><span class="glyphicon glyphicon-remove-circle stage7-remove" aria-hidden="true"></span></div></div>');
 				
 				//Enable the remove button
-				$(".stage7-remove").one("click",function(){
+				$("#stage7-form-row-"+theSelectedID+" .stage7-remove").one("click",function(){
 				
 					debug("stage7 - enablestage7ComparisonClick() remove - theSelectedID:"+theSelectedID);
 					debug("stage7 - enablestage7ComparisonClick() remove - comparisonData[theSelectedID]: "+comparisonData[theSelectedID]);
@@ -279,7 +303,7 @@ $( document ).ready(function() {
 	}
 	
 	//Save Attribute data
-	function stage7SavecomparisonData(){
+	function stage7SavecomparisonData(stage4SaveCompetitorName){
 		
 		debug("stage7 - stage7SavecomparisonData() running");
 		
@@ -297,10 +321,13 @@ $( document ).ready(function() {
 			//Add to comparisonData if it does not already exist and value is not empty
 			if(($.inArray(theValue1, comparisonData) < 0) && (theValue1 != "") && (theValue2 != "")){
 				comparisonData.push(theValue1);
-				comparisonDataPair.push(theValue2);
 			}
-			
+            if((theValue1 != "") && (theValue2 != "")){
+                comparisonDataPair.push([stage4SaveCompetitorName,theValue1,theValue2]);
+            }
+            
 			debug("stage7 - stage7SavecomparisonData() - comparisonData array: " + comparisonData);
+            debug("stage 7 - comparisonDataPair: "+ comparisonDataPair);
 		});
 	}
 	
@@ -315,7 +342,7 @@ $( document ).ready(function() {
 		//Insert the stage form items
 		var stage7ResetPageDisplayCounter = 0;
 		while(stage7ResetPageDisplayCounter < 5){
-			$("#stage7-form").append('<div class="row"><div class="col-md-12"><p class="form-group"><div class="stage7-entry">'+languageReplacement['S7P4']+'<input type="text" class="stage7-term">'+languageReplacement['S7P5']+'<b>'+mycompanydata[0]+'</b>'+languageReplacement['S7P6']+'<b>'+Stage7CompetitorNameDisplay+'</b>'+languageReplacement['S7P7']+'<input type="text" class="stage7-percentage">'+languageReplacement['S7P7B']+'</div></p></div></div>');
+			$("#stage7-form").append('<div class="row"><div class="col-md-10"><p class="form-group"><div class="stage7-entry">'+languageReplacement['S7P4']+'<input type="text" class="stage7-term">'+languageReplacement['S7P5']+'<b>'+mycompanydata[0]+'</b>'+languageReplacement['S7P6']+'<b>'+Stage7CompetitorNameDisplay+'</b>'+languageReplacement['S7P7']+'<input type="text" class="stage7-percentage">'+languageReplacement['S7P7B']+'</div></p></div></div>');
 			stage7ResetPageDisplayCounter++;
 		}
         enablestage7Remove();

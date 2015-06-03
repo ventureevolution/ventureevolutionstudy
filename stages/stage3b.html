@@ -115,18 +115,29 @@ $( document ).ready(function() {
 	    
 	    debug("stage3B saveStage3Bdata() running");
 	    
-	    $('button').each(function(){
+	    $('.btn').each(function(){
 		    
 		    var checkTypeOfStatus = $(this).hasClass('btn-danger');
-		    
-		    if(checkTypeOfStatus){
-		    	debug($(this).attr('value')+" is 0");
-			    relatedBusiness.push([$(this).attr('value'),0]);
-		    }else{
-		    	debug($(this).attr('value')+" is 1");
-			    relatedBusiness.push([$(this).attr('value'),1]);
-		    }
+            
+            
+            var checkNextButton = false;
+            //remove the next button
+            if($(this).attr('id') == "nextPage"){
+                checkNextButton = true;
+            }
+            debug("checkNextButton nextPage button:" + checkNextButton);
+		    if(!(checkNextButton)){
+                if(checkTypeOfStatus){
+                    debug($(this).attr('value')+" is 0");
+                    relatedBusiness.push([$(this).attr('value'),0]);
+                }else{
+                    debug($(this).attr('value')+" is 1");
+                    relatedBusiness.push([$(this).attr('value'),1]);
+                }
+            }
 	    });
+        
+        debug("relatedBusiness: "+relatedBusiness);
     }
 });
 </script>
