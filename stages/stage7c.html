@@ -12,7 +12,7 @@
 	.stage7C-remove:hover {
 		color: #c7144d;
 	}
-	#stage7C-mycompany-name {
+	.stage7C-mycompany-name {
 		text-transform: uppercase;
 	}
 	#stage7C-competitor-name {
@@ -47,8 +47,8 @@
 <!-- Content of the page -->
 <div class="row">
 	<div class="col-md-8 col-md-offset-2">
-		<center><p><div id="S7CP1" class="textreplace"></div><b id="stage7C-mycompany-name"></b><div id="S7CP2" class="textreplace"></div></p>
-<p><div id="S7CP3" class="textreplace"></div></p><br><br></center>
+		<center><p><div id="S7CP1" class="textreplace"></div><b class="stage7C-mycompany-name"></b><div id="S7CP2" class="textreplace"></div></p>
+<p><div id="S7CP3" class="textreplace"></div><b class="stage7C-mycompany-name"></b><div id="S7CP3B" class="textreplace"></div><b class="stage7C-mycompany-name"></b><div id="S7CP3C" class="textreplace"></div></p><br><br></center>
 		<div id="stage7C-form"></div>
 	</div>
 </div>
@@ -68,8 +68,8 @@ languageReplace();
 
 $( document ).ready(function() {
     
-    $("#stage7C-mycompany-name").empty();
-    $("#stage7C-mycompany-name").append(mycompanydata[0]);
+    $(".stage7C-mycompany-name").empty();
+    $(".stage7C-mycompany-name").append(mycompanydata[0]);
     
     debug("stage7C running");
     debug("stage7C display all selections");
@@ -77,7 +77,7 @@ $( document ).ready(function() {
     
     	var stage7CSubJ = stage7CCounter + 1;
     
-        $("#stage7C-form").append('<div class="stage7C-line-group"><div class="row"><div class="col-md-12"><p>'+stage7CSubJ+'&#46; <b>'+comparisonData[stage7CCounter]+'</b> has:</p></div></div><div class="row"><div class="col-md-3">'+languageReplacement['S7CP4']+'</div><div class="col-md-6"><div class="slider-group"><div class="stage7slider" value="" name="'+comparisonData[stage7CCounter]+'"></div></div><br><br></div><div class="col-md3">'+languageReplacement['S7CP5']+'</div></div></div>');
+        $("#stage7C-form").append('<div class="stage7C-line-group"><div class="row"><div class="col-md-12"><p>'+stage7CSubJ+'&#46; <b>'+comparisonData[stage7CCounter]+'</b>:</p></div></div><div class="row"><div class="col-md-3">'+languageReplacement['S7CP4']+'</div><div class="col-md-6"><div class="slider-group"><div class="stage7slider" value="" name="'+comparisonData[stage7CCounter]+'"></div></div><br><br></div><div class="col-md3">'+languageReplacement['S7CP5']+'</div></div></div>');
     }
     
     debug("stage7C activate all sliders");

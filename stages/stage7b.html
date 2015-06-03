@@ -12,7 +12,7 @@
 	.stage7B-remove:hover {
 		color: #c7144d;
 	}
-	#stage7B-mycompany-name {
+	.stage7B-mycompany-name {
 		text-transform: uppercase;
 	}
 	#stage7B-competitor-name {
@@ -38,13 +38,14 @@
 <!-- Content of the page -->
 <div class="row">
 	<div class="col-md-8 col-md-offset-2">
-		<center><p><div id="S7BP1" class="textreplace"></div><b id="stage7B-mycompany-name"></b><div id="S7BP2" class="textreplace"></div></p>
-<p><div id="S7BP3" class="textreplace"></div></p><br><br></center>
+		<center><p><div id="S7BP1" class="textreplace"></div><b class="stage7B-mycompany-name"></b><div id="S7BP2" class="textreplace"></div></p>
+<p><div id="S7BP3" class="textreplace"></div><b class="stage7B-mycompany-name"></b><div id="S7BP3B" class="textreplace"></div><b class="stage7B-mycompany-name"></b><div id="S7BP3C" class="textreplace"></div></p><br><br></center>
 		<div id="stage7B-form"></div>
 	</div>
 </div>
 <div class="row" id ="stage7B-next">
     <div class="col-md-8 col-md-offset-2">
+        <br><br>
         <center><button class="btn btn-success" id="nextPage"><div id="S7BP9" class="textreplace"></div></button></center>
     </div>
 </div>
@@ -54,20 +55,25 @@ languageReplace();
 
 $( document ).ready(function() {
 
+    $(".stage7B-mycompany-name").empty();
+    $(".stage7B-mycompany-name").append(mycompanydata[0]);
+    
     debug("stage7B running");
     debug("stage7B display all selections");
-    for(var stage7BCounter = 0; stage7BCounter < comparisonDataPair.length; stage7BCounter++){
-        $("#stage7B-form").append('<div class="row"><div class="col-md-10"><p class="form-group"><div class="stage7-entry">'+"<b>"+comparisonDataPair[stage7BCounter][1]+"</b>"+'</div></p></div><div class="col-md-2"><button class="btn btn-danger stage7B-button" id="stage7B-button-id-'+stage7BCounter+'">Will Learn about</button></div></div>');
+    for(var stage7BCounter = 0; stage7BCounter < comparisonData.length; stage7BCounter++){
+        $("#stage7B-form").append('<div class="row"><div class="col-md-12"><center><button class="btn btn-danger btn-lg stage7B-button id="stage7B-button-id-'+stage7BCounter+'" name="'+comparisonData[stage7BCounter]+'">'+comparisonData[stage7BCounter]+'</button></center></div></div>');
     }
     
     debug("stage7B enable all selections click");
     //Enable all button click
-    $(".btn").click(function(){
+    $(".stage7B-button").click(function(){
        if($(this).hasClass('btn-danger')){
            $(this).removeClass('btn-danger');
            $(this).addClass('btn-success');
+           $(this).append('<span class="glyphicon glyphicon-ok"></span>');
        }else{
            $(this).removeClass('btn-success');
+           $(this).find('.glyphicon-ok').remove();
            $(this).addClass('btn-danger');
        }
     });
@@ -109,17 +115,15 @@ $( document ).ready(function() {
         debug("stage7B saveStage7BData() save selections");
         $(".stage7B-button").each(function(){
             
-            var stage7BButtonID = parseInt($(this).attr('id').replace(/stage7B-button-id-/,''),10);
-            
             if($(this).hasClass('btn-success')){
-                comparisonDataPair[stage7BButtonID][3] = 1;
+                comparisonDataPair2.push([$(this).attr('name'),1]);
             }else{
-                comparisonDataPair[stage7BButtonID][3] = 0;
+                comparisonDataPair2.push([$(this).attr('name'),0]);
             }
         
         });
         
-        debug("stage7B comparisonDataPair: "+comparisonDataPair);
+        debug("stage7B comparisonDataPair2: "+comparisonDataPair2);
     }
 	
 });

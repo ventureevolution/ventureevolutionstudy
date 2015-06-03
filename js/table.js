@@ -25,6 +25,7 @@ var finalScale = [];
 var languageReplacement = [];
 var comparisonData = [];
 var comparisonDataPair = [];
+var comparisonDataPair2 = [];
 var comparisonData7C = [];
 
 
@@ -252,7 +253,7 @@ function outputAllDataCSVFile(presentationDiv){
 		//	attr3	|			|			|			|	oppositeAttribute3
 		//
 		
-		csv += "Below is the rating of the attribute polarity for each similar company (if a user selects N.A. because s/he thinks rating a company on that attribute polarity does NOT make sense, then input 9999)\n\n"
+		csv += "\"Below is the rating of the attribute polarity for each similar company (if a user selects N.A. because s/he thinks rating a company on that attribute polarity does NOT make sense, then input 9999)\"\n\n"
 		
 		//Create the competitor company header
 		for(var t6i = 0; t6i < pointdata.length; t6i++){
@@ -437,10 +438,10 @@ function outputAllDataCSVFile(presentationDiv){
         
         //Add stage7B data
         csv += "\"Below which statements the user intends to test, which are given a 1. Those statements the user did not select as to be tested are given a 0\"\n";
-        csv += "Company,Term,Percentage,Test\n"
+        csv += "Term,Test\n"
         //Loop through to get all the comparisonDataPair tests
-        for(var t12i = 0; t12i < comparisonDataPair.length; t12i++){
-            csv += comparisonDataPair[t12i][0] + "," + comparisonDataPair[t12i][1] + "," + comparisonDataPair[t12i][2] + "," + comparisonDataPair[t12i][3] + "\n";
+        for(var t12i = 0; t12i < comparisonDataPair2.length; t12i++){
+            csv += comparisonDataPair2[t12i][0] + "," + comparisonDataPair2[t12i][1] + "\n";
         }
         
         //Add new lines
