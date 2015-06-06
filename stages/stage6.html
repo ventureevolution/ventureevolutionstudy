@@ -70,12 +70,14 @@
 .slider-group {
 	margin-top: 4px;
 }
+button.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-icon-only.ui-dialog-titlebar-close{
+	    display: none;
+}
 
 </style>
 <!-- Dialog Message Area -->
 <div id="stage6-dialog-message">
   <p>
-    <span class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 50px 0;"></span>
     <div id="S6P9" class="textreplace"></div>
   </p>
 </div>
@@ -98,19 +100,23 @@
 <script src="js/jquery-ui-slider-pips.js"></script>
 <script>
 
+debug("Stage6 - language replace");
 languageReplace();
+debug("Stage6 - title replace");
 $("#stage6-dialog-message").attr("title",languageReplacement['S6P10']);
 
 $( document ).ready(function() {
 	
 	//Step 1: Set construct order
 	//Get number of attributes
+	debug("Stage6 - term attribute data");
 	var stage6AttributeNumber = attributedata.length;
 	
 	var stage6AttributeOrderArray = [];
 
 	var stage6GlobalAttributeCounter = 0;
 
+	debug("Stage6 - loop attribute number");
 	while(stage6GlobalAttributeCounter < stage6AttributeNumber){
 		
 		//Insert into array either 1 or 2 (1: will be used for order Original Attribute vs Opposite Attribute, 2: will be used for order Opposite Attribute vs Original Attribute)
@@ -136,6 +142,7 @@ $( document ).ready(function() {
 	
 	//Store the Ideal Self ID
 	idealSelfid = parseInt(pointdata.length);
+	currentSelfid = parseInt(pointdata.length) + 1;
 	
 	debug("Stage 6 ideal self id: " + idealSelfid);
 	
@@ -143,41 +150,11 @@ $( document ).ready(function() {
 	//Set initial page number
 	var stage6PageNumber = 0;
 	
-	var stage6MaxPageNumber = pointdata.length;
+	var stage6MaxPageNumber = pointdata.length + 1;
 	
 	debug("Stage6 - stage6 - stage6MaxPageNumber: "+stage6MaxPageNumber);
 	
 	stage6RunPage(stage6PageNumber);
-	
-	
-	//Generate random sequence array in which attributes will appear
-	function generateRandomSequenceArray(anArrayLength){
-		
-		var tempArray = new Array();
-		
-		debug("Stage6 - generateRandomSequenceArray: populate array");
-		//Populate the array
-		for(i = 0; i < anArrayLength; i++){
-			tempArray.push(i);
-		}
-		
-		debug("Stage6 - generateRandomSequenceArray shuffle array");
-		for(j = anArrayLength - 1; j >= 0; j--){
-			
-			var tempValue, tempIndex;
-			
-			tempIndex = Math.floor(Math.random() * j);
-			
-			tempValue = tempArray[j];
-			tempArray[j] = tempArray[tempIndex];
-			tempArray[tempIndex] = tempValue;
-			
-		}
-		
-		debug("Stage6 - generateRandomSequenceArray shuffle array result: " + tempArray.join(","));
-		
-		return tempArray;
-	}
 	
 	//Switch page function
 	function stage6RunPage(pageNumber){
@@ -223,9 +200,42 @@ $( document ).ready(function() {
 				
 			});
 			
-		}else if(stage6PageNumber > (stage6MaxPageNumber - 1)){
+		}else if(stage6PageNumber > (stage6MaxPageNumber - 2)){
 			
 			$("#stage6-next").append('<div class="col-md-8 col-md-offset-2"><center>'+languageReplacement['S6P6']+'<br><br><button class="btn btn-success" id="nextPage">'+languageReplacement['S6P7']+'</button></center></div>');
+			
+			//Enable the complete button
+			$("#nextPage").click(function(){
+				
+				var stage6CheckSlidersOption = stage6CheckSliders();
+				
+				if(stage6CheckSlidersOption == 1){
+				
+					debug("Stage6 - stage6RunPage() - Quiz completed!");
+					
+					//Save the data for this page
+					stage6SaveScaleData(stage6PageNumber);
+					
+                    //Change the loading image
+                    $("#nextPage").empty();
+                    $("#nextPage").append('<span class="glyphicon glyphicon-cog next-rotation-animate"></span> Loading');
+                    
+					//Make increament to go to next page
+					stage6PageNumber++;
+				
+				}else{
+					//Pop up dialog box to prompt user input
+					debug("Stage6 - Dialog box prompted");
+					stage6RunDialog();
+				}
+				
+			});
+			
+		}
+		
+	}else if(stage6PageNumber > (stage6MaxPageNumber - 1)){
+			
+			$("#stage6-next").append('<div class="col-md-8 col-md-offset-2"><center>'+mycompanydata[0]+'<br><br><button class="btn btn-success" id="nextPage">'+languageReplacement['S6P7']+'</button></center></div>');
 			
 			//Enable the complete button
 			$("#nextPage").click(function(){
@@ -280,7 +290,10 @@ $( document ).ready(function() {
 		//If its equals to the ideal self
 		if(tempArraySelectedID == idealSelfid){
 			$(".stage6-competitor-name").append(languageReplacement['S6P8']+mycompanydata[0]);
-		}else{
+		}else if(tempArraySelectedID == currentSelfid){
+			$(".stage6-competitor-name").append(mycompanydata[0]);
+		}		
+		else{
 			$(".stage6-competitor-name").append(pointdata[tempArraySelectedID][0]);
 		}
 	}

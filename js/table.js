@@ -27,6 +27,7 @@ var comparisonData = [];
 var comparisonDataPair = [];
 var comparisonDataPair2 = [];
 var comparisonData7C = [];
+var stage7cRandomSequence = [];
 
 
 //Functions
@@ -129,6 +130,36 @@ function findSmallestPointData(tempPointData){
 	return parseInt(smallestRefID);
 }
 
+
+//Generate random sequence array in which attributes will appear
+function generateRandomSequenceArray(anArrayLength){
+	
+	var tempArray = new Array();
+	
+	debug("Stage6 - generateRandomSequenceArray: populate array");
+	//Populate the array
+	for(i = 0; i < anArrayLength; i++){
+		tempArray.push(i);
+	}
+	
+	debug("Stage6 - generateRandomSequenceArray shuffle array");
+	for(j = anArrayLength - 1; j >= 0; j--){
+		
+		var tempValue, tempIndex;
+		
+		tempIndex = Math.floor(Math.random() * j);
+		
+		tempValue = tempArray[j];
+		tempArray[j] = tempArray[tempIndex];
+		tempArray[tempIndex] = tempValue;
+		
+	}
+	
+	debug("Stage6 - generateRandomSequenceArray shuffle array result: " + tempArray.join(","));
+	
+	return tempArray;
+}
+
 function outputAllDataCSVFile(presentationDiv){
 	
 	debug("outputAllDataCSVFile() running");
@@ -145,12 +176,12 @@ function outputAllDataCSVFile(presentationDiv){
 		var csv = "";
 		
 		//Extract personal[] data
-		csv += "First Name: " + "," + personal[0] + "\n";
-		csv += "Last Name: " + "," + personal[1] + "\n";
-		csv += "Email: " + "," + personal[2] + "\n\n\n";
+		csv += "First Name: " + "," + '\"' + personal[0] + '\"' + "\n";
+		csv += "Last Name: " + "," + '\"' + personal[1] + '\"' + "\n";
+		csv += "Email: " + "," + '\"' + personal[2] + '\"' + "\n\n\n";
 		
 		//Extract mycompanydata[] data
-		csv += "Company Name: " + "," + mycompanydata[0] + "\n\n\n";
+		csv += "Company Name: " + "," + '\"' + mycompanydata[0] + '\"' + "\n\n\n";
 		
 		//Extract pointdata[] data
 		//Add header for pointdata
@@ -161,11 +192,11 @@ function outputAllDataCSVFile(presentationDiv){
 		csv += "Similar Firm name:" + "," + "Order in which User Entered:" + "," + "Color Selected:" + ",,," + "Starting X position:" + "," + "Starting Y position:" + "," + "Final X position from center:" + "," + "Final Y position from center" + "\n";
 		
 		//print my company
-		csv += mycompanydata[0] + "," + "0" + "," + "Black" + ",,," + "0,0,0,0\n";
+		csv += '\"' + mycompanydata[0] + '\"' + "," + "0" + "," + "Black" + ",,," + "0,0,0,0\n";
 		//print all pointdata
 		for(var t1i = 0; t1i < pointdata.length; t1i++){
 			var subJ = t1i + 1;
-			csv += pointdata[t1i][0] + ","+ subJ + ",\"" + pointdata[t1i][1] + "\",,," + pointdata[t1i][2][0] + "," + pointdata[t1i][2][1] + "," + pointdata[t1i][3][0] + "," + pointdata[t1i][3][1] + "\n";
+			csv += '\"' + pointdata[t1i][0] + '\"' + ","+ subJ + ",\"" + '\"' + pointdata[t1i][1] + '\"' + "\",,," + '\"' + pointdata[t1i][2][0] + '\"' + "," + '\"' + pointdata[t1i][2][1] + '\"' + "," + '\"' + pointdata[t1i][3][0] + '\"' + "," + '\"' + pointdata[t1i][3][1] + '\"' + "\n";
 		}
 		
 		//Add spaces
@@ -175,7 +206,7 @@ function outputAllDataCSVFile(presentationDiv){
 		csv += '\"Similar firms selected as competitors of My Company (firms selected as a competitors get a 1, firms not selected get 0)\"\n';
 		debug("relatedBusiness: "+relatedBusiness);
         for(var t2i = 0; t2i < relatedBusiness.length; t2i++){
-			csv += relatedBusiness[t2i][0] + "," + relatedBusiness[t2i][1] + "\n";
+			csv += '\"' + relatedBusiness[t2i][0] + '\"' + "," + '\"' + relatedBusiness[t2i][1] + '\"' + "\n";
 		}
 
 		//Add spaces
@@ -185,7 +216,7 @@ function outputAllDataCSVFile(presentationDiv){
 		csv += "Below the order in which first pole of likeness dimensions were created by User\n";
 		for(var t3i = 0; t3i < attributedata.length; t3i++){
 			var subJ = t3i + 1;
-			csv += attributedata[t3i] + "," + subJ + "\n";
+			csv += '\"' + attributedata[t3i] + '\"' + "," + subJ + "\n";
 		}
 		
 		//Add spaces
@@ -201,7 +232,7 @@ function outputAllDataCSVFile(presentationDiv){
 				csv += ",";
 			}
 			//Append competitor name
-			csv += pointdata[t4i][0] + ",";
+			csv += '\"' + pointdata[t4i][0] + '\"' + ",";
 			
 			if(t4i == (pointdata.length-1)){
 				csv += "\n";
@@ -211,7 +242,7 @@ function outputAllDataCSVFile(presentationDiv){
 		for(var t5i = 0; t5i < attributedata.length; t5i++){
             
             //Add new line
-            csv += attributedata[t5i] + ",";
+            csv += '\"' + attributedata[t5i] + '\"' + ",";
             
             //check if attribute exist in pointdata
             for(var t5j = 0; t5j < pointdata.length; t5j++){
@@ -223,7 +254,7 @@ function outputAllDataCSVFile(presentationDiv){
                 if((pointdata[t5j][4].indexOf(attributedata[t5i]) > -1) && (pointdata[t5j][4].length > 0)){
                     //Correcting the index +1
                     var subJ = pointdata[t5j][4].indexOf(attributedata[t5i]) + 1;
-                    csv += subJ;
+                    csv += '\"' + subJ + '\"';
                 }else{
                     csv += '\"Pole Not Chosen\"';
                 }
@@ -263,7 +294,7 @@ function outputAllDataCSVFile(presentationDiv){
 				csv += ",";
 			}
 			//Append competitor name
-			csv += pointdata[t6i][0] + ",";
+			csv += '\"' + pointdata[t6i][0] + '\"' + ",";
 			
 			if(t6i == (pointdata.length-1)){
                 csv += "Ideal Future Self";
@@ -294,11 +325,11 @@ function outputAllDataCSVFile(presentationDiv){
 				
 				//Append the attribute on the first column
 				if(t6k == 0){
-					csv += output[0] + ",";
+					csv += '\"' + output[0] + '\"' + ",";
 				}
 				
 				//Append the finalScale[] data
-				csv += finalScale[t6k][t6j] + ",";
+				csv += '\"' + finalScale[t6k][t6j] + '\"' + ",";
 				
 				debug("outputAllDataCSVFile() - t6j-t6k loop - finalScale: "+finalScale[t6k][t6j]);
 				
@@ -320,9 +351,9 @@ function outputAllDataCSVFile(presentationDiv){
             debug("companySequence.length: "+companySequence.length);
             //if ideal future self
             if(parseInt(companySequence[companySequenceCounter]) == companySequence.length - 1){
-                csv += "Ideal Future Self" + "," + companySequenceCounter + "\n";
+                csv += "Ideal Future Self" + "," + '\"' + companySequenceCounter + '\"' + "\n";
             }else{
-                csv += pointdata[parseInt(companySequence[companySequenceCounter])][0] + "," + companySequenceCounter + "\n";
+                csv += '\"' + pointdata[parseInt(companySequence[companySequenceCounter])][0] + '\"' + "," + '\"' + companySequenceCounter + '\"' + "\n";
             }
         }
         
@@ -333,7 +364,7 @@ function outputAllDataCSVFile(presentationDiv){
         csv += "Below the order by which if-then statements were created by User\n";
         for(var t7i = 0; t7i < comparisonData.length; t7i++){
             var t7subJ = t7i + 1;
-            csv += comparisonData[t7i] + "," + t7subJ + "\n";
+            csv += '\"' + comparisonData[t7i] + '\"' + "," + t7subJ + "\n";
         }
         
         //Add new lines
@@ -348,7 +379,7 @@ function outputAllDataCSVFile(presentationDiv){
                 csv += ",";
             }
             //Insert the name of the company
-            csv += pointdata[t8ai][0] + ",";
+            csv += '\"'+ pointdata[t8ai][0] + '\"' + ",";
             
             if(t8ai == pointdata.length - 1){
                 csv += "\n";
@@ -358,7 +389,7 @@ function outputAllDataCSVFile(presentationDiv){
 		for(var t9ai = 0; t9ai < comparisonData.length; t9ai++){
             
             //Add term to the first column
-            csv += comparisonData[t9ai] + ",";
+            csv += '\"' + comparisonData[t9ai] + '\"' + ",";
             
             //Pick company
             for(var t10ai = 0; t10ai < pointdata.length; t10ai++){
@@ -373,7 +404,7 @@ function outputAllDataCSVFile(presentationDiv){
                     if((comparisonDataPair[t11ai][1] == comparisonData[t9ai]) && (comparisonDataPair[t11ai][0] == pointdata[t10ai][0])){
                         checkt12aiCounter++;
                         checkt11aiInserted = true;
-                        csv += checkt12aiCounter + ",";
+                        csv += '\"' + checkt12aiCounter + '\"' + ",";
                     }
                 }
                 
@@ -398,7 +429,7 @@ function outputAllDataCSVFile(presentationDiv){
                 csv += ",";
             }
             //Insert the name of the company
-            csv += pointdata[t8i][0] + ",";
+            csv += '\"' + pointdata[t8i][0] + '\"' + ",";
             
             if(t8i == pointdata.length - 1){
                 csv += "\n";
@@ -408,7 +439,7 @@ function outputAllDataCSVFile(presentationDiv){
 		for(var t9i = 0; t9i < comparisonData.length; t9i++){
             
             //Add term to the first column
-            csv += comparisonData[t9i] + ",";
+            csv += '\"' + comparisonData[t9i] + '\"' + ",";
             
             //Pick company
             for(var t10i = 0; t10i < pointdata.length; t10i++){
@@ -420,7 +451,7 @@ function outputAllDataCSVFile(presentationDiv){
                 for(var t11i = 0; t11i < comparisonDataPair.length; t11i++){
                     //Insert value
                     if((comparisonDataPair[t11i][1] == comparisonData[t9i]) && (comparisonDataPair[t11i][0] == pointdata[t10i][0])){
-                        csv += comparisonDataPair[t11i][2] + ",";
+                        csv += '\"' + comparisonDataPair[t11i][2] + '\"' + ",";
                         checkt11iInserted = true;
                     }
                 }
@@ -441,18 +472,28 @@ function outputAllDataCSVFile(presentationDiv){
         csv += "Term,Test\n"
         //Loop through to get all the comparisonDataPair tests
         for(var t12i = 0; t12i < comparisonDataPair2.length; t12i++){
-            csv += comparisonDataPair2[t12i][0] + "," + comparisonDataPair2[t12i][1] + "\n";
+            csv += '\"' + comparisonDataPair2[t12i][0] + '\"' + "," + '\"' + comparisonDataPair2[t12i][1] + '\"' + "\n";
         }
         
         //Add new lines
         csv += "\n\n\n";
         
+        //Final stage7C random sequence data
+        csv += "Below the order by which the factors where randomised\n";
+        csv += "Factor,Order\n";
+        for(var t14i = 0; t14i < stage7cRandomSequence.length; t14i++){
+        	var t14SubJ = stage7cRandomSequence[t14i] + 1;
+	        csv += '\"' + comparisonData[t14i] + '\"' + "," + '\"' + t14SubJ + '\"' + "\n";
+        }
+        
+        //Add new lines
+        csv += "\n\n\n";
         //Final stage7C data
         csv += "\"Below the importance ratings chosen by the user for each factor explaining the user's company's success over substitutes\"\n";
         csv += "," + mycompanydata[0] + "\n";
         for(var t13i = 0; t13i < comparisonData7C.length; t13i++){
 	        
-	        csv += comparisonData7C[t13i][0] + "," + comparisonData7C[t13i][1] + "\n";
+	        csv += '\"' + comparisonData7C[t13i][0] + '\"' + "," + '\"' + comparisonData7C[t13i][1] + '\"' + "\n";
 	        
         }
         

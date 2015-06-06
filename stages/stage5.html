@@ -14,19 +14,20 @@
     .stage5-vs-text{
 	    padding-top: 7px;
     }
+    button.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-icon-only.ui-dialog-titlebar-close{
+	    display: none;
+    }
 </style>
 <!-- Dialog Message Area -->
 <!-- Proceed message -->
 <div id="stage5-dialog-nextMessage">
   <p>
-    <span class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 50px 0;"></span>
     <p><div id="S5P1" class="textreplace"></div></p>
   </p>
 </div>
 <!-- Error Message -->
 <div id="stage5-dialog-errorMessage">
   <p>
-    <span class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 50px 0;"></span>
     <div id="S5P2" class="textreplace"></div>
   </p>
 </div>
@@ -99,7 +100,7 @@ $( document ).ready(function() {
 			modal: true,
 			buttons: {
 				Yes: function() {
-					$(this).dialog( languageReplacement['S5P10'] );
+					$(this).dialog("close");
 					
 					//Change the loading image
                     $("#nextPage").empty();
@@ -107,6 +108,9 @@ $( document ).ready(function() {
 					
 					stageCurrentStage++;
 					runStage(stages[stageCurrentStage]);
+				},
+				No: function(){
+					$(this).dialog("close");
 				}
 			}
 		});

@@ -36,11 +36,13 @@
 		color: #999 !important;
 		font-weight: normal !important;	
 	}
+	button.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-icon-only.ui-dialog-titlebar-close{
+	    display: none;
+    }
 </style>
 <!-- Dialog Message Area -->
 <div id="stage7C-dialog-message-proceed">
   <p>
-    <span class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 50px 0;"></span>
     <div id="S7CP6" class="textreplace"></div>
   </p>
 </div>
@@ -73,11 +75,15 @@ $( document ).ready(function() {
     
     debug("stage7C running");
     debug("stage7C display all selections");
+    
+    //Create a random sequence array
+    stage7cRandomSequence = generateRandomSequenceArray(comparisonData.length);
+    
     for(var stage7CCounter = 0; stage7CCounter < comparisonData.length; stage7CCounter++){
     
     	var stage7CSubJ = stage7CCounter + 1;
     
-        $("#stage7C-form").append('<div class="stage7C-line-group"><div class="row"><div class="col-md-12"><p>'+stage7CSubJ+'&#46; <b>'+comparisonData[stage7CCounter]+'</b>:</p></div></div><div class="row"><div class="col-md-3">'+languageReplacement['S7CP4']+'</div><div class="col-md-6"><div class="slider-group"><div class="stage7slider" value="" name="'+comparisonData[stage7CCounter]+'"></div></div><br><br></div><div class="col-md3">'+languageReplacement['S7CP5']+'</div></div></div>');
+        $("#stage7C-form").append('<div class="stage7C-line-group"><div class="row"><div class="col-md-12"><p>'+stage7CSubJ+'&#46; <b>'+comparisonData[stage7cRandomSequence[stage7CCounter]]+'</b>:</p></div></div><div class="row"><div class="col-md-3">'+languageReplacement['S7CP4']+'</div><div class="col-md-6"><div class="slider-group"><div class="stage7slider" value="" name="'+comparisonData[stage7cRandomSequence[stage7CCounter]]+'"></div></div><br><br></div><div class="col-md3">'+languageReplacement['S7CP5']+'</div></div></div>');
     }
     
     debug("stage7C activate all sliders");
@@ -109,6 +115,9 @@ $( document ).ready(function() {
 					//Change stage count and jump to next stage
 					stageCurrentStage++;
 					runStage(stages[stageCurrentStage]);
+				},
+				No: function(){
+					$(this).dialog("close");
 				}
 			}
 		});

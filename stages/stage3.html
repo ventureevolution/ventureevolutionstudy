@@ -87,18 +87,19 @@
     .stage3-button-margin {
 	    margin: 5px 15px;
     }
+    button.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-icon-only.ui-dialog-titlebar-close{
+	    display: none;
+    }
     
 </style>
 <!-- Dialog Message Area -->
 <div id="stage3-dialog-message-proceed">
   <p>
-    <span class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 50px 0;"></span>
     <div id="S3P1" class="textreplace"></div>
   </p>
 </div>
 <div id="stage3-dialog-message-error">
   <p>
-    <span class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 50px 0;"></span>
     <div id="S3P14" class="textreplace"></div>
   </p>
 </div>
@@ -295,6 +296,9 @@ $( document ).ready(function() {
 					$(this).dialog( "close" );
 					stageCurrentStage++;
 					runStage(stages[stageCurrentStage]);
+				},
+				No: function(){
+					$(this).dialog( "close" );
 				}
 			},
 			beforeClose: function(){

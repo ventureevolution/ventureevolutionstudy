@@ -10,12 +10,11 @@
     }
 </style>
 <!-- Dialog Message Area -->
-<div id="stage3B-dialog-message-proceed">
+<!--div id="stage3B-dialog-message-proceed">
   <p>
-    <span class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 50px 0;"></span>
     <div id="S3BP4" class="textreplace"></div>
   </p>
-</div>
+</div-->
 <!-- Content of the page -->
 <div class="row">
 	<div class="col-md-8 col-md-offset-2">
@@ -45,12 +44,21 @@ $( document ).ready(function() {
 
 	 $("#nextPage").click(function(){
 	 
-	 	$( "#stage3B-dialog-message-proceed" ).dialog( "open" );
+	 	//$( "#stage3B-dialog-message-proceed" ).dialog( "open" );
+	 	//Save the data
+	 	saveStage3Bdata();
+	 	
+	 	//Change the loading image
+        $("#nextPage").empty();
+        $("#nextPage").append('<span class="glyphicon glyphicon-cog next-rotation-animate"></span> Loading');
+        //Change stage count and jump to next stage
+        stageCurrentStage++;
+        runStage(stages[stageCurrentStage]);
 	 	
     });
     
     //Dialog function
-	$(function() {
+	/*$(function() {
 		$( "#stage3B-dialog-message-proceed" ).dialog({
 			autoOpen: false,
 			modal: true,
@@ -75,7 +83,7 @@ $( document ).ready(function() {
 				$("#nextPage").append(languageReplacement['S3BP3']);
 			}
 		});
-	});
+	});*/
     
     function stage3BEnableButton(DIVidentifier){
         
