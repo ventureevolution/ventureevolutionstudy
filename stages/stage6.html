@@ -136,7 +136,7 @@ $( document ).ready(function() {
 	
 	//Randomize the company display sequence
 	debug("Stage 6 - generate company sequence");
-	companySequence = generateRandomSequenceArray(parseInt(pointdata.length) + 1);
+	companySequence = generateRandomSequenceArray(parseInt(pointdata.length) + 2);
 	
 	debug("Stage 6 company sequence: " + companySequence.join(","));
 	
@@ -150,7 +150,7 @@ $( document ).ready(function() {
 	//Set initial page number
 	var stage6PageNumber = 0;
 	
-	var stage6MaxPageNumber = pointdata.length + 1;
+	var stage6MaxPageNumber = parseInt(pointdata.length) + 1;
 	
 	debug("Stage6 - stage6 - stage6MaxPageNumber: "+stage6MaxPageNumber);
 	
@@ -169,6 +169,7 @@ $( document ).ready(function() {
 		//Display next button trigger
 		if((stage6PageNumber >= 0) && (stage6PageNumber <= (stage6MaxPageNumber - 1))){
 			
+			debug("Stage6 stage number: "+stage6PageNumber);
 			//Display next button
 			$("#stage6-next").append('<div class="col-md-8 col-md-offset-2"><center>'+languageReplacement['S6P4']+'<br><br><button class="btn btn-success" id="nextPage">'+languageReplacement['S6P5']+'</button></center></div>');
 			
@@ -200,7 +201,9 @@ $( document ).ready(function() {
 				
 			});
 			
-		}else if(stage6PageNumber > (stage6MaxPageNumber - 2)){
+		}else if((stage6PageNumber > (stage6MaxPageNumber - 2)) && (stage6PageNumber < (stage6MaxPageNumber - 1))){
+			
+			debug("Stage6 stage number: "+stage6PageNumber);
 			
 			$("#stage6-next").append('<div class="col-md-8 col-md-offset-2"><center>'+languageReplacement['S6P6']+'<br><br><button class="btn btn-success" id="nextPage">'+languageReplacement['S6P7']+'</button></center></div>');
 			
@@ -232,10 +235,9 @@ $( document ).ready(function() {
 			});
 			
 		}
-		
-	}else if(stage6PageNumber > (stage6MaxPageNumber - 1)){
+		else if(stage6PageNumber > (stage6MaxPageNumber - 1)){
 			
-			$("#stage6-next").append('<div class="col-md-8 col-md-offset-2"><center>'+mycompanydata[0]+'<br><br><button class="btn btn-success" id="nextPage">'+languageReplacement['S6P7']+'</button></center></div>');
+			$("#stage6-next").append('<div class="col-md-8 col-md-offset-2"><center>'+languageReplacement['S6P6']+'<br><br><button class="btn btn-success" id="nextPage">'+languageReplacement['S6P7']+'</button></center></div>');
 			
 			//Enable the complete button
 			$("#nextPage").click(function(){
@@ -266,7 +268,6 @@ $( document ).ready(function() {
 			});
 			
 		}
-		
 	}
 	
 	//Reset the display
@@ -292,8 +293,7 @@ $( document ).ready(function() {
 			$(".stage6-competitor-name").append(languageReplacement['S6P8']+mycompanydata[0]);
 		}else if(tempArraySelectedID == currentSelfid){
 			$(".stage6-competitor-name").append(mycompanydata[0]);
-		}		
-		else{
+		}else{
 			$(".stage6-competitor-name").append(pointdata[tempArraySelectedID][0]);
 		}
 	}
