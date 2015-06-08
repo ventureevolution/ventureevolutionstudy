@@ -286,19 +286,25 @@ function outputAllDataCSVFile(presentationDiv){
 		
 		csv += "\"Below is the rating of the attribute polarity for each similar company (if a user selects N.A. because s/he thinks rating a company on that attribute polarity does NOT make sense, then input 9999)\"\n\n"
 		
+		var temppointdatalength = pointdata.length + 1;
+		
 		//Create the competitor company header
-		for(var t6i = 0; t6i < pointdata.length; t6i++){
+		for(var t6i = 0; t6i <= temppointdatalength; t6i++){
 			
 			if(t6i == 0){
 				//First column to be blank
 				csv += ",";
 			}
-			//Append competitor name
-			csv += '\"' + pointdata[t6i][0] + '\"' + ",";
 			
-			if(t6i == (pointdata.length-1)){
-                csv += "Ideal Future Self";
-				csv += "\n";
+			if(t6i == (temppointdatalength-1)){
+                csv += '\"Ideal Future Self\",';
+			}
+			else if(t6i == temppointdatalength){
+				csv += mycompanydata[0] + "\n";
+			}
+			else{
+				//Append competitor name
+				csv += '\"' + pointdata[t6i][0] + '\"' + ",";
 			}
 		}
 		
@@ -321,7 +327,7 @@ function outputAllDataCSVFile(presentationDiv){
 			}
 			
 			//Build the row data
-			for(var t6k = 0; t6k <= pointdata.length; t6k++){
+			for(var t6k = 0; t6k <= temppointdatalength; t6k++){
 				
 				//Append the attribute on the first column
 				if(t6k == 0){
@@ -334,7 +340,7 @@ function outputAllDataCSVFile(presentationDiv){
 				debug("outputAllDataCSVFile() - t6j-t6k loop - finalScale: "+finalScale[t6k][t6j]);
 				
 				//Append the opposite attribute on the last column
-				if(t6k == pointdata.length){
+				if(t6k == temppointdatalength){
 					csv += output[1] + "\n";
 				}
 			}
@@ -349,11 +355,19 @@ function outputAllDataCSVFile(presentationDiv){
         for(var companySequenceCounter = 0; companySequenceCounter < companySequence.length; companySequenceCounter++){
             debug("companySequence[companySequenceCounter]: " + companySequence[companySequenceCounter]);
             debug("companySequence.length: "+companySequence.length);
-            //if ideal future self
+			
+			var tempprintcompanySequenceCounter = companySequenceCounter + 1;
+            //if current self
             if(parseInt(companySequence[companySequenceCounter]) == companySequence.length - 1){
-                csv += "Ideal Future Self" + "," + '\"' + companySequenceCounter + '\"' + "\n";
+				debug("companySequence[companySequenceCounter]: "+companySequence[companySequenceCounter]);
+                csv += mycompanydata[0] + "," + '\"' + tempprintcompanySequenceCounter + '\"' + "\n";
+            }else if(parseInt(companySequence[companySequenceCounter]) == companySequence.length - 2){
+				//if ideal future self
+				debug("companySequence[companySequenceCounter]: "+companySequence[companySequenceCounter]);
+                csv += "Ideal Future Self" + "," + '\"' + tempprintcompanySequenceCounter + '\"' + "\n";
             }else{
-                csv += '\"' + pointdata[parseInt(companySequence[companySequenceCounter])][0] + '\"' + "," + '\"' + companySequenceCounter + '\"' + "\n";
+				debug("companySequence[companySequenceCounter]: "+companySequence[companySequenceCounter]);
+                csv += '\"' + pointdata[parseInt(companySequence[companySequenceCounter])][0] + '\"' + "," + '\"' + tempprintcompanySequenceCounter + '\"' + "\n";
             }
         }
         

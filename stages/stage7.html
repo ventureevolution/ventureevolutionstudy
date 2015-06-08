@@ -27,6 +27,12 @@
     button.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-icon-only.ui-dialog-titlebar-close{
 	    display: none;
     }
+    .stage7-entry{
+	    color: rgb(51,51,51);
+    }
+    .stage7-active{
+	    color: rgb(84,84,84) !important;
+    }
 </style>
 <!-- Dialog Message Area -->
 <div id="stage7-dialog-message-error">
@@ -42,7 +48,7 @@
 		</div>
 		<div id="stage7-form">
 		</div>
-		<center><button id="stage7-add-more" class="btn btn-default"><div id="S7P8" class="textreplace"></button></center>
+		<!--center><button id="stage7-add-more" class="btn btn-default"><div id="S7P8" class="textreplace"></button></center-->
 	</div>
 </div>
 <div class="row" id ="stage7-next">
@@ -105,10 +111,10 @@ $( document ).ready(function() {
 	
         debug("stage7 - new input field when clicked");
 		//Step 4: Add new input fields when Add button is clicked
-		$("#stage7-add-more").click(function(){
+		/*$("#stage7-add-more").click(function(){
 			$("#stage7-form").append('<div class="row"><div class="col-md-10"><p class="form-group"><div class="stage7-entry">'+languageReplacement['S7P4']+'<input type="text" class="stage7-term">'+languageReplacement['S7P5']+'<b>'+mycompanydata[0]+'</b>'+languageReplacement['S7P6']+'<b>'+tempCompetitorNameIs+'</b>'+languageReplacement['S7P7']+'<input type="text" class="stage7-percentage">'+languageReplacement['S7P7B']+'</div></p></div></div>');
 			enablestage7Remove();
-		});
+		});*/
 
 		//Step 5: Load Next Button with Conditions
 		if((pageNumber >= 0) && (pageNumber < (maxPageNumber - 1))){
@@ -346,10 +352,11 @@ $( document ).ready(function() {
 		//Insert the stage form items
 		var stage7ResetPageDisplayCounter = 0;
 		while(stage7ResetPageDisplayCounter < 1){
-			$("#stage7-form").append('<div class="row"><div class="col-md-10"><p class="form-group"><div class="stage7-entry">'+languageReplacement['S7P4']+'<input type="text" class="stage7-term">'+languageReplacement['S7P5']+'<b>'+mycompanydata[0]+'</b>'+languageReplacement['S7P6']+'<b>'+Stage7CompetitorNameDisplay+'</b>'+languageReplacement['S7P7']+'<input type="text" class="stage7-percentage">'+languageReplacement['S7P7B']+'</div></p></div></div>');
+			$("#stage7-form").append('<div class="row"><div class="col-md-10"><p class="form-group"><div class="stage7-entry stage7-active">'+languageReplacement['S7P4']+'<input type="text" class="stage7-term">'+languageReplacement['S7P5']+'<b>'+mycompanydata[0]+'</b>'+languageReplacement['S7P6']+'<b>'+Stage7CompetitorNameDisplay+'</b>'+languageReplacement['S7P7']+'<input type="text" class="stage7-percentage">'+languageReplacement['S7P7B']+'</div></p></div></div>');
 			stage7ResetPageDisplayCounter++;
 		}
         enablestage7Remove();
+        //Stage7EnableAdd();
 		
 		//Clear the attribute stage selction area
 		$("#stage7-selection").empty();
@@ -358,6 +365,10 @@ $( document ).ready(function() {
 		//Insert the stage7 selection attributes
 		enablestage7Comparison();
 	}
+	
+	/*function Stage7EnableAdd(){
+		$(".stage7-active").
+	}*/
 	
 	//Check if the attribute entry are empty
 	function stage7CheckTypeComparisonNotEmpty() {
