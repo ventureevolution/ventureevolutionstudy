@@ -90,7 +90,16 @@
     button.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-icon-only.ui-dialog-titlebar-close{
 	    display: none;
     }
-    
+    #tabling {
+	    padding-top: 80px;
+    }
+    .navbar.navbar-default{
+	    background-image: none;
+	    background-color:transparent;
+	    border: none;
+	    box-shadow: none;
+	    -webkit-box-shadow: none;
+    }
 </style>
 <!-- Dialog Message Area -->
 <div id="stage3-dialog-message-proceed">
@@ -104,9 +113,15 @@
   </p>
 </div>
 <!-- Content of the page -->
+<nav class="navbar navbar-default navbar-fixed-top">
+	<div class="row">
+		<div class="col-md-8 col-md-offset-2">
+			<p><div id="S3P2A" class="textreplace"></div><span class="stage3-myCompanyName"></span><div id="S3P2B" class="textreplace"></div><span class="stage3-myCompanyName"></span><div id="S3P2C" class="textreplace"></div></p>
+		</div>
+	</div>
+</nav>
 <div class="row">
 	<div class="col-md-8 col-md-offset-2">
-		<p><div id="S3P2A" class="textreplace"></div><span class="stage3-myCompanyName"></span><div id="S3P2B" class="textreplace"></div><span class="stage3-myCompanyName"></span><div id="S3P2C" class="textreplace"></div></p>
 		<div id="stage3-drawingBoard">
 			<div id="stage3-drawingHelp" style="display: none;">
                 <svg class="stage3-drawing-line">

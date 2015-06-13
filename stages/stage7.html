@@ -28,11 +28,28 @@
 	    display: none;
     }
     .stage7-entry{
-	    color: rgb(51,51,51);
+	    color: rgba(51,51,51,0.5);
     }
-    .stage7-active{
-	    color: rgb(84,84,84) !important;
+    .stage7-is-active{
+	    color: rgba(51,51,51,1) !important;
     }
+    #stage7-form .row{
+	    padding: 10 0 10 0;
+    }
+    #tabling {
+	    padding-top: 90px;
+	}
+	.navbar.navbar-default{
+		padding-top: 30px;
+	    background-image: none;
+	    background-color: #ffffff;
+	    border: none;
+	    box-shadow: none;
+	    -webkit-box-shadow: none;
+	}
+	#stage7-top{
+		padding-top: 0px;
+	}
 </style>
 <!-- Dialog Message Area -->
 <div id="stage7-dialog-message-error">
@@ -41,14 +58,21 @@
   </p>
 </div>
 <!-- Content of the page -->
+<nav class="navbar navbar-default navbar-fixed-top">
+	<div class="row">
+		<div class="col-md-8 col-md-offset-2">
+			<p><div id="S7P1" class="textreplace"></div><span style="color: green;"><b id="stage7-mycompany-name"></b><div id="S7P2" class="textreplace"></div><b id="stage7-competitor-name"></b><div id="S7P3" class="textreplace"></div></span></p>
+		</div>
+	</div>
+</nav>
+<div id="stage7-top">&nbsp;</div>
 <div class="row">
 	<div class="col-md-8 col-md-offset-2">
-		<p><div id="S7P1" class="textreplace"></div><span style="color: green;"><b id="stage7-mycompany-name"></b><div id="S7P2" class="textreplace"></div><b id="stage7-competitor-name"></b><div id="S7P3" class="textreplace"></div></span></p>
 		<div class="row" id="stage7-selection">
 		</div>
 		<div id="stage7-form">
 		</div>
-		<center><button id="stage7-add-more" class="btn btn-default"><div id="S7P8" class="textreplace"></button></center>
+		<!--center><button id="stage7-add-more" class="btn btn-default"><div id="S7P8" class="textreplace"></button></center-->
 	</div>
 </div>
 <div class="row" id ="stage7-next">
@@ -138,6 +162,7 @@ $( document ).ready(function() {
 					
 					//Re-run the page
 					stage7runPage(stage7pageCount);
+					$('html,body').animate({scrollTop:$('#stage7-top').offset().top},1000);
 				}else{
 					debug("stage7 - clicked on next when empty");
                     
@@ -255,7 +280,7 @@ $( document ).ready(function() {
 					debug("stage7 - enablestage7ComparisonClick() - theSelectedID: "+theSelectedID);
 			
 					//Insert the item into the selection list
-					$("#stage7-form").prepend('<div class="row" id="stage7-form-row-'+theSelectedID+'"><div class="col-md-10 has-feedback"><p class="form-group"><div class="stage7-entry">'+languageReplacement['S7P4']+'<input type="text"  value="'+comparisonData[theSelectedID]+'" class="stage7-term">'+languageReplacement['S7P5']+'<b>'+mycompanydata[0]+'</b>'+languageReplacement['S7P6']+'<b>'+stage7CompetitorNameIs+'</b>'+languageReplacement['S7P7']+'<input type="text" class="stage7-percentage">'+languageReplacement['S7P7B']+'</div></p></div><div class="col-md-2"><span class="glyphicon glyphicon-remove-circle stage7-remove" aria-hidden="true"></span></div></div>');
+					$("#stage7-form").prepend('<div class="row" id="stage7-form-row-'+theSelectedID+'"><div class="col-md-10 has-feedback"><div class="stage7-entry stage7-is-active stage7-is-last">'+languageReplacement['S7P4']+'<input type="text"  value="'+comparisonData[theSelectedID]+'" class="stage7-term">'+languageReplacement['S7P5']+'<b>'+mycompanydata[0]+'</b>'+languageReplacement['S7P6']+'<b>'+stage7CompetitorNameIs+'</b>'+languageReplacement['S7P7']+'<input type="text" class="stage7-percentage">'+languageReplacement['S7P7B']+'</div></div><div class="col-md-2"><span class="glyphicon glyphicon-remove-circle stage7-remove" aria-hidden="true"></span></div></div>');
 					
 					//Enable the remove function
 					$("#stage7-form-row-"+theSelectedID+" .stage7-remove").one("click",function(){
@@ -274,7 +299,16 @@ $( document ).ready(function() {
 					});
 					
 					//Remove the attribute button
-					$(this).parent().remove();
+					var selectionButtonSlotCounter = 0;
+					$('.selectionButtonSlot').each(function(){
+						selectionButtonSlotCounter += 1;
+					});
+					if(selectionButtonSlotCounter == 1){
+						$(this).parent().parent().parent().remove();
+					}else{
+						$(this).parent().remove();
+					}
+					//Stage7EnableAdd(stage7CompetitorNameIs);
 					
 				});
 			});
@@ -288,7 +322,7 @@ $( document ).ready(function() {
 				debug("stage7 - enablestage7ComparisonClick() - theSelectedID: "+theSelectedID);
 				
 				//Insert the item into the selection list
-				$("#stage7-form").prepend('<div class="row" id="stage7-form-row-'+theSelectedID+'"><div class="col-md-10 has-feedback"><p class="form-group"><div class="stage7-entry">'+languageReplacement['S7P4']+'<input type="text"  value="'+comparisonData[theSelectedID]+'" class="stage7-term">'+languageReplacement['S7P5']+'<b>'+mycompanydata[0]+'</b>'+languageReplacement['S7P6']+'<b>'+stage7CompetitorNameIs+'</b>'+languageReplacement['S7P7']+'<input type="text" class="stage7-percentage">'+languageReplacement['S7P7B']+'</div></p></div><div class="col-md-2"><span class="glyphicon glyphicon-remove-circle stage7-remove" aria-hidden="true"></span></div></div>');
+				$("#stage7-form").prepend('<div class="row" id="stage7-form-row-'+theSelectedID+'"><div class="col-md-10 has-feedback"><div class="stage7-entry stage7-is-active stage7-is-last">'+languageReplacement['S7P4']+'<input type="text"  value="'+comparisonData[theSelectedID]+'" class="stage7-term">'+languageReplacement['S7P5']+'<b>'+mycompanydata[0]+'</b>'+languageReplacement['S7P6']+'<b>'+stage7CompetitorNameIs+'</b>'+languageReplacement['S7P7']+'<input type="text" class="stage7-percentage">'+languageReplacement['S7P7B']+'</div></div><div class="col-md-2"><span class="glyphicon glyphicon-remove-circle stage7-remove" aria-hidden="true"></span></div></div>');
 				
 				//Enable the remove button
 				$("#stage7-form-row-"+theSelectedID+" .stage7-remove").one("click",function(){
@@ -307,7 +341,16 @@ $( document ).ready(function() {
 				});
 				
 				//Remove the attribute button
-				$(this).parent().remove();
+				var selectionButtonSlotCounter = 0;
+				$('.selectionButtonSlot').each(function(){
+					selectionButtonSlotCounter += 1;
+				});
+				if(selectionButtonSlotCounter == 1){
+					$(this).parent().parent().parent().remove();
+				}else{
+					$(this).parent().remove();
+				}
+				//Stage7EnableAdd(stage7CompetitorNameIs);
 			});
 		}
 	}
@@ -352,11 +395,11 @@ $( document ).ready(function() {
 		//Insert the stage form items
 		var stage7ResetPageDisplayCounter = 0;
 		while(stage7ResetPageDisplayCounter < 1){
-			$("#stage7-form").append('<div class="row"><div class="col-md-10"><p class="form-group"><div class="stage7-entry stage7-active">'+languageReplacement['S7P4']+'<input type="text" class="stage7-term">'+languageReplacement['S7P5']+'<b>'+mycompanydata[0]+'</b>'+languageReplacement['S7P6']+'<b>'+Stage7CompetitorNameDisplay+'</b>'+languageReplacement['S7P7']+'<input type="text" class="stage7-percentage">'+languageReplacement['S7P7B']+'</div></p></div></div>');
+			$("#stage7-form").append('<div class="row"><div class="col-md-10"><div class="stage7-entry stage7-is-active stage7-is-last">'+languageReplacement['S7P4']+'<input type="text" class="stage7-term">'+languageReplacement['S7P5']+'<b>'+mycompanydata[0]+'</b>'+languageReplacement['S7P6']+'<b>'+Stage7CompetitorNameDisplay+'</b>'+languageReplacement['S7P7']+'<input type="text" class="stage7-percentage">'+languageReplacement['S7P7B']+'</div></div></div>');
 			stage7ResetPageDisplayCounter++;
 		}
         enablestage7Remove();
-        //Stage7EnableAdd();
+        Stage7EnableAdd(Stage7CompetitorNameDisplay);
 		
 		//Clear the attribute stage selction area
 		$("#stage7-selection").empty();
@@ -366,9 +409,30 @@ $( document ).ready(function() {
 		enablestage7Comparison();
 	}
 	
-	/*function Stage7EnableAdd(){
-		$(".stage7-active").
-	}*/
+	function Stage7EnableAdd(Stage7CompetitorNameDisplay){
+		$("input").click(function(){
+			$(".stage7-entry").each(function(){
+				checkActiveClass = $(this).hasClass('stage7-is-active');
+				
+				if(checkActiveClass){
+					$(this).removeClass('stage7-is-active');
+				}
+			});
+			
+			$(this).parent().addClass('stage7-is-active');
+			
+			checkLastClass = $(this).parent().hasClass('stage7-is-last');
+				
+			if(checkLastClass){
+				//CONTINUE
+				$(this).parent().removeClass('stage7-is-last');
+				$("#stage7-form").append('<div class="row"><div class="col-md-10"><div class="stage7-entry stage7-is-active stage7-is-last">'+languageReplacement['S7P4']+'<input type="text" class="stage7-term">'+languageReplacement['S7P5']+'<b>'+mycompanydata[0]+'</b>'+languageReplacement['S7P6']+'<b>'+Stage7CompetitorNameDisplay+'</b>'+languageReplacement['S7P7']+'<input type="text" class="stage7-percentage">'+languageReplacement['S7P7B']+'</div></div></div>');
+				enablestage7Remove();
+				Stage7EnableAdd(Stage7CompetitorNameDisplay);
+			}
+			
+		});
+	}
 	
 	//Check if the attribute entry are empty
 	function stage7CheckTypeComparisonNotEmpty() {

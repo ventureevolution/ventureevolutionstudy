@@ -17,6 +17,20 @@
     button.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-icon-only.ui-dialog-titlebar-close{
 	    display: none;
     }
+    #tabling {
+	    padding-top: 200px;
+    }
+    .navbar.navbar-default{
+    	padding-top: 30px;
+	    background-image: none;
+	    background-color: #ffffff;
+	    border: none;
+	    box-shadow: none;
+	    -webkit-box-shadow: none;
+    }
+    #stage5-top{
+	    padding-top: 0px;
+    }
 </style>
 <!-- Dialog Message Area -->
 <!-- Proceed message -->
@@ -32,12 +46,15 @@
   </p>
 </div>
 <!-- Content of the page -->
-<div class="row">
-	<div class="col-md-8 col-md-offset-2">
-		<p><div id="S5P3" class="textreplace"></div><b class="stage5-company-name"></b><div id="S5P4" class="textreplace"></div></p>
-		<p><div id="S5P5" class="textreplace"></div></p><br><br>
+<nav class="navbar navbar-default navbar-fixed-top">
+	<div class="row">
+		<div class="col-md-8 col-md-offset-2">
+			<p><div id="S5P3" class="textreplace"></div><b class="stage5-company-name"></b><div id="S5P4" class="textreplace"></div></p>
+			<p><div id="S5P5" class="textreplace"></div></p><br><br>
+		</div>
 	</div>
-</div>
+</nav>
+<div id="stage5-top">&nbsp;</div>
 <div class="row">
 	<div class="col-md-8 col-md-offset-2" id="stage5-form">
 	</div>
@@ -51,6 +68,7 @@
 </div>
 <!-- Script of the page -->
 <script>
+$('html,body').animate({scrollTop:$('#stage5-top').offset().top},1000);
 languageReplace();
 
 //Form placeholder text

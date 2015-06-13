@@ -26,6 +26,16 @@
     button.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-icon-only.ui-dialog-titlebar-close{
 	    display: none;
     }
+    #tabling {
+	    padding-top: 80px;
+    }
+    .navbar.navbar-default{
+	    background-image: none;
+	    background-color: #ffffff;
+	    border: none;
+	    box-shadow: none;
+	    -webkit-box-shadow: none;
+    }
 </style>
 <!-- Dialog Message Area -->
 <div id="stage4-dialog-message-proceed">
@@ -34,9 +44,16 @@
   </p>
 </div>
 <!-- Content of the page -->
+<nav class="navbar navbar-default navbar-fixed-top">
+	<div class="row">
+		<div class="col-md-8 col-md-offset-2">
+			<p><div id="S4P1" class="textreplace"></div><span class="stage4-mycompany"></span><div id="S4P2" class="textreplace"></div><span class="stage4-competitor"></span><div id="S4P3" class="textreplace"></div></p>
+		</div>
+	</div>
+</nav>
+<div id="stage4-top"></div>
 <div class="row">
 	<div class="col-md-8 col-md-offset-2">
-		<p><div id="S4P1" class="textreplace"></div><span class="stage4-mycompany"></span><div id="S4P2" class="textreplace"></div><span class="stage4-competitor"></span><div id="S4P3" class="textreplace"></div></p>
 		<form id="stage4-form">
 			<div class="row">
 				<div class="col-md-8 col-md-offset-2">
@@ -164,6 +181,8 @@ $( document ).ready(function() {
 					
 					//Re-run the page
 					stage4runPage(stage4pageCount);
+					$('html,body').animate({
+						scrollTop:$('#stage4-top').offset().top},1000);
 				}else{
 					debug("Stage4 - clicked on next when empty");
 					

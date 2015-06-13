@@ -196,7 +196,7 @@ function outputAllDataCSVFile(presentationDiv){
 		//print all pointdata
 		for(var t1i = 0; t1i < pointdata.length; t1i++){
 			var subJ = t1i + 1;
-			csv += '\"' + pointdata[t1i][0] + '\"' + ","+ subJ + ",\"" + '\"' + pointdata[t1i][1] + '\"' + "\",,," + '\"' + pointdata[t1i][2][0] + '\"' + "," + '\"' + pointdata[t1i][2][1] + '\"' + "," + '\"' + pointdata[t1i][3][0] + '\"' + "," + '\"' + pointdata[t1i][3][1] + '\"' + "\n";
+			csv += '\"' + pointdata[t1i][0] + '\"' + ",\""+ subJ + "\"," + '\"' + pointdata[t1i][1] + '\"' + ",,," + '\"' + pointdata[t1i][2][0] + '\"' + "," + '\"' + pointdata[t1i][2][1] + '\"' + "," + '\"' + pointdata[t1i][3][0] + '\"' + "," + '\"' + pointdata[t1i][3][1] + '\"' + "\n";
 		}
 		
 		//Add spaces
