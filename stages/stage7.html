@@ -2,7 +2,8 @@
 <style type="text/css">
 	.selectionButtonSlot{
 		margin-bottom: 15px;
-		white-space: normal; 
+        overflow: scroll;
+		white-space: normal;
 	}
 	.stage7-remove {
 		font-size: 2em;
@@ -13,10 +14,10 @@
 		color: #c7144d;
 	}
 	#stage7-mycompany-name {
-		text-transform: uppercase;
+		text-transform: capitalize;
 	}
 	#stage7-competitor-name {
-		text-transform: uppercase;
+		text-transform: capitalize;
 	}
     .stage7-term {
         width: 50%;
@@ -61,11 +62,11 @@
 <nav class="navbar navbar-default navbar-fixed-top">
 	<div class="row">
 		<div class="col-md-8 col-md-offset-2">
-			<p><div id="S7P1" class="textreplace"></div><span style="color: green;"><b id="stage7-mycompany-name"></b><div id="S7P2" class="textreplace"></div><b id="stage7-competitor-name"></b><div id="S7P3" class="textreplace"></div></span></p>
+			<p><div id="S7P1" class="textreplace"></div><b id="stage7-mycompany-name"></b><div id="S7P2" class="textreplace"></div><b id="stage7-competitor-name"></b><div id="S7P3" class="textreplace"></div></p><br>
 		</div>
 	</div>
 </nav>
-<div id="stage7-top">&nbsp;</div>
+<div id="stage7-top">&nbsp;</div><br><br>
 <div class="row">
 	<div class="col-md-8 col-md-offset-2">
 		<div class="row" id="stage7-selection">
@@ -136,7 +137,7 @@ $( document ).ready(function() {
         debug("stage7 - new input field when clicked");
 		//Step 4: Add new input fields when Add button is clicked
 		/*$("#stage7-add-more").click(function(){
-			$("#stage7-form").append('<div class="row"><div class="col-md-10"><p class="form-group"><div class="stage7-entry">'+languageReplacement['S7P4']+'<input type="text" class="stage7-term">'+languageReplacement['S7P5']+'<b>'+mycompanydata[0]+'</b>'+languageReplacement['S7P6']+'<b>'+tempCompetitorNameIs+'</b>'+languageReplacement['S7P7']+'<input type="text" class="stage7-percentage">'+languageReplacement['S7P7B']+'</div></p></div></div>');
+			$("#stage7-form").append('<div class="row"><div class="col-md-11"><p class="form-group"><div class="stage7-entry">'+languageReplacement['S7P4']+'<input type="text" class="stage7-term">'+languageReplacement['S7P5']+'<b>'+mycompanydata[0]+'</b>'+languageReplacement['S7P6']+'<b>'+tempCompetitorNameIs+'</b>'+languageReplacement['S7P7']+'<input type="text" class="stage7-percentage">'+languageReplacement['S7P7B']+'</div></p></div></div>');
 			enablestage7Remove();
 		});*/
 
@@ -222,7 +223,7 @@ $( document ).ready(function() {
 			//Check if the class & button has already been added, if not it will add
 			if(!$(this).parent().hasClass("has-feedback")){
 				$(this).parent().addClass("has-feedback");
-				$('<div class="col-md-2"><span class="glyphicon glyphicon-remove-circle stage7-remove" aria-hidden="true"></span></div>').insertAfter($(this).parent());
+				$('<div class="col-md-1"><span class="glyphicon glyphicon-remove-circle stage7-remove" aria-hidden="true"></span></div>').insertAfter($(this).parent());
 				$(".stage7-remove").one("click",function(){
 					$(this).parent().parent().remove();
 				});
@@ -237,7 +238,7 @@ $( document ).ready(function() {
 		
 		//Insert the header text
 		if(stage7pageCount != 0){
-			$("#stage7-selection").append('<div class="col-md-8 col-md-offset-2"><br><br><center><p>'+languageReplacement['S7P13']+'</p></center><div class="row"></div></div>');
+			$("#stage7-selection").append('<div class="col-md-9 col-md-offset-2"><br><br><center><p>'+languageReplacement['S7P13']+'</p></center><div class="row"></div></div>');
 		}
 	
 		//Loop through [comparisonData] to load all the attributes into buttons
@@ -248,7 +249,7 @@ $( document ).ready(function() {
 		var enablestage7ComparisonCounter = 0;
 		
 		while(enablestage7ComparisonCounter < countComparison){
-			$("#stage7-selection .col-md-8 .row").append('<div class="col-md-4"><button type="button" class="btn btn-danger btn-block selectionButtonSlot" id="stage7-att-btn'+enablestage7ComparisonCounter+'">'+comparisonData[enablestage7ComparisonCounter]+'</button></div>');
+			$("#stage7-selection .col-md-9 .row").append('<div class="col-md-4"><button type="button" class="btn btn-danger btn-block selectionButtonSlot" id="stage7-att-btn'+enablestage7ComparisonCounter+'">'+comparisonData[enablestage7ComparisonCounter]+'</button></div>');
 			enablestage7ComparisonCounter++;
 			
 			debug("stage7 - enablestage7Comparison() - loop counter: "+enablestage7ComparisonCounter);
@@ -280,7 +281,7 @@ $( document ).ready(function() {
 					debug("stage7 - enablestage7ComparisonClick() - theSelectedID: "+theSelectedID);
 			
 					//Insert the item into the selection list
-					$("#stage7-form").prepend('<div class="row" id="stage7-form-row-'+theSelectedID+'"><div class="col-md-10 has-feedback"><div class="stage7-entry stage7-is-active stage7-is-last">'+languageReplacement['S7P4']+'<input type="text"  value="'+comparisonData[theSelectedID]+'" class="stage7-term">'+languageReplacement['S7P5']+'<b>'+mycompanydata[0]+'</b>'+languageReplacement['S7P6']+'<b>'+stage7CompetitorNameIs+'</b>'+languageReplacement['S7P7']+'<input type="text" class="stage7-percentage">'+languageReplacement['S7P7B']+'</div></div><div class="col-md-2"><span class="glyphicon glyphicon-remove-circle stage7-remove" aria-hidden="true"></span></div></div>');
+					$("#stage7-form").prepend('<div class="row" id="stage7-form-row-'+theSelectedID+'"><div class="col-md-11 has-feedback"><div class="stage7-entry stage7-is-active stage7-is-last">'+languageReplacement['S7P4']+'<input type="text"  value="'+comparisonData[theSelectedID]+'" class="stage7-term">'+languageReplacement['S7P5']+'<b>'+mycompanydata[0]+'</b>'+languageReplacement['S7P6']+'<b>'+stage7CompetitorNameIs+'</b>'+languageReplacement['S7P7']+'<input type="text" class="stage7-percentage">'+languageReplacement['S7P7B']+'</div></div><div class="col-md-1"><span class="glyphicon glyphicon-remove-circle stage7-remove" aria-hidden="true"></span></div></div>');
 					
 					//Enable the remove function
 					$("#stage7-form-row-"+theSelectedID+" .stage7-remove").one("click",function(){
@@ -292,7 +293,7 @@ $( document ).ready(function() {
 						$(this).parent().parent().remove();
 						
 						//Add the button back into the stage
-						$("#stage7-selection .col-md-8 .row").append('<div class="col-md-4"><button type="button" class="btn btn-danger btn-block selectionButtonSlot" id="stage7-att-btn'+theSelectedID+'">'+comparisonData[theSelectedID]+'</button></div>');
+						$("#stage7-selection .col-md-9 .row").append('<div class="col-md-4"><button type="button" class="btn btn-danger btn-block selectionButtonSlot" id="stage7-att-btn'+theSelectedID+'">'+comparisonData[theSelectedID]+'</button></div>');
 						
 						//Enable the button click function
 						enablestage7ComparisonClick("#stage7-att-btn"+theSelectedID);
@@ -322,7 +323,7 @@ $( document ).ready(function() {
 				debug("stage7 - enablestage7ComparisonClick() - theSelectedID: "+theSelectedID);
 				
 				//Insert the item into the selection list
-				$("#stage7-form").prepend('<div class="row" id="stage7-form-row-'+theSelectedID+'"><div class="col-md-10 has-feedback"><div class="stage7-entry stage7-is-active stage7-is-last">'+languageReplacement['S7P4']+'<input type="text"  value="'+comparisonData[theSelectedID]+'" class="stage7-term">'+languageReplacement['S7P5']+'<b>'+mycompanydata[0]+'</b>'+languageReplacement['S7P6']+'<b>'+stage7CompetitorNameIs+'</b>'+languageReplacement['S7P7']+'<input type="text" class="stage7-percentage">'+languageReplacement['S7P7B']+'</div></div><div class="col-md-2"><span class="glyphicon glyphicon-remove-circle stage7-remove" aria-hidden="true"></span></div></div>');
+				$("#stage7-form").prepend('<div class="row" id="stage7-form-row-'+theSelectedID+'"><div class="col-md-11 has-feedback"><div class="stage7-entry stage7-is-active stage7-is-last">'+languageReplacement['S7P4']+'<input type="text"  value="'+comparisonData[theSelectedID]+'" class="stage7-term">'+languageReplacement['S7P5']+'<b>'+mycompanydata[0]+'</b>'+languageReplacement['S7P6']+'<b>'+stage7CompetitorNameIs+'</b>'+languageReplacement['S7P7']+'<input type="text" class="stage7-percentage">'+languageReplacement['S7P7B']+'</div></div><div class="col-md-1"><span class="glyphicon glyphicon-remove-circle stage7-remove" aria-hidden="true"></span></div></div>');
 				
 				//Enable the remove button
 				$("#stage7-form-row-"+theSelectedID+" .stage7-remove").one("click",function(){
@@ -334,7 +335,7 @@ $( document ).ready(function() {
 					$(this).parent().parent().remove();
 					
 					//Add the button back into the stage
-					$("#stage7-selection .col-md-8 .row").append('<div class="col-md-4"><button type="button" class="btn btn-danger btn-block selectionButtonSlot" id="stage7-att-btn'+theSelectedID+'">'+comparisonData[theSelectedID]+'</button></div>');
+					$("#stage7-selection .col-md-9 .row").append('<div class="col-md-4"><button type="button" class="btn btn-danger btn-block selectionButtonSlot" id="stage7-att-btn'+theSelectedID+'">'+comparisonData[theSelectedID]+'</button></div>');
 					
 					//Enable the button click function
 					enablestage7ComparisonClick("#stage7-att-btn"+theSelectedID);
@@ -395,7 +396,7 @@ $( document ).ready(function() {
 		//Insert the stage form items
 		var stage7ResetPageDisplayCounter = 0;
 		while(stage7ResetPageDisplayCounter < 1){
-			$("#stage7-form").append('<div class="row"><div class="col-md-10"><div class="stage7-entry stage7-is-active stage7-is-last">'+languageReplacement['S7P4']+'<input type="text" class="stage7-term">'+languageReplacement['S7P5']+'<b>'+mycompanydata[0]+'</b>'+languageReplacement['S7P6']+'<b>'+Stage7CompetitorNameDisplay+'</b>'+languageReplacement['S7P7']+'<input type="text" class="stage7-percentage">'+languageReplacement['S7P7B']+'</div></div></div>');
+			$("#stage7-form").append('<div class="row"><div class="col-md-11"><div class="stage7-entry stage7-is-active stage7-is-last">'+languageReplacement['S7P4']+'<input type="text" class="stage7-term">'+languageReplacement['S7P5']+'<b>'+mycompanydata[0]+'</b>'+languageReplacement['S7P6']+'<b>'+Stage7CompetitorNameDisplay+'</b>'+languageReplacement['S7P7']+'<input type="text" class="stage7-percentage">'+languageReplacement['S7P7B']+'</div></div></div>');
 			stage7ResetPageDisplayCounter++;
 		}
         enablestage7Remove();
@@ -426,7 +427,7 @@ $( document ).ready(function() {
 			if(checkLastClass){
 				//CONTINUE
 				$(this).parent().removeClass('stage7-is-last');
-				$("#stage7-form").append('<div class="row"><div class="col-md-10"><div class="stage7-entry stage7-is-active stage7-is-last">'+languageReplacement['S7P4']+'<input type="text" class="stage7-term">'+languageReplacement['S7P5']+'<b>'+mycompanydata[0]+'</b>'+languageReplacement['S7P6']+'<b>'+Stage7CompetitorNameDisplay+'</b>'+languageReplacement['S7P7']+'<input type="text" class="stage7-percentage">'+languageReplacement['S7P7B']+'</div></div></div>');
+				$("#stage7-form").append('<div class="row"><div class="col-md-11"><div class="stage7-entry stage7-is-active stage7-is-last">'+languageReplacement['S7P4']+'<input type="text" class="stage7-term">'+languageReplacement['S7P5']+'<b>'+mycompanydata[0]+'</b>'+languageReplacement['S7P6']+'<b>'+Stage7CompetitorNameDisplay+'</b>'+languageReplacement['S7P7']+'<input type="text" class="stage7-percentage">'+languageReplacement['S7P7B']+'</div></div></div>');
 				enablestage7Remove();
 				Stage7EnableAdd(Stage7CompetitorNameDisplay);
 			}
