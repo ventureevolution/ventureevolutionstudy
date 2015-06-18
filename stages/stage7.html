@@ -163,7 +163,7 @@ $( document ).ready(function() {
 					
 					//Re-run the page
 					stage7runPage(stage7pageCount);
-					$('html,body').animate({scrollTop:$('#stage7-top').offset().top},1000);
+                    window.scrollTo(0, 0);
 				}else{
 					debug("stage7 - clicked on next when empty");
                     
@@ -215,7 +215,7 @@ $( document ).ready(function() {
 			}
 		});
 	});
-
+    
 	//Validation layer: ensure that the inputs are filled
 	function enablestage7Remove(){
 		$(".stage7-entry").change(function(){
@@ -238,7 +238,7 @@ $( document ).ready(function() {
 		
 		//Insert the header text
 		if(stage7pageCount != 0){
-			$("#stage7-selection").append('<div class="col-md-9 col-md-offset-2"><br><br><center><p>'+languageReplacement['S7P13']+'</p></center><div class="row"></div></div>');
+			$("#stage7-selection").append('<div class="col-md-10 col-md-offset-1"><br><br><center><p>'+languageReplacement['S7P13']+'</p></center><div class="row"></div></div>');
 		}
 	
 		//Loop through [comparisonData] to load all the attributes into buttons
@@ -249,7 +249,7 @@ $( document ).ready(function() {
 		var enablestage7ComparisonCounter = 0;
 		
 		while(enablestage7ComparisonCounter < countComparison){
-			$("#stage7-selection .col-md-9 .row").append('<div class="col-md-4"><button type="button" class="btn btn-danger btn-block selectionButtonSlot" id="stage7-att-btn'+enablestage7ComparisonCounter+'">'+comparisonData[enablestage7ComparisonCounter]+'</button></div>');
+			$("#stage7-selection .col-md-10 .row").append('<div class="col-md-4"><button type="button" class="btn btn-info btn-block selectionButtonSlot" id="stage7-att-btn'+enablestage7ComparisonCounter+'">'+comparisonData[enablestage7ComparisonCounter]+'</button></div>');
 			enablestage7ComparisonCounter++;
 			
 			debug("stage7 - enablestage7Comparison() - loop counter: "+enablestage7ComparisonCounter);
@@ -293,7 +293,7 @@ $( document ).ready(function() {
 						$(this).parent().parent().remove();
 						
 						//Add the button back into the stage
-						$("#stage7-selection .col-md-9 .row").append('<div class="col-md-4"><button type="button" class="btn btn-danger btn-block selectionButtonSlot" id="stage7-att-btn'+theSelectedID+'">'+comparisonData[theSelectedID]+'</button></div>');
+						$("#stage7-selection .col-md-10 .row").append('<div class="col-md-4"><button type="button" class="btn btn-info btn-block selectionButtonSlot" id="stage7-att-btn'+theSelectedID+'">'+comparisonData[theSelectedID]+'</button></div>');
 						
 						//Enable the button click function
 						enablestage7ComparisonClick("#stage7-att-btn"+theSelectedID);
@@ -335,7 +335,7 @@ $( document ).ready(function() {
 					$(this).parent().parent().remove();
 					
 					//Add the button back into the stage
-					$("#stage7-selection .col-md-9 .row").append('<div class="col-md-4"><button type="button" class="btn btn-danger btn-block selectionButtonSlot" id="stage7-att-btn'+theSelectedID+'">'+comparisonData[theSelectedID]+'</button></div>');
+					$("#stage7-selection .col-md-10 .row").append('<div class="col-md-4"><button type="button" class="btn btn-info btn-block selectionButtonSlot" id="stage7-att-btn'+theSelectedID+'">'+comparisonData[theSelectedID]+'</button></div>');
 					
 					//Enable the button click function
 					enablestage7ComparisonClick("#stage7-att-btn"+theSelectedID);

@@ -177,17 +177,18 @@ $( document ).ready(function() {
 					//Reset the display
 					stage4ResetPageDisplay();
 					
-					//Increament to the global variable
+					//Increment to the global variable
 					stage4pageCount++;
 					
 					//Re-run the page
 					stage4runPage(stage4pageCount);
-					$('html,body').animate({
-						scrollTop:$('#stage4-top').offset().top},1000);
+                    window.scrollTo(0, 0);
 				}else{
 					debug("Stage4 - clicked on next when empty");
 					
-					$("#stage4-dialog-message-proceed").dialog("open");
+					window.scrollTo(0, 0);
+                    $("#stage4-dialog-message-proceed").dialog("open");
+                    window.scrollTo(0, 0);
 				}
 				
 			});
@@ -215,7 +216,9 @@ $( document ).ready(function() {
 				}else{
 					debug("Stage4 - clicked on next when empty");
 					
+                    window.scrollTo(0, 0);
 					$("#stage4-dialog-message-proceed").dialog("open");
+                    window.scrollTo(0, 0);
 				}
 
 			});
@@ -225,12 +228,13 @@ $( document ).ready(function() {
 	
 	//Dialog function
 	$(function() {
-		$( "#stage4-dialog-message-proceed" ).dialog({
+        $( "#stage4-dialog-message-proceed" ).dialog({
 			autoOpen: false,
 			modal: true,
 			buttons: {
-				Close: function() {
+				Ok: function() {
 					$(this).dialog( "close" );
+                    window.scrollTo(0, 0);
 				}
 			}
 		});

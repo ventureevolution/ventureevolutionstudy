@@ -13,12 +13,21 @@
 }
 
 .slider{
-	width:95%;
+	width:100%;
 	display: inline-block;
 	*display: inline;
 	vertical-align: top;
 }
 
+.ui-slider-horizontal {
+  height: 1.0em;
+}
+    
+.ui-slider .ui-slider-handle{
+    width: 1.4em;
+    height: 1.4em;
+}
+    
 .slider-input {
 	display: none;
 }
@@ -208,8 +217,8 @@ $( document ).ready(function() {
 					stage6PageNumber++;
 					
 					//Go to next page
-					stage6RunPage(stage6PageNumber);	
-					$('html,body').animate({scrollTop:$('#stage6-top').offset().top},1000);
+					stage6RunPage(stage6PageNumber);
+                    window.scrollTo(0, 0);
 				}else{
 					//Pop up dialog box to prompt user input
 					debug("Stage6 - Dialog box prompted");

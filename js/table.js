@@ -135,6 +135,7 @@ function findSmallestPointData(tempPointData){
 function generateRandomSequenceArray(anArrayLength){
 	
 	var tempArray = new Array();
+    //writing "var tempArray = [];" should be faster for code execution.
 	
 	debug("Stage6 - generateRandomSequenceArray: populate array");
 	//Populate the array
