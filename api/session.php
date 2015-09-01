@@ -78,7 +78,7 @@ function runBase(){
 				echo json_encode($response,JSON_NUMERIC_CHECK);
 			}
 		}else{
-			$response = array('result' => 'error', 'output'=>'check real connection failed: secretyKey: '.$_POST['secretKey'].' firstname: '.$_POST['firstname'].' company: '.$_POST['company'].' csv: '.$_POST['csv']);
+			$response = array('result' => 'error', 'output'=>'check real connection failed: secretKey: '.$_POST['secretKey'].' firstname: '.$_POST['firstname'].' company: '.$_POST['company'].' csv: '.$_POST['csv']);
 			echo json_encode($response,JSON_NUMERIC_CHECK);
 		}
 	}
@@ -191,11 +191,13 @@ function checkRealConnection(){
 	//Check if exist
 	$timeExpiry = date("Y-m-d H:i:s", time() - $expiryTime);
 	
-	$result = mysqli_query($conn,"SELECT cid FROM Session WHERE secretKey = '".$secretKey."' AND createdDateTime > '".$timeExpiry."';");
+	echo "expiry time: ".$timeExpiry."<br>";
+	
+	$result = mysqli_query($conn,"SELECT sid FROM Session WHERE secretKey = '".$secretKey."' AND createdDateTime > '".$timeExpiry."';");
 	
 	while(($row = mysqli_fetch_assoc($result)) && $count < $onlyFirst){
-		if($row['cid'] != ''){
-			return $row['cid'];
+		if($row['sid'] != ''){
+			return $row['sid'];
 		}
 		$count++;
 	}
