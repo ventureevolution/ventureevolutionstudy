@@ -1,0 +1,163 @@
+<!-- Styling of the page -->
+<style type="text/css">
+	.stage3-button {
+        width: 60%;
+        overflow: visible;
+        white-space: normal;
+    }
+    #stage3b-company-name{
+        font-weight: bold;
+	    text-transform: capitalize;
+    }
+    #tabling {
+	    padding-top: 80px;
+    }
+    .navbar.navbar-default{
+	    background-image: none;
+	    background-color:#ffffff;
+	    border: none;
+	    box-shadow: none;
+	    -webkit-box-shadow: none;
+    }
+</style>
+<!-- Dialog Message Area -->
+<!--div id="stage3B-dialog-message-proceed">
+  <p>
+    <div id="S3BP4" class="textreplace"></div>
+  </p>
+</div-->
+<!-- Content of the page -->
+<nav class="navbar navbar-default navbar-fixed-top">
+	<div class="row">
+		<div class="col-md-8 col-md-offset-2">
+			<p><div id="S3BP1" class="textreplace"></div><span id="stage3b-company-name"></span><div id="S3BP2" class="textreplace"></div></p>
+		</div>
+	</div>
+</nav>
+<div class="row">
+	<div class="col-md-8 col-md-offset-2">
+		<br>
+		<div id="stage3b-form">
+		<div id="stage3b-content"></div>
+		</div>
+		<center><button class="btn btn-success" id="nextPage"><div id="S3BP3" class="textreplace"></div></button></center>
+	</div>
+</div>
+<!-- Script of the page -->
+<script type="text/javascript">
+languageReplace();
+
+$( document ).ready(function() {
+
+	$("#stage3b-company-name").append(mycompanydata[0]);
+	
+    
+    //ADD RANDOMIZATION LATER TO ORDER OF NAMES & ADD RANDOMIZATION TO SAVE FEATURE
+    
+	for(var stage3bLoop in pointdata){
+        $("#stage3b-content").append('<center><button class="btn btn-danger btn-lg stage3-button" id="stage3b-button-'+stage3bLoop+'" value="'+pointdata[stage3bLoop][0]+'">'+pointdata[stage3bLoop][0]+'&nbsp;</button></center><br>');
+
+        stage3BEnableButton('stage3b-button-'+stage3bLoop);
+    }
+
+	 $("#nextPage").click(function(){
+	 
+	 	//$( "#stage3B-dialog-message-proceed" ).dialog( "open" );
+	 	//Save the data
+	 	saveStage3Bdata();
+	 	
+	 	//Change the loading image
+        $("#nextPage").empty();
+        $("#nextPage").append('<span class="glyphicon glyphicon-cog next-rotation-animate"></span> Loading');
+        //Change stage count and jump to next stage
+        stageCurrentStage++;
+        runStage(stages[stageCurrentStage]);
+	 	
+    });
+    
+    //Dialog function
+	/*$(function() {
+		$( "#stage3B-dialog-message-proceed" ).dialog({
+			autoOpen: false,
+			modal: true,
+			buttons: {
+				Yes: function() {
+					//Save the data
+			        saveStage3Bdata();
+			        
+			        //Close the dialog
+			        $(this).dialog( "close" );
+			        
+			        //Change the loading image
+			        $("#nextPage").empty();
+			        $("#nextPage").append('<span class="glyphicon glyphicon-cog next-rotation-animate"></span> Loading');
+			        //Change stage count and jump to next stage
+			        stageCurrentStage++;
+			        runStage(stages[stageCurrentStage]);
+				}
+			},
+			beforeClose: function(){
+				$("#nextPage").empty();
+				$("#nextPage").append(languageReplacement['S3BP3']);
+			}
+		});
+	});*/
+    
+    function stage3BEnableButton(DIVidentifier){
+        
+        debug("stage3b stage3BEnableButton() running");
+        
+        $("#"+DIVidentifier).one("click", function(){
+            
+            debug("stage3BEnableButton() - click activated");
+            
+            var checkAvailbility = $("#"+DIVidentifier).hasClass('btn-danger');
+            
+            if(checkAvailbility){
+            	debug("btn-danger detected");
+                $("#"+DIVidentifier).removeClass('btn-danger');
+                $("#"+DIVidentifier).addClass('btn-success');
+                $("#"+DIVidentifier).append('<span class="glyphicon glyphicon-ok"></span>');
+                
+                stage3BEnableButton(DIVidentifier);
+            }else{
+            	debug("btn-success detected");
+                $("#"+DIVidentifier).removeClass('btn-success');
+                $("#"+DIVidentifier).addClass('btn-danger');
+                $("#"+DIVidentifier).find('.glyphicon').remove();
+                
+                stage3BEnableButton(DIVidentifier);
+            }
+        });
+    }
+    
+    function saveStage3Bdata(){
+	    
+	    debug("stage3B saveStage3Bdata() running");
+	    
+	    $('.btn').each(function(){
+		    
+		    var checkTypeOfStatus = $(this).hasClass('btn-danger');
+            
+            
+            var checkNextButton = false;
+            //remove the next button
+            if($(this).attr('id') == "nextPage"){
+                checkNextButton = true;
+            }
+            debug("checkNextButton nextPage button:" + checkNextButton);
+		    if(!(checkNextButton)){
+                if(checkTypeOfStatus){
+                    debug($(this).attr('value')+" is 0");
+                    relatedBusiness.push([$(this).attr('value'),0]);
+                }else{
+                    debug($(this).attr('value')+" is 1");
+                    relatedBusiness.push([$(this).attr('value'),1]);
+                }
+            }
+	    });
+        
+        debug("relatedBusiness: "+relatedBusiness);
+    }
+});
+</script>

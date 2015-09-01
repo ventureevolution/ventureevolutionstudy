@@ -1,0 +1,163 @@
+<!-- Styling of the page -->
+<style type="text/css">
+	.stage7c-button {
+        width: 60%;
+        overflow: visible;
+        white-space: normal;
+    }
+    #stage7c-company-name{
+        font-weight: bold;
+	    text-transform: capitalize;
+    }
+    #tabling {
+	    padding-top: 80px;
+    }
+    .navbar.navbar-default{
+	    background-image: none;
+	    background-color:#ffffff;
+	    border: none;
+	    box-shadow: none;
+	    -webkit-box-shadow: none;
+    }
+</style>
+<!-- Dialog Message Area -->
+<!--div id="stage7c-dialog-message-proceed">
+  <p>
+    <div id="S3BP4" class="textreplace"></div>
+  </p>
+</div-->
+<!-- Content of the page -->
+<nav class="navbar navbar-default navbar-fixed-top">
+	<div class="row">
+		<div class="col-md-8 col-md-offset-2">
+			<p><div id="S7CP1" class="textreplace"></div><span id="stage7c-company-name"></span><div id="S7CP2" class="textreplace"></div></p>
+		</div>
+	</div>
+</nav>
+<div class="row">
+	<div class="col-md-8 col-md-offset-2">
+		<br>
+		<div id="stage7c-form">
+		<div id="stage7c-content"></div>
+		</div>
+		<center><button class="btn btn-success" id="nextPage"><div id="S7DP10" class="textreplace"></div></button></center>
+	</div>
+</div>
+<!-- Script of the page -->
+<script type="text/javascript">
+languageReplace();
+
+$( document ).ready(function() {
+
+	$("#stage7c-company-name").append(mycompanydata[0]);
+	
+    
+    //ADD RANDOMIZATION LATER TO ORDER OF NAMES & ADD RANDOMIZATION TO SAVE FEATURE
+    
+	for(var stage7cLoop in stage7bTempMassStorage){
+        $("#stage7c-content").append('<center><button class="btn btn-danger btn-lg stage7c-button" id="stage7c-button-'+stage7cLoop+'" value="'+stage7bTempMassStorage[stage7cLoop]+'">'+stage7bTempMassStorage[stage7cLoop]+'&nbsp;</button></center><br>');
+
+        stage7cEnableButton('stage7c-button-'+stage7cLoop);
+    }
+
+	 $("#nextPage").click(function(){
+	 
+	 	//$( "#stage7c-dialog-message-proceed" ).dialog( "open" );
+	 	//Save the data
+	 	savestage7cdata();
+	 	
+	 	//Change the loading image
+        $("#nextPage").empty();
+        $("#nextPage").append('<span class="glyphicon glyphicon-cog next-rotation-animate"></span> Loading');
+        //Change stage count and jump to next stage
+        stageCurrentStage++;
+        runStage(stages[stageCurrentStage]);
+	 	
+    });
+    
+    //Dialog function
+	/*$(function() {
+		$( "#stage7c-dialog-message-proceed" ).dialog({
+			autoOpen: false,
+			modal: true,
+			buttons: {
+				Yes: function() {
+					//Save the data
+			        savestage7cdata();
+			        
+			        //Close the dialog
+			        $(this).dialog( "close" );
+			        
+			        //Change the loading image
+			        $("#nextPage").empty();
+			        $("#nextPage").append('<span class="glyphicon glyphicon-cog next-rotation-animate"></span> Loading');
+			        //Change stage count and jump to next stage
+			        stageCurrentStage++;
+			        runStage(stages[stageCurrentStage]);
+				}
+			},
+			beforeClose: function(){
+				$("#nextPage").empty();
+				$("#nextPage").append(languageReplacement['S3BP3']);
+			}
+		});
+	});*/
+    
+    function stage7cEnableButton(DIVidentifier){
+        
+        debug("stage7c stage7cEnableButton() running");
+        
+        $("#"+DIVidentifier).one("click", function(){
+            
+            debug("stage7cEnableButton() - click activated");
+            
+            var checkAvailbility = $("#"+DIVidentifier).hasClass('btn-danger');
+            
+            if(checkAvailbility){
+            	debug("btn-danger detected");
+                $("#"+DIVidentifier).removeClass('btn-danger');
+                $("#"+DIVidentifier).addClass('btn-success');
+                $("#"+DIVidentifier).append('<span class="glyphicon glyphicon-ok"></span>');
+                
+                stage7cEnableButton(DIVidentifier);
+            }else{
+            	debug("btn-success detected");
+                $("#"+DIVidentifier).removeClass('btn-success');
+                $("#"+DIVidentifier).addClass('btn-danger');
+                $("#"+DIVidentifier).find('.glyphicon').remove();
+                
+                stage7cEnableButton(DIVidentifier);
+            }
+        });
+    }
+    
+    function savestage7cdata(){
+	    
+	    debug("stage7c savestage7cdata() running");
+	    
+	    $('.btn').each(function(){
+		    
+		    var checkTypeOfStatus = $(this).hasClass('btn-danger');
+            
+            
+            var checkNextButton = false;
+            //remove the next button
+            if($(this).attr('id') == "nextPage"){
+                checkNextButton = true;
+            }
+            debug("checkNextButton nextPage button:" + checkNextButton);
+		    if(!(checkNextButton)){
+                if(checkTypeOfStatus){
+                    debug($(this).attr('value')+" is 0");
+                    stage7cActivities.push([$(this).attr('value'),0]);
+                }else{
+                    debug($(this).attr('value')+" is 1");
+                    stage7cActivities.push([$(this).attr('value'),1]);
+                }
+            }
+	    });
+        
+        debug("stage7cActivities: "+stage7cActivities);
+    }
+});
+</script>

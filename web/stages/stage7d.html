@@ -1,0 +1,277 @@
+<!-- Styling of the page -->
+<style>
+
+/* Slider styling */      
+#steps-fivepercent-slider .ui-slider-tip {
+    visibility: visible;
+    opacity: 1;
+    top: -30px;
+}
+
+.slider-row{
+	margin: 0 0 18px 0;
+}
+
+.slider{
+	width:100%;
+	display: inline-block;
+	*display: inline;
+	vertical-align: top;
+}
+
+.ui-slider-horizontal {
+  height: 1.0em;
+}
+    
+.ui-slider .ui-slider-handle{
+    width: 1.4em;
+    height: 1.4em;
+}
+    
+.slider-input {
+	display: none;
+}
+/* End of slider styling */
+.stage7d-competitor-name {
+	font-weight: bold;
+    text-transform: capitalize;
+}
+
+.ui-slider-label {
+	display: none;
+}
+
+.ui-slider-pips .ui-slider-pip-selected-initial-first{
+	color: #999 !important;
+	font-weight: normal !important;
+}
+
+.ui-slider-pips .ui-slider-pip-selected-first {
+	color: #999 !important;
+	font-weight: normal !important;	
+}
+
+.slider-overlay{
+    position: absolute;
+    display: block;
+    top: 0;
+    margin-left: -15px;
+    width: 100%;
+    height: 120%;
+    z-index: 100;
+    background-color: rgba(192,192,192,0.3);
+}
+.stage7d-col-left-align{
+    text-align: right;
+    padding-right: 0;
+    padding-left: 0;
+    font-weight: bold;
+}
+.stage7d-col-right-align{
+    padding-right: 0;
+    padding-left: 0;
+    font-weight: bold;
+}
+.stage7d-col-na-box{
+    padding-right: 0;
+    margin-top: -8px;
+}
+.slider-group {
+	margin-top: 4px;
+}
+button.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-icon-only.ui-dialog-titlebar-close{
+	    display: none;
+}
+#tabling {
+    padding-top: 200px;
+}
+.navbar.navbar-default{
+	padding-top: 30px;
+    background-image: none;
+    background-color:#ffffff;
+    border: none;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+}
+#stage7d-top{
+	padding-top: 0px;
+}
+</style>
+<!-- Dialog Message Area -->
+<div id="stage7d-dialog-error">
+  <p>
+    <div id="S7DP11" class="textreplace"></div>
+  </p>
+</div>
+<!-- Content of the page -->
+<nav class="navbar navbar-default navbar-fixed-top">
+	<div class="row">
+		<div class="col-md-8 col-md-offset-2">
+			<center><p><div id="S7DP1" class="textreplace"></div><span class="stage7d-company-name"></span><div id="S7DP2" class="textreplace"></div></p></center><br><br>
+		</div>
+	</div>
+</nav>
+<div id="stage7d-top">&nbsp;</div>
+<div class="row">
+	<div class="col-md-9 col-md-offset-1" id="stage7d-form">
+	</div>
+</div>
+<div class="row" id ="stage7d-next">
+	<center><button class="btn btn-success" id="nextPage"><div id="S7DP10" class="textreplace"></div></button></center>
+</div>
+<!-- Script of the page -->
+<!-- This is for sliders -->
+<script src="js/jquery-2.1.1.js"></script>
+<script src="js/jquery-ui.min.js"></script>
+<script src="js/jquery-ui-slider-pips.js"></script>
+<script>
+
+languageReplace();
+
+$( document ).ready(function() {
+	
+	var stage7dMaxLoop = stage7a1aspects.length;
+	
+	//replace all company name factors
+	$('.stage7d-company-name').empty();
+	$('.stage7d-company-name').append(mycompanydata[0]);
+	
+	buildstage7d(0);
+	
+	$(function() {
+		$( "#stage7d-dialog-error" ).dialog({
+			autoOpen: false,
+			modal: true,
+			buttons: {
+				Ok: function() {
+					$(this).dialog( "close" );
+				}
+			}
+		});
+	});
+	
+	function buildstage7d(stage7dStageNumber){
+		
+		//Scroll to top
+		window.scrollTo(0, 0);
+		
+		//Clear stage first
+		$('#stage7d-form').empty();
+		
+		//Change next button back
+		$("#nextPage").empty();
+		$("#nextPage").append(languageReplacement['S7DP10']);
+		
+		if(stage7dStageNumber < stage7dMaxLoop){
+			
+			//Insert first sentence
+			$('#stage7d-form').append(languageReplacement['S7DP3']+mycompanydata[0]+languageReplacement['S7DP4']+mycompanydata[0]+languageReplacement['S7DP5']+"<b>"+stage7a1aspects[stage7dStageNumber]+"</b><br>");
+			
+			//Add Scale here!!!
+			$('#stage7d-form').append('<div class="btn-group btn-group-justified stage7d-entry-group" role="group" aria-label="..."><a href="#" class="btn btn-default stage7d-entry" value="'+languageReplacement['S7DP12']+'">'+languageReplacement['S7DP12']+'</a><a href="#" class="btn btn-default stage7d-entry" value="'+languageReplacement['S7DP13']+'">'+languageReplacement['S7DP13']+'</a><a href="#" class="btn btn-default stage7d-entry" value="'+languageReplacement['S7DP14']+'">'+languageReplacement['S7DP14']+'</a><a href="#" class="btn btn-default stage7d-entry" value="'+languageReplacement['S7DP15']+'">'+languageReplacement['S7DP15']+'</a><a href="#" class="btn btn-default stage7d-entry" value="'+languageReplacement['S7DP16']+'">'+languageReplacement['S7DP16']+'</a></div>'+"<br><br>");
+			
+			//Loop activities
+			for(stage7dLoopActivities in stage7cActivities){
+			
+				//number is stage7dLoopActivities + 2
+				var stage7dDisplayNumber = parseInt(stage7dLoopActivities) + 2;
+				$('#stage7d-form').append(stage7dDisplayNumber + '. ' + languageReplacement['S7DP6'] + "<b>"+ stage7cActivities[stage7dLoopActivities][0] + "</b>" +languageReplacement['S7DP7'] + mycompanydata[0] + languageReplacement['S7DP8'] +"<b>"+ stage7a1aspects[stage7dStageNumber] +"</b>"+ languageReplacement['S7DP9'] + "<br>");
+				
+				//Add scale here!!!
+				$('#stage7d-form').append('<div class="btn-group btn-group-justified stage7d-entry-group" role="group" aria-label="..."><a href="#" class="btn btn-default stage7d-entry" value="'+languageReplacement['S7DP12']+'">'+languageReplacement['S7DP12']+'</a><a href="#" class="btn btn-default stage7d-entry" value="'+languageReplacement['S7DP13']+'">'+languageReplacement['S7DP13']+'</a><a href="#" class="btn btn-default stage7d-entry" value="'+languageReplacement['S7DP14']+'">'+languageReplacement['S7DP14']+'</a><a href="#" class="btn btn-default stage7d-entry" value="'+languageReplacement['S7DP15']+'">'+languageReplacement['S7DP15']+'</a><a href="#" class="btn btn-default stage7d-entry" value="'+languageReplacement['S7DP16']+'">'+languageReplacement['S7DP16']+'</a></div>'+"<br><br>");
+			}
+			
+		}
+		
+		stage7dActivateButtons();
+		
+		$("#nextPage").click(function(){
+
+			//If LAST LOOP
+			if(stage7dStageNumber >= (stage7dMaxLoop - 1)){
+				if(stage7dCheckDataMissing() == false){
+					savestage7ddata(stage7a1aspects[stage7dStageNumber]);
+					//Change the loading image
+					$("#nextPage").empty();
+					$("#nextPage").append('<span class="glyphicon glyphicon-cog next-rotation-animate"></span> Loading');
+					//Change stage count and jump to next stage
+					stageCurrentStage++;
+					runStage(stages[stageCurrentStage]);
+				}else{
+					$( "#stage7d-dialog-error" ).dialog("open");
+				}
+			}
+			//FOR NON-LAST LOOP
+			else{
+				if(stage7dCheckDataMissing() == false){
+					savestage7ddata(stage7a1aspects[stage7dStageNumber]);
+					//Change the loading image
+					$("#nextPage").empty();
+					$("#nextPage").append('<span class="glyphicon glyphicon-cog next-rotation-animate"></span> Loading');
+					$("#nextPage").unbind('click');
+					var stage7dnextStageNumber = parseInt(stage7dStageNumber) + 1;
+					buildstage7d(stage7dnextStageNumber);
+				}else{
+					$( "#stage7d-dialog-error" ).dialog("open");
+				}
+				
+			}
+
+		});
+		
+	}
+
+	function stage7dActivateButtons(){
+	
+		//Enable all the buttons
+		$('a.stage7d-entry').click(function(event){
+			event.preventDefault();
+			//Add remove the group active class
+			$(this).parent().children('.stage7d-entry').removeClass('active');
+			//Add active class to the individual
+			$(this).addClass('active');
+		});
+	}
+	
+	function stage7dCheckDataMissing(){
+		
+		var stage7dSaveOutputMissing = false;
+		
+		$('.stage7d-entry-group').each(function(){
+		
+			var stage7dEntryGroupOutputActive = false;
+			
+			$(this).children('.stage7d-entry').each(function(){
+				
+				if($(this).hasClass('active')){
+					stage7dEntryGroupOutputActive = true;
+				}
+			});
+			
+			if(stage7dEntryGroupOutputActive == false){
+				stage7dSaveOutputMissing = true;
+			}
+		});
+		
+		return stage7dSaveOutputMissing;
+		
+	}
+	
+	function savestage7ddata(theAspect){
+		
+		stage7dData[theAspect] = [];
+		
+		$('.stage7d-entry-group').each(function(){
+			
+			$(this).children('.stage7d-entry').each(function(){
+				
+				if($(this).hasClass('active')){
+					stage7dData[theAspect].push($(this).attr('value'));
+				}
+			});
+
+		});
+	}
+
+});
+</script>

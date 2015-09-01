@@ -8,6 +8,9 @@
        position: relative;
        margin: 0 auto 0 auto;
     }
+    .btn-spacing{
+	    margin: 0 10px 0 10px;
+    }
     .point{
         width:20px;
         height:20px;
@@ -42,9 +45,9 @@
 	    left:190px;
 	    z-index:50;
     }
-    #stage3-myCompanyName{
+    .stage3-myCompanyName{
 	    font-weight: bold;
-	    text-transform: uppercase;
+	    text-transform: capitalize;
     }
     .ui-dialog {
 	    z-index: 3000;
@@ -53,56 +56,79 @@
 	    color: #000000;
     }
     #stage3-newCompetitorButton{
-	    background-color: #000000;
     }
     #stage3-drawingHelp{
     	bottom: 0;
     	left: 0;
     	position: absolute;
-	    height: auto;
+	    height: 200px;
 	    width: 200px;
     }
     .stage3-drawing-corner{
-    	position: absolute;
-    	height: auto;
+        height: 47px;
     	width: auto;
 	    color: #474747;
-	    background-color: #B2B2B2 !important;
+	    background-color: #D8D8D8 !important;
 	    font-size: 0.8em;
 	    bottom: 0;
 	    left: 0;
+        position: absolute;
+        display: block;
+        *display: inline-block;
     }
     .stage3-drawing-line{
-	    top: 0;
-	    right: 0;
-	    width: 50px;
-	    height: 60px;
+        margin-left: 0px;
+	    width: 200px;
+	    height: 200px;
+        display: block;
+        position: relative;
+        *display: inline-block;
     }
-    
+    .stage3-remove-button {
+        color: #c12c2a;
+        font-size: smaller;
+    }
+    button.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-icon-only.ui-dialog-titlebar-close{
+	    display: none;
+    }
+    #tabling {
+	    padding-top: 80px;
+    }
+    .navbar.navbar-default{
+	    background-image: none;
+	    background-color:#ffffff;
+	    border: none;
+	    box-shadow: none;
+	    -webkit-box-shadow: none;
+    }
 </style>
 <!-- Dialog Message Area -->
 <div id="stage3-dialog-message-proceed">
   <p>
-    <span class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 50px 0;"></span>
     <div id="S3P1" class="textreplace"></div>
   </p>
 </div>
 <div id="stage3-dialog-message-error">
   <p>
-    <span class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 50px 0;"></span>
     <div id="S3P14" class="textreplace"></div>
   </p>
 </div>
 <!-- Content of the page -->
+<nav class="navbar navbar-default navbar-fixed-top">
+	<div class="row">
+		<div class="col-md-8 col-md-offset-2">
+			<p><div id="S3P2A" class="textreplace"></div><span class="stage3-myCompanyName"></span><div id="S3P2B" class="textreplace"></div><span class="stage3-myCompanyName"></span><div id="S3P2C" class="textreplace"></div></p>
+		</div>
+	</div>
+</nav>
 <div class="row">
 	<div class="col-md-8 col-md-offset-2">
-		<p><div id="S3P2A" class="textreplace"></div><span class="stage3-myCompanyName"></span><div id="S3P2B" class="textreplace"></div><span class="stage3-myCompanyName"></span><div id="S3P2C" class="textreplace"></div><span class="stage3-myCompanyName"></span><div id="S3P2D" class="textreplace"></div></p>
 		<div id="stage3-drawingBoard">
 			<div id="stage3-drawingHelp" style="display: none;">
-				<div id="S3P13" class="textreplace stage3-drawing-corner"></div>
-				<svg height="60" width="50" class="stage3-drawing-line">
-				  <line x1="0" y1="50" x2="50" y2="0" style="stroke:rgb(84,84,84);stroke-width:2" />
+                <svg class="stage3-drawing-line">
+				  <line x1="100" y1="150" x2="200" y2="0" style="stroke:rgb(216,216,216);stroke-width:2" />
 				</svg>
+                <div class="stage3-drawing-corner"><div id="S3P13" class="textreplace"></div></div>
 			</div>
 			<div class="referencepoint" id="reference"><span class="stage3-myCompanyName"></span></div>
 		</div>
@@ -116,7 +142,6 @@
 <form id="stage3-form">
 <div class="row">
 	<div class="col-md-8 col-md-offset-2">
-		<br>
 		<p class="form-group">
 			<label for="stage3-newCompetitor"><div id="S3P3" class="textreplace"></div></label>
 			<input type="text" class="form-control" id="stage3-newCompetitor" name="stage3-newCompetitor">
@@ -138,6 +163,9 @@ $("#stage3-dialog-message").attr("title",languageReplacement['S3P12']);
 
 $( document ).ready(function() {
 
+    //Set color palette
+    var colorPaletteAlt = colorPalette.slice();
+
 	//Setting the validation script
 	jQuery.validator.setDefaults({
 	  debug: true,
@@ -155,9 +183,6 @@ $( document ).ready(function() {
 
 	//Display my company name in the center of the div box
 	$(".stage3-myCompanyName").append(mycompanydata[0]);
-	
-	//Add competitor counter to simplify referencing
-	var competitorNumber = 0;
 
 	//Upon clicking the "Add Competitor" button, actions to be carried out
 	$("#stage3-newCompetitorButton").click(function(){
@@ -170,7 +195,7 @@ $( document ).ready(function() {
 			minlength: 2,
 			uniqueCompanyName: true,
 			messages: {
-	            required: languageReplacement['S3P6'],
+	            //required: languageReplacement['S3P6'],
 	            minlength: jQuery.validator.format(languageReplacement['S3P7']),
 	            uniqueCompanyName: jQuery.validator.format(languageReplacement['S3P8'])
 	        }
@@ -179,13 +204,21 @@ $( document ).ready(function() {
 		//If the competitor name is valid, create the dot
 		if(($("#stage3-newCompetitor").val() != "") && checkValueNotInPointData($("#stage3-newCompetitor").val())){
 
-			//Add help box which will fade out in 10s
+			//Add help box which will fade out after 8s
 			$("#stage3-drawingHelp").fadeIn(200);
-			$("#stage3-drawingHelp").delay(10000).fadeOut(400);
+			$("#stage3-drawingHelp").delay(8000).fadeOut(400);
 
 			//Get a random color from the colorPalette
-			var randomNumber = Math.floor(Math.random() * parseInt(colorPalette.length));
-			lastZindex = lastZindex + 1;
+            if((colorPaletteAlt.length == 0)){
+                colorPaletteAlt = colorPalette.slice();
+            }
+            
+			var randomNumber = Math.floor(Math.random() * parseInt(colorPaletteAlt.length));
+			
+            //Create the entry into the box
+			var pointdataPosition = competitorNumber;
+            
+            lastZindex = lastZindex + 1;
 			competitorNumber = competitorNumber + 1;
 			
 			var positionX = 190;
@@ -195,18 +228,29 @@ $( document ).ready(function() {
 			//var positionX = 190 - (competitorNumber * 10);
 			//var positionY = 190 - (competitorNumber * 10);
 			
-			//Create the entry into the box
-			var pointdataPosition = pointdata.length;
-			$("#stage3-drawingBoard").append("<div class='point' id='"+pointdataPosition+"' style='background-color:"+colorPalette[randomNumber]+";top:"+positionY+"px;left:"+positionX+"px;z-index:"+lastZindex+";'><span class='dot-initial'>" + $("#stage3-newCompetitor").val() + "</span></div>");
+			//Create the entry into the box CONTINUE
+			$("#stage3-drawingBoard").append("<div class='point' id='point-"+pointdataPosition+"' style='background-color:"+colorPaletteAlt[randomNumber]+";top:"+positionY+"px;left:"+positionX+"px;z-index:"+lastZindex+";' name='"+$("#stage3-newCompetitor").val()+"'><span class='dot-initial'>" + $("#stage3-newCompetitor").val() + "</span></div>");
+			
+			//Create entry into the remove competitor area
+            if(pointdataPosition == 0){
+                $("#stage3-delete-buttons").append('<br><p>'+languageReplacement['S3P15']+'</p>');
+            }
+            
+			$("#stage3-delete-buttons").append("<button class='btn btn-default btn-spacing' id='removeButton-"+pointdataPosition+"'>"+$("#stage3-newCompetitor").val()+"&nbsp;<span class='glyphicon glyphicon-remove-circle stage3-remove-button'></button>");
+			
+			//Enable the remove buttons
+			stage3EnableRemoveButton(pointdataPosition);
 			
 			//Insert value into the list of competitor array ["competitor", "color",[x location,y location]]
-			var pointlocationXY = $("#"+pointdataPosition).offset();
+			var pointlocationXY = $("#point-"+pointdataPosition).offset();
 			var fixedX = parseInt(pointlocationXY.left);
 			var fixedY = parseInt(pointlocationXY.top);
-			pointdata.push([$("#stage3-newCompetitor").val(), colorPalette[randomNumber],[fixedX, fixedY],[0,0]]);
+			pointdata.push([$("#stage3-newCompetitor").val(), colorPaletteAlt[randomNumber],[0,0],[0,0]]);
+			debug("add new pointdata debug: "+pointdata);
+            debug("pointdataPosition is "+pointdataPosition);
 			
-			//Remove color from colorPalette to prevent repeats
-			colorPalette.splice(randomNumber,1);	
+			//Remove color from colorPaletteAlt to prevent repeats
+			colorPaletteAlt.splice(randomNumber,1);	
 			
 			//Empty the input box
 			$("#stage3-newCompetitor").val('');
@@ -222,8 +266,15 @@ $( document ).ready(function() {
 						var offset = $(this).offset();
 			            var xPos = parseInt(offset.left) - fixedX;
 			            var yPos = parseInt(offset.top) - fixedY;
-			            var pointid = $(this).attr("id");
-			            pointdata[pointid][3] = [xPos, yPos];
+			            var pointid = parseInt($(this).attr("id").replace(/point-/,''),10);
+                        debug("point data is "+pointid);
+                        
+                        var getDraggableDotName = $(this).attr('name');
+                        for(var draggableCounter in pointdata){
+	                        if(pointdata[draggableCounter][0] == getDraggableDotName){
+		                        pointdata[draggableCounter][3] = [xPos, yPos];
+	                        }
+                        }
 					}
 				};
 				$(".point").draggable(opt);
@@ -231,17 +282,19 @@ $( document ).ready(function() {
 			
 			//If competitor added is at least 2, add the next page button
 			if(competitorNumber == 2){
-				$("#stage3-next").append("<div class='col-md-8 col-md-offset-2'><center>"+languageReplacement['S3P9']+"<br><br><button class='btn btn-success' id='nextPage'>"+languageReplacement['S3P10']+"</button></center></div>");
+				$("#stage3-next").append("<div class='col-md-8 col-md-offset-2'><center><br>"+languageReplacement['S3P9']+"<br><br><button class='btn btn-success' id='nextPage'>"+languageReplacement['S3P10']+"</button></center></div>");
 				
 				//Enable next page function
 				$("#nextPage").click(function(){
 				
 					//IF non of the points were moved, DO NOT proceed
 					if(checkPointDataChanges()){
-						$( "#stage3-dialog-message-proceed" ).dialog( "open" );
+						window.scrollTo(0, 0);
+                        $( "#stage3-dialog-message-proceed" ).dialog( "open" );
 						$("#nextPage").empty();
 						$("#nextPage").append('<span class="glyphicon glyphicon-cog next-rotation-animate"></span> Loading');
 					}else{
+                        window.scrollTo(0, 0);
 						$( "#stage3-dialog-message-error" ).dialog( "open" );
 					}
 					
@@ -261,7 +314,15 @@ $( document ).ready(function() {
 					$(this).dialog( "close" );
 					stageCurrentStage++;
 					runStage(stages[stageCurrentStage]);
+				},
+				No: function(){
+					$(this).dialog( "close" );
+                    window.scrollTo(0, 0);
 				}
+			},
+			beforeClose: function(){
+				$("#nextPage").empty();
+				$("#nextPage").append(languageReplacement['S3P10']);
 			}
 		});
 	});
@@ -270,24 +331,53 @@ $( document ).ready(function() {
 			autoOpen: false,
 			modal: true,
 			buttons: {
-				Yes: function() {
+				Ok: function() {
 					$(this).dialog( "close" );
+                    window.scrollTo(0, 0);
 				}
 			}
 		});
 	});
 
+	function stage3EnableRemoveButton(PositionDataPoint){
+		
+		debug("stage3 - stage3EnableRemoveButton() is running on: "+PositionDataPoint);
+		
+		$("#removeButton-"+PositionDataPoint).one("click",function(){
+			
+			var NameOfCompetitorPoint = $("#point-"+PositionDataPoint).attr('name');
+			
+			for(var stage3LoopPointDataRemoveIndex in pointdata){
+				debug("stage3 - stage3EnableRemoveButton() looping: "+stage3LoopPointDataRemoveIndex);
+				if(pointdata[stage3LoopPointDataRemoveIndex][0] == NameOfCompetitorPoint){
+					pointdata.splice(stage3LoopPointDataRemoveIndex,1);
+					debug(pointdata);
+                    $("#point-"+PositionDataPoint).remove();
+			        $("#removeButton-"+PositionDataPoint).remove();
+				}
+				
+			}
+		});
+		
+	}			
+	
 	function checkPointDataChanges(){
 		
-		var maxLoop = pointdata.length;
+		var maxLoop = competitorNumber;
 		var setReturnValue = true;
 		
-		for(var LoopCounter = 0; LoopCounter < maxLoop; LoopCounter++){
+        debug("pointdata is "+pointdata);
+        
+		for(var LoopCounter = 0; LoopCounter <= maxLoop; LoopCounter++){
 			
-			debug('X: '+pointdata[LoopCounter][3][0].toString()+' Y: '+pointdata[LoopCounter][3][1].toString());
-			if((pointdata[LoopCounter][3][0] == 0) && (pointdata[LoopCounter][3][1] == 0)){
-				setReturnValue = false;
-			}
+            if(!(pointdata[LoopCounter])){
+                //DO NOTHING
+            }else{
+                debug('X: '+pointdata[LoopCounter][3][0].toString()+' Y: '+pointdata[LoopCounter][3][1].toString());
+                if((pointdata[LoopCounter][3][0] == 0) && (pointdata[LoopCounter][3][1] == 0)){
+                    setReturnValue = false;
+                }
+            }
 		}
 		
 		return setReturnValue;

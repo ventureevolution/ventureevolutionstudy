@@ -1,0 +1,283 @@
+<!-- Styling of the page -->
+<style type="text/css">
+	.selectionButtonSlot{
+		margin-bottom: 15px;
+		overflow: visible;
+		white-space: normal;
+	}
+	.stage7b-remove {
+		font-size: 2em;
+		color: #768393;
+		line-height: 34px;
+	}
+	.stage7b-remove:hover {
+		color: #c7144d;
+	}
+	.stage7b-add-entry-button{
+		margin: 5px 0 5px 0;
+	}
+	.stage7b-mycompany {
+		text-transform: capitalize;
+        font-weight: bold;
+	}
+	.stage7b-competitor {
+		text-transform: capitalize;
+        font-weight: bold;
+	}
+    #stage7b-form{
+        margin-bottom: 0;
+    }
+    button.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-icon-only.ui-dialog-titlebar-close{
+	    display: none;
+    }
+    #tabling {
+	    padding-top: 110px;
+    }
+    .navbar.navbar-default{
+	    background-image: none;
+	    background-color: #ffffff;
+	    border: none;
+	    box-shadow: none;
+	    -webkit-box-shadow: none;
+    }
+    #stage7b-selector{
+	    margin-bottom: 20px;
+    }
+</style>
+<!-- Dialog Message Area -->
+<div id="stage7b-dialog-message-proceed">
+  <p>
+    <p><div id="S7BP10" class="textreplace"></div></p>
+  </p>
+</div>
+<div id="stage7b-dialog-message-error">
+	<p><div id="S7BP11" class="textreplace"></div></p>
+</div>
+<!-- Content of the page -->
+<nav class="navbar navbar-default navbar-fixed-top">
+	<div class="row">
+		<div class="col-md-8 col-md-offset-2">
+			<p><div id="S7BP1" class="textreplace"></div><span class="stage7b-aspect"></span><div id="S7BP2" class="textreplace"></div><span class="stage7b-mycompany"></span><div id="S7BP3" class="textreplace"></div><span class="stage7b-aspect"></span><div id="S7BP4" class="textreplace"></div><span class="stage7b-mycompany"></span><div id="S7BP5" class="textreplace"></div></p>
+		</div>
+	</div>
+</nav>
+<div id="stage7b-top"></div>
+<div class="row">
+	<div class="col-md-8 col-md-offset-2"><div class="row" id="stage7b-selector"></div></div>
+</div>
+<div class="row">
+	<div class="col-md-8 col-md-offset-2">
+		<form id="stage7b-form"></form>
+        <div class="row">
+				<div class="col-md-8 col-md-offset-2">
+		          <p><center><button id="stage7b-add-textbox" class="btn btn-default btn-block"><div id="S7BP8" class="textreplace"></div></button></center></p>
+                </div>
+        </div>
+		<div class="row">
+			<div class="col-md-8 col-md-offset-2">
+				<p><center><button class="btn btn-success btn-block" id="nextPage"><div id="S7BP9" class="textreplace"></div></button></center></p>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Script of the page -->
+<script>
+languageReplace();
+
+$( document ).ready(function() {
+
+	debug("stage7b running!");
+	
+	//Replace company name
+	$(".stage7b-mycompany").empty();
+	$(".stage7b-mycompany").append(mycompanydata[0]);
+	
+	//Stage Rotation is required around stage7a1aspects
+	
+	//Get length of stage7a1aspects
+	var stage7bStageLength = stage7a1aspects.length;
+	
+	//Build stage
+	stage7bBuildStage(0);
+	
+	
+	//Dialog function
+	$(function() {
+        $( "#stage7b-dialog-message-proceed" ).dialog({
+			autoOpen: false,
+			modal: true,
+			buttons: {
+				Yes: function() {
+					$(this).dialog( "close" );
+					$('#stage7b-add-textbox').unbind('click');
+					$("#nextPage").unbind('click');
+					stageCurrentStage++;
+					runStage(stages[stageCurrentStage]);
+				},
+				No: function() {
+					$(this).dialog( "close" );
+				}
+			}
+		});
+		$( "#stage7b-dialog-message-error" ).dialog({
+			autoOpen: false,
+			modal: true,
+			buttons: {
+				Ok: function() {
+					$(this).dialog( "close" );
+				}
+			}
+		});
+	});
+	
+	
+	
+	function stage7bBuildStage(stage7BNumber){
+		
+		//Scroll to top
+		window.scrollTo(0, 0);
+		
+		//Change all aspect names
+		$(".stage7b-aspect").empty();
+		$(".stage7b-aspect").append(stage7a1aspects[stage7BNumber]);
+		
+		//Empty #stage7b-form and generate 5 textboxs
+		$("#stage7b-form").empty();
+		for(var stage7BBoxNumber = 0; stage7BBoxNumber < 5; stage7BBoxNumber++){
+			$("#stage7b-form").append('<div class="row"><div class="col-md-8 col-md-offset-2"><p class="form-group"><input type="text" class="form-control stage7b-entry" placeholder="'+languageReplacement['S7BP6']+'"></p></div></div>');
+		}
+		
+		//Enable Add textbox on click on the button
+		$('#stage7b-add-textbox').click(function(){
+			debug("stage7b add textbox button clicked");
+			$('#stage7b-form').append('<div class="row"><div class="col-md-8 col-md-offset-2"><p class="form-group"><input type="text" class="form-control stage7b-entry" placeholder="'+languageReplacement['S7BP6']+'"></p></div></div>');
+		});
+		
+		//Add option buttons at the top if any
+		if((stage7BNumber != 0) && (stage7bTempMassStorage.length > 0)){
+		
+			//Refresh next button
+			$('#nextPage').empty();
+			$('#nextPage').prop('disabled', false);
+			$('#nextPage').append(languageReplacement['S7BP9']);
+			
+			//Empty #stage7b-selector
+			$('#stage7b-selector').empty();
+		
+			//Add the buttons to top if any
+			for(var stage7bSelectorItem = 0; stage7bSelectorItem < stage7bTempMassStorage.length; stage7bSelectorItem++){
+				//add the title if its the first entry
+				if(stage7bSelectorItem == 0){
+					$('#stage7b-selector').append('<div class="col-md-12" id="optionText"><center>'+languageReplacement['S7BP7']+'</center></div>');
+				}
+				//add the button
+				$('#stage7b-selector').append('<div class="col-md-4"><button class="btn btn-default btn-block stage7b-add-entry-button" value="'+stage7bTempMassStorage[stage7bSelectorItem]+'">'+stage7bTempMassStorage[stage7bSelectorItem]+'</button></div>');
+			}
+			
+			//Initialize the button to add
+			$('.stage7b-add-entry-button').click(function(){
+				var theCurrentValue = $(this).val();
+				//remove this button
+				$(this).parent().remove();
+				//remove the title if 
+				if($('.stage7b-add-entry-button').length == 0){
+					$('#optionText').remove();
+				}
+				$('#stage7b-form').prepend('<div class="row"><div class="col-md-8 col-md-offset-2"><p class="form-group"><input type="text" class="form-control stage7b-entry stage7b-add-entry-button-via" placeholder="'+languageReplacement['S7BP6']+'" value="'+theCurrentValue+'"></p></div></div>');
+			});
+		}
+		
+		
+		//Enable next page function
+		$("#nextPage").click(function(){
+
+			//IF LAST PAGE
+			if(stage7BNumber >= (stage7bStageLength - 1)){
+				//IF non of the points were moved, DO NOT proceed
+				if(stage7bCheckTypeAttributeNotEmpty()){
+					//Save data
+					stage7bSaveData(stage7a1aspects[stage7BNumber]);
+					//Open dialog box
+					$( "#stage7b-dialog-message-proceed" ).dialog( "open" );
+					$("#nextPage").empty();
+					$("#nextPage").prop('disabled', true);
+					$("#nextPage").append('<span class="glyphicon glyphicon-cog next-rotation-animate"></span> Loading');
+				}else{
+					$( "#stage7b-dialog-message-error" ).dialog( "open" );
+				}
+			}
+			//IF NOT LAST PAGE
+			else{
+				//IF non of the points were moved, DO NOT proceed
+				if(stage7bCheckTypeAttributeNotEmpty()){
+					//Save data
+					stage7bSaveData(stage7a1aspects[stage7BNumber]);
+					$('#stage7b-add-textbox').unbind('click');
+					$("#nextPage").unbind('click');
+					//Change next button look
+					$("#nextPage").empty();
+					$("#nextPage").prop('disabled', true);
+					$("#nextPage").append('<span class="glyphicon glyphicon-cog next-rotation-animate"></span> Loading');
+					//Jump to next stage
+					var stage7NextStageNumber = stage7BNumber + 1;
+					stage7bBuildStage(stage7NextStageNumber);
+				}else{
+					$( "#stage7b-dialog-message-error" ).dialog( "open" );
+				}
+			}
+
+		});
+		
+	}
+	
+	//Check the the entries are not empty as it is needed to proceed
+	function stage7bCheckTypeAttributeNotEmpty() {
+		
+		debug("stage7b - stage7bCheckTypeAttributeNotEmpty() running");
+		
+		//By default the attribute inputs are assumed to be empty
+		var confirmNotEmpty = false;
+		
+		$(".stage7b-entry").each(function(){
+			
+			var theValue = $(this).val();
+			
+			if(theValue != ""){
+				//Should any of the attribute inputs not be empty, change the status to true
+				confirmNotEmpty = true;
+			}
+			
+			debug("stage7b - stage7bCheckTypeAttributeNotEmpty() - theValue: "+theValue);
+			debug("stage7b - stage7bCheckTypeAttributeNotEmpty() - confirmNotEmpty: "+confirmNotEmpty);
+			
+		});
+		
+		//Return final status for validation
+		return confirmNotEmpty;
+		
+	}
+	
+	function stage7bSaveData(stage7bAspectName){
+		
+		debug("stage7b - stage7bSaveData() running");
+		
+		stage7baspects[stage7bAspectName] = [];
+		
+		$(".stage7b-entry").each(function(){
+		
+			var theValue = $(this).val();
+			
+			if(theValue !=""){
+				//append the data to the stage7baspects global variable
+				stage7baspects[stage7bAspectName].push(theValue);
+				
+				//Add to mass storage if it doesn't already exist
+				if(stage7bTempMassStorage.indexOf(theValue) < 0){
+					stage7bTempMassStorage.push(theValue);
+				}
+			}
+		});
+	}
+	
+});
+</script>

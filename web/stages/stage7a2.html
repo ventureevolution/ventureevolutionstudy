@@ -1,0 +1,248 @@
+<!-- Styling of the page -->
+<style type="text/css">
+	.selectionButtonSlot{
+		margin-bottom: 15px;
+		overflow: visible;
+		white-space: normal;
+	}
+	.stage7a2-remove {
+		font-size: 2em;
+		color: #768393;
+		line-height: 34px;
+	}
+	.stage7a2-remove:hover {
+		color: #c7144d;
+	}
+	.stage7a2-mycompany {
+		text-transform: capitalize;
+        font-weight: bold;
+	}
+	.stage7a2-competitor {
+		text-transform: capitalize;
+        font-weight: bold;
+	}
+    #stage7a2-form{
+        margin-bottom: 0;
+    }
+    button.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-icon-only.ui-dialog-titlebar-close{
+	    display: none;
+    }
+    #tabling {
+	    padding-top: 110px;
+    }
+    .navbar.navbar-default{
+	    background-image: none;
+	    background-color: #ffffff;
+	    border: none;
+	    box-shadow: none;
+	    -webkit-box-shadow: none;
+    }
+    #stage7a2-selector{
+	    margin-bottom: 20px;
+    }
+    .stage7a2-add-entry-button{
+	    margin: 5px 0 5px 0;
+    }
+</style>
+<!-- Dialog Message Area -->
+<div id="stage7a2-dialog-message-proceed">
+  <p>
+    <p><div id="S7A1P6" class="textreplace"></div></p>
+  </p>
+</div>
+<div id="stage7a2-dialog-message-error">
+	<p><div id="S7A1P7" class="textreplace"></div></p>
+</div>
+<!-- Content of the page -->
+<nav class="navbar navbar-default navbar-fixed-top">
+	<div class="row">
+		<div class="col-md-8 col-md-offset-2">
+			<p><div id="S7A2P1" class="textreplace"></div><span class="stage7a2-mycompany"></span><div id="S7A2P2" class="textreplace"></div></p>
+			<p><div id="S7A2P3" class="textreplace"></div><span class="stage7a2-mycompany"></span><div id="S7A2P4" class="textreplace"></div></p>
+		</div>
+	</div>
+</nav>
+<div id="stage7a2-top"></div>
+<div class="row">
+	<div class="col-md-8 col-md-offset-2"><div class="row" id="stage7a2-selector"></div></div>
+</div>
+<div class="row">
+	<div class="col-md-8 col-md-offset-2">
+		<form id="stage7a2-form">
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2">
+					<p class="form-group">
+						<input type="text" class="form-control stage7a2-entry">
+					</p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2">
+					<p class="form-group">
+						<input type="text" class="form-control stage7a2-entry">
+					</p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2">
+					<p class="form-group">
+						<input type="text" class="form-control stage7a2-entry">
+					</p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2">
+					<p class="form-group">
+						<input type="text" class="form-control stage7a2-entry">
+					</p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2">
+					<p class="form-group">
+						<input type="text" class="form-control stage7a2-entry">
+					</p>
+				</div>
+			</div>
+		</form>
+        <div class="row">
+				<div class="col-md-8 col-md-offset-2">
+		          <p><center><button id="stage7a2-add-textbox" class="btn btn-default btn-block"><div id="S7A2P6" class="textreplace"></div></button></center></p>
+                </div>
+        </div>
+		<div class="row">
+			<div class="col-md-8 col-md-offset-2">
+				<p><center><button class="btn btn-success btn-block" id="nextPage"><div id="S7A2P7" class="textreplace"></div></button></center></p>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Script of the page -->
+<script>
+languageReplace();
+
+//Form placeholder text
+$(".stage7a2-entry").attr("placeholder",languageReplacement['S7A2P5']);
+
+$( document ).ready(function() {
+
+	debug("stage7a2 running!");
+	
+	//Replace company name
+	$(".stage7a2-mycompany").empty();
+	$(".stage7a2-mycompany").append(mycompanydata[0]);
+	
+	//Add textbox on click on the button
+	$('#stage7a2-add-textbox').click(function(){
+		debug("stage7a2 add textbox button clicked");
+		$('#stage7a2-form').append('<div class="row"><div class="col-md-8 col-md-offset-2"><p class="form-group"><input type="text" class="form-control stage7a2-entry" placeholder="'+languageReplacement['S7A2P5']+'"></p></div></div>');
+	});
+	
+	//Enable next page function
+	$("#nextPage").click(function(){
+
+		//IF non of the points were moved, DO NOT proceed
+		if(stage7a2CheckTypeAttributeNotEmpty()){
+			$( "#stage7a2-dialog-message-proceed" ).dialog( "open" );
+			$("#nextPage").empty();
+			$("#nextPage").append('<span class="glyphicon glyphicon-cog next-rotation-animate"></span> Loading');
+		}else{
+			$( "#stage7a2-dialog-message-error" ).dialog( "open" );
+		}
+
+	});
+	
+	//Dialog function
+	$(function() {
+        $( "#stage7a2-dialog-message-proceed" ).dialog({
+			autoOpen: false,
+			modal: true,
+			buttons: {
+				Yes: function() {
+					$(this).dialog( "close" );
+					stage7A2SaveData();
+					stageCurrentStage++;
+					runStage(stages[stageCurrentStage]);
+				},
+				No: function() {
+					$(this).dialog( "close" );
+				}
+			}
+		});
+		$( "#stage7a2-dialog-message-error" ).dialog({
+			autoOpen: false,
+			modal: true,
+			buttons: {
+				Ok: function() {
+					$(this).dialog( "close" );
+				}
+			}
+		});
+	});
+	
+	//Add the buttons to add 7A1 aspects
+	for(var stage7a1SelectorItem = 0; stage7a1SelectorItem < stage7a1aspects.length; stage7a1SelectorItem++){
+		//add the title if its the first entry
+		if(stage7a1SelectorItem == 0){
+			$('#stage7a2-selector').append('<div class="col-md-12" id="optionText"><center>'+languageReplacement['S7A2P8']+'</center></div>');
+		}
+		//add the button
+		$('#stage7a2-selector').append('<div class="col-md-4"><button class="btn btn-default btn-block stage7a2-add-entry-button" value="'+stage7a1aspects[stage7a1SelectorItem]+'">'+stage7a1aspects[stage7a1SelectorItem]+'</button></div>');
+	}
+	
+	//Initialize the button to add
+	$('.stage7a2-add-entry-button').click(function(){
+		var theCurrentValue = $(this).val();
+		//remove this button
+		$(this).parent().remove();
+		//remove the title if 
+		if($('.stage7a2-add-entry-button').length == 0){
+			$('#optionText').remove();
+		}
+		$('#stage7a2-form').prepend('<div class="row"><div class="col-md-8 col-md-offset-2"><p class="form-group"><input type="text" class="form-control stage7a2-entry stage7a2-add-entry-button-via" placeholder="'+languageReplacement['S7A2P5']+'" value="'+theCurrentValue+'"></p></div></div>');
+	});
+	
+	//Check the the entries are not empty as it is needed to proceed
+	function stage7a2CheckTypeAttributeNotEmpty() {
+		
+		debug("stage7a2 - stage7a2CheckTypeAttributeNotEmpty() running");
+		
+		//By default the attribute inputs are assumed to be empty
+		var confirmNotEmpty = false;
+		
+		$(".stage7a2-entry").each(function(){
+			
+			var theValue = $(this).val();
+			
+			if(theValue !=""){
+				//Should any of the attribute inputs not be empty, change the status to true
+				confirmNotEmpty = true;
+			}
+			
+			debug("stage7a2 - stage7a2CheckTypeAttributeNotEmpty() - theValue: "+theValue);
+			debug("stage7a2 - stage7a2CheckTypeAttributeNotEmpty() - confirmNotEmpty: "+confirmNotEmpty);
+			
+		});
+		
+		//Return final status for validation
+		return confirmNotEmpty;
+		
+	}
+	
+	function stage7A2SaveData(){
+		
+		debug("Stage7A2 - stage7A2SaveData() running");
+		
+		$(".stage7a2-entry").each(function(){
+		
+			var theValue = $(this).val();
+			
+			if(theValue !=""){
+				//append the data to the stage7a2aspects global variable
+				stage7a2aspects.push(theValue);
+			}
+		});
+	}
+	
+});
+</script>

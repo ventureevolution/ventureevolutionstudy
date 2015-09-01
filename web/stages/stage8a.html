@@ -1,0 +1,277 @@
+<!-- Styling of the page -->
+<style type="text/css">
+	.selectionButtonSlot{
+		margin-bottom: 15px;
+        overflow: visible;
+		white-space: normal;
+	}
+	.stage8a-remove {
+		font-size: 2em;
+		color: #768393;
+		line-height: 34px;
+	}
+	.stage8a-remove:hover {
+		color: #c7144d;
+	}
+	.stage8a-mycompany {
+		text-transform: capitalize;
+        font-weight: bold;
+	}
+	.stage8a-competitor {
+		text-transform: capitalize;
+        font-weight: bold;
+	}
+    #stage8a-form{
+        margin-bottom: 0;
+    }
+    button.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-icon-only.ui-dialog-titlebar-close{
+	    display: none;
+    }
+    #tabling {
+	    padding-top: 150px;
+    }
+    .navbar.navbar-default{
+	    background-image: none;
+	    background-color: #ffffff;
+	    border: none;
+	    box-shadow: none;
+	    -webkit-box-shadow: none;
+    }
+    #nextPage{
+	    margin-top: 10px;
+    }
+</style>
+<!-- Dialog Message Area -->
+<div id="stage8a-dialog-message-error">
+  <p>
+	<p><div id="S8AP10" class="textreplace"></div></p>
+  </p>
+</div>
+<!-- Content of the page -->
+<nav class="navbar navbar-default navbar-fixed-top">
+	<div class="row">
+		<div class="col-md-8 col-md-offset-2">
+			<p><div id="S8AP1" class="textreplace"></div></p>
+			<p><div id="S8AP2" class="textreplace"></div><span class="stage8a-mycompany"></span><div id="S8AP3" class="textreplace"></div><span class="stage8a-mycompany"></span><div id="S8AP4" class="textreplace"></div></p>
+		</div>
+	</div>
+</nav>
+<div id="stage8a-top"></div>
+<div class="row" id="stage8a-selection">
+</div>
+<div class="row">
+	<div class="col-md-8 col-md-offset-2">
+		<div id="stage8a-form">
+		</div>
+        <div class="row">
+				<div class="col-md-8 col-md-offset-2">
+					<center><button id="stage8a-add-contributor" class="btn btn-default btn-block"><div id="S8AP8" class="textreplace"></div></button></center>
+                </div>
+        </div>
+	</div>
+</div>
+<div class="row" id ="stage8a-next">
+	<div class="col-md-8 col-md-offset-2">
+		<center><button class="btn btn-success" id="nextPage"><div id="S8AP9" class="textreplace"></div></button></center>
+	</div>
+</div>
+<!-- Script of the page -->
+<script>
+$( document ).ready(function() {
+
+languageReplace();
+
+//Common Variables
+
+var stage8aMaxLoopNumber = 5;
+var stage8aAddCounter = 0;
+	
+function stage8aBlockAddForm(stage8aSetNumber){
+	this.Output = '<div class="row"><div class="col-md-1 col-md-offset-1 stage8a-set3"><span class="glyphicon glyphicon-remove-circle stage8a-remove stage8a-remove-def-'+stage8aSetNumber+'"></span></div><div class="col-md-4 stage8a-set1"><p class="form-group"><input type="text" class="form-control stage8a-entry-name-'+stage8aSetNumber+'" placeholder="'+languageReplacement['S8AP6']+'"></p></div><div class="col-md-4 stage8a-set2"><p class="form-group"><input type="text" class="form-control stage8a-entry-task-'+stage8aSetNumber+'" placeholder="'+languageReplacement['S8AP7']+'"><br><input type="text" class="form-control stage8a-entry-task-'+stage8aSetNumber+'" placeholder="'+languageReplacement['S8AP7']+'"><br><input type="text" class="form-control stage8a-entry-task-'+stage8aSetNumber+'" placeholder="'+languageReplacement['S8AP7']+'"><br><button id="stage8a-add-task-'+stage8aSetNumber+'" class="btn btn-default btn-block">'+languageReplacement['S8AP5']+'</button></p></div></div>';
+}
+	
+function stageBlockAddTask(stage8aSetNumber){
+	this.Output = '<input type="text" class="form-control stage8a-entry-task-'+stage8aSetNumber+'" placeholder="'+languageReplacement['S8AP7']+'"><br>';
+}
+	
+	//Add 5 sets
+	for(var stage8aLoopSet = 0; stage8aLoopSet < stage8aMaxLoopNumber; stage8aLoopSet++){
+		
+		var pushLoopSet = new stage8aBlockAddForm(stage8aLoopSet);
+		
+		$('#stage8a-form').append(pushLoopSet.Output);
+		stage8aInitializeFormButton(stage8aLoopSet);
+	}
+	
+	//On click of the add contributor button, add more contributor sets
+	$('#stage8a-add-contributor').click(function(){
+		
+		//Create a new counter variable
+		var currentCount = stage8aMaxLoopNumber + stage8aAddCounter;
+		//Create a new block to add
+		var stage8aNewAddButtonBlock = new stage8aBlockAddForm(currentCount);
+		
+		//Add content
+		$('#stage8a-form').append(stage8aNewAddButtonBlock.Output);
+		
+		//Initialize button functions
+		stage8aInitializeFormButton(currentCount);
+		
+		//Increament to stage8aAddCounter
+		stage8aAddCounter++;
+	});
+	
+	//Dialog box
+	$(function() {
+		$( "#stage8a-dialog-message-error" ).dialog({
+			autoOpen: false,
+			modal: true,
+			buttons: {
+				CLOSE: function() {
+			        //Close the dialog
+			        $(this).dialog( "close" );
+				}
+			}
+		});
+	});
+	
+	//Enable Next Page button
+	$('#nextPage').click(function(){
+		//Ensure that all data is there else prompt to add
+		if(stage8aEnsureComplete()){
+		
+			//Save Data
+			stage8aSaveData();
+			
+			//Change the loading image
+			$("#nextPage").empty();
+			$("#nextPage").append('<span class="glyphicon glyphicon-cog next-rotation-animate"></span> Loading');
+			//Change stage count and jump to next stage
+			stageCurrentStage++;
+			runStage(stages[stageCurrentStage]);
+			
+		}else{
+			$('#stage8a-dialog-message-error').dialog( "open" );
+		}
+	});
+	
+	function stage8aSaveData(){
+		
+		debug('stage8a - stage8aSaveData() - getContributorName:'+getContributorName);
+		var MaxLoop = stage8aMaxLoopNumber + stage8aAddCounter;
+		
+		//Loop through all answer
+		for(var LoopHereNow = 0; LoopHereNow <= MaxLoop; LoopHereNow++){
+			
+			//if stage8a-entry-name-X has a value check for at least one task
+			var getContributorName = $('.stage8a-entry-name-'+LoopHereNow).val();
+			
+			if((getContributorName != '') || (typeof getContributorName !== "undefined")){
+				
+				debug('stage8a - stage8aSaveData() - getContributorName:'+getContributorName);
+				stage8aData[getContributorName] = [];
+				
+				$('.stage8a-entry-task-'+LoopHereNow).each(function(){
+					
+					var getTask = $(this).val();
+					//Check if there is at least one value for tasks
+					if(getTask != ''){
+						stage8aData[getContributorName].push(getTask);
+						
+						//Write to the general storage if its unique
+						if(stage8bTempMassStorage.indexOf(getTask) < 0){
+							stage8bTempMassStorage.push(getTask);
+						}
+						
+						debug('stage8a - stage8aSaveData() - getTask:'+getTask);
+					}
+				});
+			}
+		}
+	}
+	
+	function stage8aEnsureComplete(){
+	
+		debug('stage8a - stage8aEnsureComplete() is running');
+	
+		var outcome = false;
+		
+		var MaxLoop = stage8aMaxLoopNumber + stage8aAddCounter;
+		
+		debug('stage8aEnsureComplete() - MaxLoop: '+ MaxLoop);
+		
+		//Loop through all answer
+		for(var LoopHereNow = 0; LoopHereNow <= MaxLoop; LoopHereNow++){
+			
+			var NoContributor = true;
+			
+			//if stage8a-entry-name-X has a value check for at least one task
+			if($('.stage8a-entry-name-'+LoopHereNow).val() != ''){
+				
+				debug("stage8aEnsureComplete() -  one contributor");
+				NoContributor = false;
+				
+				var checkAtLeastOneTask = false;
+				
+				$('.stage8a-entry-task-'+LoopHereNow).each(function(){
+					//Check if there is at least one value for tasks
+					if($(this).val() != ''){
+						debug("stage8aEnsureComplete() -  at least one task");
+						checkAtLeastOneTask = true;
+					}
+				});
+				
+				//If the task is totally empty, change to false outcome
+				if((checkAtLeastOneTask == true) && (NoContributor == false)){
+					debug("stage8aEnsureComplete() -  one contributor and at least one task");
+					outcome = true;
+				}
+			}else{
+				
+				debug("stage8aEnsureComplete() -  no contributor");
+				var checkAtLeastOneTask = false;
+				
+				//To cater to cases where after success yet subsequent cases have no contributors but have tasks
+				$('.stage8a-entry-task-'+LoopHereNow).each(function(){
+					//Check if there is at least one value for tasks
+					if($(this).val() != ''){
+						debug("stage8aEnsureComplete() -  at least one task");
+						checkAtLeastOneTask = true;
+					}
+				});
+				
+				if((checkAtLeastOneTask == true) && (NoContributor == true)){
+					debug("stage8aEnsureComplete() - no contributor and at least one task");
+					outcome = false;
+				}
+				
+			}
+		}
+		
+		return outcome;
+	}
+	
+	function stage8aInitializeFormButton(buttonNumber){
+		
+		$('#stage8a-add-task-'+buttonNumber).click(function(){
+		
+			var printTask = new stageBlockAddTask(buttonNumber);
+			$(this).parent().append(printTask.Output);
+		
+		});
+		
+		$('.stage8a-entry-name-'+buttonNumber).change(function(){
+			if($('.stage8a-entry-name-'+buttonNumber).val() != ''){
+				//Enable the remove button
+				$('.stage8a-remove-def-'+buttonNumber).show();
+			}else{
+				//Remove the remove button
+				$('.stage8a-remove-def-'+buttonNumber).hide();
+			}
+		});
+		
+		$('.stage8a-remove-def-'+buttonNumber).hide();
+		
+	}
+});
+</script>

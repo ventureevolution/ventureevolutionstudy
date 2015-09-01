@@ -1,0 +1,147 @@
+<!-- Styling of the page -->
+<style type="text/css">
+	.selectionButtonSlot{
+		margin-bottom: 15px;
+        overflow: visible;
+		white-space: normal;
+	}
+	.stage8b-remove {
+		font-size: 2em;
+		color: #768393;
+		line-height: 34px;
+	}
+	.stage8b-remove:hover {
+		color: #c7144d;
+	}
+	.stage8b-mycompany {
+		text-transform: capitalize;
+        font-weight: bold;
+	}
+	.stage8b-competitor {
+		text-transform: capitalize;
+        font-weight: bold;
+	}
+    #stage8b-form{
+        margin-bottom: 0;
+    }
+    button.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-icon-only.ui-dialog-titlebar-close{
+	    display: none;
+    }
+    #tabling {
+	    padding-top: 80px;
+    }
+    .navbar.navbar-default{
+	    background-image: none;
+	    background-color: #ffffff;
+	    border: none;
+	    box-shadow: none;
+	    -webkit-box-shadow: none;
+    }
+</style>
+<!-- Dialog Message Area -->
+<div id="stage8b-dialog-message-error">
+  <p>
+	<p><div id="S8BP3" class="textreplace"></div></p>
+  </p>
+</div>
+<!-- Content of the page -->
+<nav class="navbar navbar-default navbar-fixed-top">
+	<div class="row">
+		<div class="col-md-8 col-md-offset-2">
+			<p><div id="S8BP1" class="textreplace"></div></p>
+		</div>
+	</div>
+</nav>
+<div id="stage8b-top"></div>
+<div class="row" id="stage8b-selection">
+</div>
+<div class="row">
+	<div class="col-md-8 col-md-offset-2">
+		<form id="stage8b-form">
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2">
+					<p>
+						<input type="text" class="form-control" id="stage8b-textarea">
+					</p>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<div class="row" id ="stage8b-next">
+	<div class="col-md-8 col-md-offset-2">
+		<center><button class="btn btn-success" id="nextPage"><div id="S8BP2" class="textreplace"></div></button></center>
+	</div>
+</div>
+<!-- Script of the page -->
+<script>
+$( document ).ready(function() {
+
+	//Replace with all the text from the language file
+	languageReplace();
+	
+	//Insert placeholder text for stage8b-textarea
+	$('#stage8b-textarea').attr("placeholder",languageReplacement['S8BP4']);
+
+	debug("stage8b running");
+
+	//Dialog box
+	$(function() {
+		$( "#stage8b-dialog-message-error" ).dialog({
+			autoOpen: false,
+			modal: true,
+			buttons: {
+				Close: function() {
+			        //Close the dialog
+			        $(this).dialog( "close" );
+				}
+			}
+		});
+	});
+	
+	//Enable the next page button
+	$('#nextPage').click(function(){
+
+		debug("stage8b - nextPage clicked");
+
+		if(stage8bCheckTextExist()){
+			//Save data
+			stage8bSaveData();
+			
+			//Change the loading image
+			$("#nextPage").empty();
+			$("#nextPage").append('<span class="glyphicon glyphicon-cog next-rotation-animate"></span> Loading');
+			
+			//Change stage count and jump to next stage
+			stageCurrentStage++;
+			runStage(stages[stageCurrentStage]);
+		}else{
+			$('#stage8b-dialog-message-error').dialog('open');
+		}
+
+	});
+
+	function stage8bSaveData(){
+		
+		debug("stage8b - stage8bSaveData() running");
+	
+		stage8bData.push($("#stage8b-textarea").val());
+	}
+	
+	function stage8bCheckTextExist(){
+		
+		debug("stage8b - stage8bCheckTextExist() running");
+		
+		var stage8bTextValue = $("#stage8b-textarea").val();
+		
+		if((stage8bTextValue != '') || (typeof stage8bTextValue !== "undefined")){
+			return true;
+		}
+		else{
+			return false;
+		}
+		
+	}
+
+});
+</script>

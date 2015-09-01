@@ -2,7 +2,8 @@
 <style type="text/css">
 	.selectionButtonSlot{
 		margin-bottom: 15px;
-		white-space: normal; 
+        overflow: visible;
+		white-space: normal;
 	}
 	.stage4-remove {
 		font-size: 2em;
@@ -12,19 +13,50 @@
 	.stage4-remove:hover {
 		color: #c7144d;
 	}
-	#stage4-mycompany {
-		text-transform: uppercase;
-		color: #006E51;
+	.stage4-mycompany {
+		text-transform: capitalize;
+        font-weight: bold;
 	}
-	#stage4-competitor {
-		text-transform: uppercase;
-		color: #006E51;
+	.stage4-competitor {
+		text-transform: capitalize;
+        font-weight: bold;
 	}
+    #stage4-form{
+        margin-bottom: 0;
+    }
+    button.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-icon-only.ui-dialog-titlebar-close{
+	    display: none;
+    }
+    #tabling {
+	    padding-top: 80px;
+    }
+    .navbar.navbar-default{
+	    background-image: none;
+	    background-color: #ffffff;
+	    border: none;
+	    box-shadow: none;
+	    -webkit-box-shadow: none;
+    }
 </style>
+<!-- Dialog Message Area -->
+<div id="stage4-dialog-message-proceed">
+  <p>
+    <p><div id="S4P14" class="textreplace"></div><span class="stage4-competitor"></span><div id="S4P15" class="textreplace"></div><span class="stage4-mycompany"></span><div id="S4P16" class="textreplace"></div></p>
+  </p>
+</div>
 <!-- Content of the page -->
+<nav class="navbar navbar-default navbar-fixed-top">
+	<div class="row">
+		<div class="col-md-8 col-md-offset-2">
+			<p><div id="S4P1" class="textreplace"></div><span class="stage4-mycompany"></span><div id="S4P2" class="textreplace"></div><span class="stage4-competitor"></span><div id="S4P3" class="textreplace"></div></p>
+		</div>
+	</div>
+</nav>
+<div id="stage4-top"></div>
+<div class="row" id="stage4-selection">
+</div>
 <div class="row">
 	<div class="col-md-8 col-md-offset-2">
-		<p><div id="S4P1" class="textreplace"></div><b id="stage4-mycompany"></b><div id="S4P2" class="textreplace"></div><b id="stage4-competitor"></b><div id="S4P3" class="textreplace"></div></p>
 		<form id="stage4-form">
 			<div class="row">
 				<div class="col-md-8 col-md-offset-2">
@@ -62,10 +94,12 @@
 				</div>
 			</div>
 		</form>
-		<center><button id="stage4-add-likeness" class="btn btn-default"><div id="S4P4" class="textreplace"></button></center>
+        <div class="row">
+				<div class="col-md-8 col-md-offset-2">
+					<center><button id="stage4-add-likeness" class="btn btn-default btn-block"><div id="S4P4" class="textreplace"></div></button></center>
+                </div>
+        </div>
 	</div>
-</div>
-<div class="row" id="stage4-selection">
 </div>
 <div class="row" id ="stage4-next">
 </div>
@@ -106,12 +140,13 @@ $( document ).ready(function() {
 		//Display layer: company names
 		
 		//Step 1: clear the div
-		$("#stage4-mycompany").empty();
-		$("#stage4-competitor").empty();
+		$(".stage4-mycompany").empty();
+		$(".stage4-competitor").empty();
 		
 		//Step 2: populate the div
-		$("#stage4-mycompany").append(mycompanydata[0]);
-		$("#stage4-competitor").append(tempOrderingArray[tempDisplayReferenceID][0]);
+		$(".stage4-mycompany").append(mycompanydata[0]);
+        var stage4tempCompetitorName = tempOrderingArray[tempDisplayReferenceID][0];
+		$(".stage4-competitor").append(stage4tempCompetitorName);
 		
 		//Pop the reference out of the array
 		tempOrderingArray.splice(tempDisplayReferenceID, 1);
@@ -120,7 +155,7 @@ $( document ).ready(function() {
 		enableStage4Remove();
 	
 		//Step 4: Add new input fields when Add Likeness Dimension button is clicked
-		$("#stage4-add-likeness").one("click",function(){
+		$("#stage4-add-likeness").click(function(){
 			$("#stage4-form").append('<div class="row"><div class="col-md-8 col-md-offset-2"><p class="form-group"><input type="text" class="form-control stage4-entry" placeholder="'+languageReplacement['S4P5']+'"></p></div></div>');
 			enableStage4Remove();
 		});
@@ -137,18 +172,23 @@ $( document ).ready(function() {
 				if(stage4CheckTypeAttributeNotEmpty()){
 					
 					//Save all new attributes into [attributedata]
-					stage4SaveAttributeData();
+					stage4SaveAttributeData(stage4tempCompetitorName);
 					
 					//Reset the display
 					stage4ResetPageDisplay();
 					
-					//Increament to the global variable
+					//Increment to the global variable
 					stage4pageCount++;
 					
 					//Re-run the page
 					stage4runPage(stage4pageCount);
+                    window.scrollTo(0, 0);
 				}else{
 					debug("Stage4 - clicked on next when empty");
+					
+					window.scrollTo(0, 0);
+                    $("#stage4-dialog-message-proceed").dialog("open");
+                    window.scrollTo(0, 0);
 				}
 				
 			});
@@ -164,19 +204,41 @@ $( document ).ready(function() {
 				if(stage4CheckTypeAttributeNotEmpty()){
 					
 					//Save all new attributes into [attributedata]
-					stage4SaveAttributeData();
+					stage4SaveAttributeData(stage4tempCompetitorName);
+					
+					//Change the loading image
+                    $("#nextPage").empty();
+                    $("#nextPage").append('<span class="glyphicon glyphicon-cog next-rotation-animate"></span> Loading');
 					
 					//Change stage count and jump to next stage
 					stageCurrentStage++;
 					runStage(stages[stageCurrentStage]);
 				}else{
 					debug("Stage4 - clicked on next when empty");
+					
+                    window.scrollTo(0, 0);
+					$("#stage4-dialog-message-proceed").dialog("open");
+                    window.scrollTo(0, 0);
 				}
 
 			});
 		}
 
 	}
+	
+	//Dialog function
+	$(function() {
+        $( "#stage4-dialog-message-proceed" ).dialog({
+			autoOpen: false,
+			modal: true,
+			buttons: {
+				Ok: function() {
+					$(this).dialog( "close" );
+                    window.scrollTo(0, 0);
+				}
+			}
+		});
+	});
 
 	//Validation layer: ensure that the inputs are filled
 	function enableStage4Remove(){
@@ -209,7 +271,7 @@ $( document ).ready(function() {
 		var enableStage4AttributesCounter = 0;
 		
 		while(enableStage4AttributesCounter < countAttribute){
-			$("#stage4-selection .col-md-8 .row").append('<div class="col-md-4"><button type="button" class="btn btn-danger btn-block selectionButtonSlot" id="stage4-att-btn'+enableStage4AttributesCounter+'">'+attributedata[enableStage4AttributesCounter]+'</button></div>');
+			$("#stage4-selection .col-md-8 .row").append('<div class="col-md-4"><button type="button" class="btn btn-primary btn-block selectionButtonSlot" id="stage4-att-btn'+enableStage4AttributesCounter+'">'+attributedata[enableStage4AttributesCounter]+'</button></div>');
 			enableStage4AttributesCounter++;
 			
 			debug("Stage4 - enableStage4Attributes() - loop counter: "+enableStage4AttributesCounter);
@@ -253,7 +315,7 @@ $( document ).ready(function() {
 						$(this).parent().parent().remove();
 						
 						//Add the button back into the stage
-						$("#stage4-selection .col-md-8 .row").append('<div class="col-md-4"><button type="button" class="btn btn-danger btn-block selectionButtonSlot" id="stage4-att-btn'+theSelectedID+'">'+attributedata[theSelectedID]+'</button></div>');
+						$("#stage4-selection .col-md-8 .row").append('<div class="col-md-4"><button type="button" class="btn btn-primary btn-block selectionButtonSlot" id="stage4-att-btn'+theSelectedID+'">'+attributedata[theSelectedID]+'</button></div>');
 						
 						//Enable the button click function
 						enableStage4AttributeClick("#stage4-att-btn"+theSelectedID);
@@ -286,7 +348,7 @@ $( document ).ready(function() {
 					$(this).parent().parent().remove();
 					
 					//Add the button back into the stage
-					$("#stage4-selection .col-md-8 .row").append('<div class="col-md-4"><button type="button" class="btn btn-danger btn-block selectionButtonSlot" id="stage4-att-btn'+theSelectedID+'">'+attributedata[theSelectedID]+'</button></div>');
+					$("#stage4-selection .col-md-8 .row").append('<div class="col-md-4"><button type="button" class="btn btn-primary btn-block selectionButtonSlot" id="stage4-att-btn'+theSelectedID+'">'+attributedata[theSelectedID]+'</button></div>');
 					
 					//Enable the button click function
 					enableStage4AttributeClick("#stage4-att-btn"+theSelectedID);
@@ -299,9 +361,22 @@ $( document ).ready(function() {
 	}
 	
 	//Save Attribute data
-	function stage4SaveAttributeData(){
+	function stage4SaveAttributeData(CompetitorNameRef){
 		
 		debug("Stage4 - stage4SaveAttributeData() running");
+		debug("Stage4 CompetitorNameRef: "+CompetitorNameRef);
+        
+        var stage4FinalCounter = "";
+        
+        //Find the refID of the competitor
+        for(var stage4SaveCounter = 0; stage4SaveCounter < pointdata.length; stage4SaveCounter++){
+            if(pointdata[stage4SaveCounter][0] == CompetitorNameRef){
+                stage4FinalCounter = stage4SaveCounter;
+            }
+        }
+        
+		//Create empty array
+		pointdata[parseInt(stage4FinalCounter)][4] = [];
 		
 		$(".stage4-entry").each(function(){
 		
@@ -317,8 +392,14 @@ $( document ).ready(function() {
 			if(($.inArray(theValue, attributedata) < 0) && (theValue != "")){
 				attributedata.push(theValue);
 			}
+            
+            if(theValue != ""){
+                //Add to the pointdata
+                pointdata[stage4FinalCounter][4].push(theValue);
+            }
 			
 			debug("Stage4 - stage4SaveAttributeData() - attributedata array: " + attributedata);
+            debug("Stage 4 - pointdata["+stage4FinalCounter+"][4]: " + pointdata[stage4FinalCounter][4]);
 		});
 	}
 	
