@@ -78,7 +78,7 @@ function runBase(){
 				echo json_encode($response,JSON_NUMERIC_CHECK);
 			}
 		}else{
-			$response = array('result' => 'error', 'output'=>'check real connection failed');
+			$response = array('result' => 'error', 'output'=>'check real connection failed: secretyKey: '.$_POST['secretKey'].' firstname: '.$_POST['firstname'].' company: '.$_POST['company'].' csv: '.$_POST['csv']);
 			echo json_encode($response,JSON_NUMERIC_CHECK);
 		}
 	}
