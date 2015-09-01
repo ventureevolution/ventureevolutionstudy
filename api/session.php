@@ -66,7 +66,13 @@ function runBase(){
 			$currentCompany = $_POST['company'];
 			$currentCSV = $_POST['csv'];
 			try{
-				$conn->query("INSERT INTO csvStored (firstname, company, csvData, createDateTime) VALUES ('".$currentFirstName."','".$currentCompany."','".$currentCSV."','".date('Y-m-d H:i:s')."')");
+				
+				$theQuery = "INSERT INTO csvStored (firstname, company, csvData, createDateTime) VALUES ('".$currentFirstName."','".$currentCompany."','".$currentCSV."','".date('Y-m-d H:i:s')."')";
+				
+				$conn->query($theQuery);
+				
+				$response = array('result' => 'success', 'output'=>$theQuery);
+				echo json_encode($response,JSON_NUMERIC_CHECK);
 			}catch (Exception $e){
 				$response = array('result' => 'error', 'output'=>$e->getMessage());
 				echo json_encode($response,JSON_NUMERIC_CHECK);
