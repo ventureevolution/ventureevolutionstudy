@@ -1,8 +1,14 @@
 <html>
 <head>
+<style>
+	.activeLinkStyle{
+		color: brown;
+	}
+</style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<script>
 		$('#thesubmitter').click(function(){
+			$(this).addClass('activeLinkStyle');
 			$.ajax({
 				type: 'GET',
 				url: 'http://api.ventureevolution.com/session.php?request=initialize',
