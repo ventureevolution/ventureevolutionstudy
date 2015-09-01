@@ -177,6 +177,8 @@ function checkRealConnection(){
 	$count = 0;
 	$onlyFirst = 1;
 	
+	$secretKey = $_POST['secretKey'];
+	
 	//Check if exist
 	$timeExpiry = date("Y-m-d H:i:s", time() - $expiryTime);
 	
