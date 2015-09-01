@@ -77,6 +77,9 @@ function runBase(){
 				$response = array('result' => 'error', 'output'=>$e->getMessage());
 				echo json_encode($response,JSON_NUMERIC_CHECK);
 			}
+		}else{
+			$response = array('result' => 'error', 'output'=>'check real connection failed');
+			echo json_encode($response,JSON_NUMERIC_CHECK);
 		}
 	}
 }
