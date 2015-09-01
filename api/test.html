@@ -7,16 +7,18 @@
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<script>
-		$('#thesubmitter').click(function(){
-			$(this).addClass('activeLinkStyle');
-			$.ajax({
-				type: 'GET',
-				url: 'http://api.ventureevolution.com/session.php?request=initialize',
-				data: dataString,
-				dataType: 'json',
-				success: function(data){
-					alert(data.result);
-				}
+		$(document).ready(function{
+			$('#thesubmitter').click(function(){
+				$(this).addClass('activeLinkStyle');
+				$.ajax({
+					type: 'GET',
+					url: 'http://api.ventureevolution.com/session.php?request=initialize',
+					data: dataString,
+					dataType: 'json',
+					success: function(data){
+						alert(data.result);
+					}
+				});
 			});
 		});
 	</script>
