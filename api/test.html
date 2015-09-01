@@ -4,8 +4,9 @@
 	<script>
 		$('#thesubmitter').click(function(){
 			$.ajax({
+				type: 'GET',
 				url: 'http://api.ventureevolution.com/session.php?request=initialize',
-				type: 'get',
+				data: dataString,
 				dataType: 'json',
 				success: function(data){
 					alert(data.result);
