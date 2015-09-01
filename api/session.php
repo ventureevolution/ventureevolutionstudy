@@ -67,7 +67,7 @@ function runBase(){
 			$currentCSV = $_POST['csv'];
 			try{
 				
-				$theQuery = "INSERT INTO csvStored (firstname, company, csvData, createDateTime) VALUES ('".$currentFirstName."','".$currentCompany."','".$currentCSV."','".date('Y-m-d H:i:s')."')";
+				$theQuery = "INSERT INTO csvStored (firstname, company, csvData, createdDateTime) VALUES ('".$currentFirstName."','".$currentCompany."','".$currentCSV."','".date('Y-m-d H:i:s')."')";
 				
 				$conn->query($theQuery);
 				
