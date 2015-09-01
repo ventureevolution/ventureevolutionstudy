@@ -1,12 +1,26 @@
 <html>
-<head></head>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script>
+		$('#thesubmitter').click(function(){
+			$.ajax({
+				url: 'http://api.ventureevolution.com/session.php?request=initialize',
+				type: 'get',
+				dataType: 'json',
+				success: function(data){
+					alert(data.result);
+				}
+			);
+		});
+	</script>
+</head>
 	<body>
 		<form action="session.php?request=save" method="post">
-			Secret Key: <input type="text" name="secretKey"><br>
-			First Name: <input type="text" name="firstname"><br>
-			Company: <input type="text" name="company"><br>
-			CSV: <input type="text" name="csv"><br>
-			<input type="submit" value="submit">
+			Secret Key: <input type="text" name="secretKey" id="secretKey"><br>
+			First Name: <input type="text" name="firstname" id="firstname"><br>
+			Company: <input type="text" name="company" id="companuy"><br>
+			CSV: <input type="text" name="csv" id="csv"><br>
+			<a href="#" id="thesubmitter">Submit</a>
 		</form>
 	</body>
 </html>

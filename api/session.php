@@ -71,14 +71,15 @@ function runBase(){
 				
 				$conn->query($theQuery);
 				
-				$response = array('result' => 'success', 'output'=>$theQuery);
+				$response = array('result' => 'success', 'output'=>'stored successfully');
 				echo json_encode($response,JSON_NUMERIC_CHECK);
 			}catch (Exception $e){
 				$response = array('result' => 'error', 'output'=>$e->getMessage());
 				echo json_encode($response,JSON_NUMERIC_CHECK);
 			}
 		}else{
-			$response = array('result' => 'error', 'output'=>'check real connection failed: secretKey: '.$_POST['secretKey'].' firstname: '.$_POST['firstname'].' company: '.$_POST['company'].' csv: '.$_POST['csv']);
+			//$response = array('result' => 'error', 'output'=>'check real connection failed: secretKey: '.$_POST['secretKey'].' firstname: '.$_POST['firstname'].' company: '.$_POST['company'].' csv: '.$_POST['csv']);
+			$response = array('result' => 'error', 'output'=>'check real connection failed');
 			echo json_encode($response,JSON_NUMERIC_CHECK);
 		}
 	}
@@ -191,7 +192,7 @@ function checkRealConnection(){
 	//Check if exist
 	$timeExpiry = date("Y-m-d H:i:s", time() - $expiryTime);
 	
-	echo "expiry time: ".$timeExpiry."<br>";
+	//echo "expiry time: ".$timeExpiry."<br>";
 	
 	$result = mysqli_query($conn,"SELECT sid FROM Session WHERE secretKey = '".$secretKey."' AND createdDateTime > '".$timeExpiry."';");
 	

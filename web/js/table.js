@@ -494,7 +494,7 @@ function createOutputCSVData(){
 
 function postToServer(){
 	//GET API SESSION
-	
+	//$.ajax(serverEndpoint+'?request=initialize').done();
 	
 	//POST FILE
 	
