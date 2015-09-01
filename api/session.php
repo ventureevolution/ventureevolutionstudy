@@ -60,11 +60,17 @@ function runBase(){
 	//IF request = save
 	elseif($requestType == 'save'){
 
-		//Connect to database
-		$conn = new mysqli($servername, $username, $password, $databasename);
-
 		if(checkRealConnection()){
 		
+			$currentFirstName = $_POST['firstname'];
+			$currentCompany = $_POST['company'];
+			$currentCSV = $_POST['csv'];
+			try{
+				$conn->query("INSERT INTO csvStored (firstname, company, csvData, createDateTime) VALUES ('".$currentFirstName."','".$currentCompany."','".$currentCSV."','".date('Y-m-d H:i:s')."')");
+			}catch (Exception $e){
+				$response = array('result' => 'error', 'output'=>$e->getMessage());
+				echo json_encode($response,JSON_NUMERIC_CHECK);
+			}
 		}
 	}
 }
@@ -90,13 +96,13 @@ function runCreateTable(){
 	global $conn;
 	
 	try {
-		$conn->query("CREATE TABLE Session (sid int NOT NULL AUTO_INCREMENT, secretKey VARCHAR(16) UNIQUE, ipaddress VARCHAR(40), PRIMARY KEY (sid));");
+		$conn->query("CREATE TABLE Session (sid int NOT NULL AUTO_INCREMENT, secretKey VARCHAR(16) UNIQUE, ipaddress VARCHAR(40), createdDateTime DATETIME NOT NULL, PRIMARY KEY (sid))");
 
-		$conn->query("CREATE TABLE csvStored (cid int NOT NULL AUTO_INCREMENT, firstname VARCHAR(120) NOT NULL, lastname VARCHAR(120) NOT NULL, csvDate BLOB, createdDateTime DATETIME NOT NULL, PRIMARY KEY (cid));");
+		$conn->query("CREATE TABLE csvStored (cid int NOT NULL AUTO_INCREMENT, firstname VARCHAR(120) NOT NULL, company VARCHAR(120) NOT NULL, csvData BLOB, createdDateTime DATETIME NOT NULL, PRIMARY KEY (cid));");
 		
 	}catch (Exception $e){
-	
-		echo 'Caught exception: ',  $e->getMessage(), "\n";
+		$response = array('result' => 'error', 'output'=>$e->getMessage());
+		echo json_encode($response,JSON_NUMERIC_CHECK);
 	}
 	
 }
@@ -125,11 +131,11 @@ function generateSecretKey(){
 		$result = mysqli_query($conn,"SELECT cid FROM Session WHERE secretKey = '".$secretKey."';");
 		
 		//Create only if the key doesn't already exist
-		$countRow = mysqli_fetch_array($result);
+		$countRow = mysqli_num_rows($result);
 		
 		if($countRow == 0){
 			$breakGeneration = FALSE;
-			$result = mysqli_query($conn,"INSERT INTO Session (secretKey, ipaddress) VALUES ('".$secretKey."','".get_client_ip()."');");
+			$result = mysqli_query($conn,"INSERT INTO Session (secretKey, ipaddress, createdDateTime) VALUES ('".$secretKey."','".get_client_ip()."','".date('Y-m-d H:i:s')."');");
 		}else{
 			$secretKey = '';
 		}
