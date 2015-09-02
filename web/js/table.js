@@ -500,6 +500,7 @@ function initializeServer(){
 	//If save to server is enabled, the session generator will run to retrieve a session
 	if(turnOnSaveToVentureEvolution){
 		$.ajax({
+			async: false,
 			type: 'GET',
 			url: serverEndpoint + '?request=initialize',
 			dataType: 'json',
@@ -520,14 +521,15 @@ function postToServer(){
 	
 		//POST FILE
 		$.ajax({
+			async: false,
 			type: 'POST',
 			url:serverEndpoint + '?request=save',
 			data: {secretKey: sessionKey, firstname: personal[0], company: mycompanydata[0], csv: postCSVFileOutput},
 			dataType: 'json',
 			success: function(data){
 				if(data.result == "success"){
-					storeInitializationString = data.output;
-					alert(data.output);
+					sessionKey = data.output;
+					return true;
 				}else if(data.result == 'error'){
 					//Retry up MAX retries if initialization fails
 					if(data.code == '901'){
@@ -540,18 +542,29 @@ function postToServer(){
 							postRetryCounter--;
 						}else{
 							postErrorHandler = data.output;
+							debug("postToServer() error: "+ postErrorHandler);
+							
+							return false;
 						}
 					}else{
 						postErrorHandler = data.output;
+						debug("postToServer() error: "+ postErrorHandler);
+						
+						if(postRetryCounter <= 0){
+							return false;
+						}
 					}
 				}
 			},
 			error: function(errorThrown){
 				postErrorHandler = errorThrown;
+				debug("postToServer() error: "+ postErrorHandler);
+				
+				if(postRetryCounter <= 0){
+					return false;
+				}
 			}
 		});
-		
-		return true;
 		
 	}else{
 		
