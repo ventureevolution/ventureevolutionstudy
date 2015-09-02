@@ -501,9 +501,9 @@ function initializeServer(){
 	//If save to server is enabled, the session generator will run to retrieve a session
 	if(turnOnSaveToVentureEvolution){
 		$.ajax({
-			async: false,
 			type: 'GET',
 			url: serverEndpoint + '?request=initialize',
+			async: false,
 			dataType: 'json',
 			success: function(data){
 				sessionKey = data.output;
@@ -522,9 +522,9 @@ function postToServer(){
 	
 		//POST FILE
 		$.ajax({
-			async: false,
 			type: 'POST',
 			url:serverEndpoint + '?request=save',
+			async: false,
 			data: {secretKey: sessionKey, firstname: personal[0], company: mycompanydata[0], csv: postCSVFileOutput},
 			dataType: 'json',
 			success: function(data){
