@@ -16,4 +16,6 @@ var colorList = ["9D9D9D","9A9A9A","979797","949494","919191","8E8E8E","8B8B8B",
 
 var serverEndpoint = "http://api.ventureevolution.com/session.php";
 
+var turnOnSaveToVentureEvolution = true;
+
 /* END OF SETTINGS */

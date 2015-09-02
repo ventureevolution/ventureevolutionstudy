@@ -4,10 +4,8 @@
 //Configuration parameters
 $databasename = 'ventureevolution';
 $hostname = 'localhost';
-$username = 'root';
-$password = 'Perdex128';
-
-//Functions
+$username = 'ventureevolution';
+$password = 'LqFcDce355pLvHud';
 
 
 //STEP 1: Determine request type
@@ -17,10 +15,11 @@ $expiryTime = 3600; //expiry in seconds
 $requestType = $_GET['request'];
 
 //STEP 2: Run request
-//IF request = initialize
-
 runBase();
 
+//Functions
+
+//function: Initialization function
 function runBase(){
 	
 	global $conn, $response, $requestType;
@@ -29,7 +28,7 @@ function runBase(){
 
 		if (mysqli_connect_errno())
 		{
-			$response = array('result' => 'error', 'output'=>"Failed to connect to MySQL: ".mysqli_connect_error());
+			$response = array('result' => 'error', 'output'=>"Failed to connect to MySQL: ".mysqli_connect_error(), 'code'=>'900');
 			echo json_encode($response,JSON_NUMERIC_CHECK);
 			
 			return;
@@ -45,7 +44,7 @@ function runBase(){
 
 		if($theSecretKey == ''){
 			//Print error response
-			$response = array('result' => 'error', 'output'=>'unable to generate secret key');
+			$response = array('result' => 'error', 'output'=>'unable to generate secret key', 'code'=>'901');
 			echo json_encode($response,JSON_NUMERIC_CHECK);
 			
 			return;
@@ -74,19 +73,18 @@ function runBase(){
 				$response = array('result' => 'success', 'output'=>'stored successfully');
 				echo json_encode($response,JSON_NUMERIC_CHECK);
 			}catch (Exception $e){
-				$response = array('result' => 'error', 'output'=>$e->getMessage());
+				$response = array('result' => 'error', 'output'=>$e->getMessage(),'code'=>'902');
 				echo json_encode($response,JSON_NUMERIC_CHECK);
 			}
 		}else{
 			//$response = array('result' => 'error', 'output'=>'check real connection failed: secretKey: '.$_POST['secretKey'].' firstname: '.$_POST['firstname'].' company: '.$_POST['company'].' csv: '.$_POST['csv']);
-			$response = array('result' => 'error', 'output'=>'check real connection failed');
+			$response = array('result' => 'error', 'output'=>'check real connection failed','code'=>'903');
 			echo json_encode($response,JSON_NUMERIC_CHECK);
 		}
 	}
 }
 
-//FUNCTIONS
-
+//function: check if it is running for the first time
 function checkFirstTimeRun(){
 
 	global $conn;
@@ -101,6 +99,7 @@ function checkFirstTimeRun(){
 	
 }
 
+//function: create the required tables in the database (especially used when running for the first time)
 function runCreateTable(){
 
 	global $conn;
@@ -111,12 +110,13 @@ function runCreateTable(){
 		$conn->query("CREATE TABLE csvStored (cid int NOT NULL AUTO_INCREMENT, firstname VARCHAR(120) NOT NULL, company VARCHAR(120) NOT NULL, csvData BLOB, createdDateTime DATETIME NOT NULL, PRIMARY KEY (cid));");
 		
 	}catch (Exception $e){
-		$response = array('result' => 'error', 'output'=>$e->getMessage());
+		$response = array('result' => 'error', 'output'=>$e->getMessage(),'code'=>'904');
 		echo json_encode($response,JSON_NUMERIC_CHECK);
 	}
 	
 }
 
+//function: this will generate a secret key and save it into the database (basic protection against hacking)
 function generateSecretKey(){
 
 	global $conn;
@@ -161,6 +161,7 @@ function generateSecretKey(){
 	return $secretKey;
 }
 
+//function: obtains the IP address of the client
 function get_client_ip() {
     $ipaddress = '';
     if (getenv('HTTP_CLIENT_IP'))
@@ -180,6 +181,7 @@ function get_client_ip() {
     return $ipaddress;
 }
 
+//function: to authenticate the secret key and affirm that it is valid within the expiry period
 function checkRealConnection(){
 
 	global $conn,$expiryTime;

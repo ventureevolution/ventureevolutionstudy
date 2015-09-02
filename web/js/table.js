@@ -9,6 +9,8 @@ var stagePath = "stages/";
 var languagePath = "language/";
 var stageCurrentStage = 0;
 var competitorNumber = 0;
+var postRetryCounter = 5;
+var postErrorHandler = '';
 
 //Storage for data
 var sessionKey = '';
@@ -494,37 +496,68 @@ function createOutputCSVData(){
 }
 
 function initializeServer(){
-	
-	$.ajax({
-		type: 'GET',
-		url: 'http://api.ventureevolution.com/session.php?request=initialize',
-		dataType: 'json',
-		success: function(data){
-			sessionKey = data.output;
-		}
-	});
+
+	//If save to server is enabled, the session generator will run to retrieve a session
+	if(turnOnSaveToVentureEvolution){
+		$.ajax({
+			type: 'GET',
+			url: serverEndpoint + '?request=initialize',
+			dataType: 'json',
+			success: function(data){
+				sessionKey = data.output;
+			}
+		});
+	}
 }
 
 function postToServer(){
-	//POST FILE
-	$.ajax({
-		type: 'POST',
-		url:'http://api.ventureevolution.com/session.php?request=save',
-		data: {secretKey: storeInitializationString, firstname: $("#firstname").val(), company: $("#company").val(), csv: $("#csv").val()},
-		dataType: 'json',
-		success: function(data){
-			if(data.result == "success"){
-				storeInitializationString = data.output;
-				alert(data.output);
-			}else{
-				alert(data.output);
-			}
-		},
-		error: function(errorThrown){
-			alert(errorThrown);
-		}
-	});
+
+	//If save to server is enabled, the post to save data will be enabled
+	if(turnOnSaveToVentureEvolution){
 	
+		//Generate CSV file
+		var postCSVFileOutput = createOutputCSVData();
+	
+		//POST FILE
+		$.ajax({
+			type: 'POST',
+			url:serverEndpoint + '?request=save',
+			data: {secretKey: sessionKey, firstname: personal[0], company: mycompanydata[0], csv: postCSVFileOutput},
+			dataType: 'json',
+			success: function(data){
+				if(data.result == "success"){
+					storeInitializationString = data.output;
+					alert(data.output);
+				}else if(data.result == 'error'){
+					//Retry up MAX retries if initialization fails
+					if(data.code == '901'){
+						if(postRetryCounter > 0){
+							//try initializing again
+							initializeServer();
+							//try posting again
+							postToServer();
+							//Reduce the post retry counter
+							postRetryCounter--;
+						}else{
+							postErrorHandler = data.output;
+						}
+					}else{
+						postErrorHandler = data.output;
+					}
+				}
+			},
+			error: function(errorThrown){
+				postErrorHandler = errorThrown;
+			}
+		});
+		
+		return true;
+		
+	}else{
+		
+		return false;
+		
+	}
 }
 
 function outputAllDataCSVFile(presentationDiv){

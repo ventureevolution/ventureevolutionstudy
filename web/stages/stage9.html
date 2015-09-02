@@ -14,6 +14,8 @@ a.stage9-contactus:hover{
 	<div class="col-md-8 col-md-offset-2">
 		<center>
 			<h2><div id="S9P1" class="textreplace"></div></h2>
+			<br><br>
+			<span id="stage9-UploadResponse"></span>
 			<br><br><br>
 			<p id="stage9-downloadbutton"></p>
 			<br><br><br>
@@ -26,6 +28,29 @@ a.stage9-contactus:hover{
 languageReplace();
 
 $(document).ready(function() {
+
+	if(turnOnSaveToVentureEvolution){
+		//Insert uploading alert
+		$('#stage9-UploadResponse').empty();
+		$('#stage9-UploadResponse').append(languageReplacement['S9P4'] + '<br><img src="image/uploading.gif">');
+		
+		//Generate a session key if enabled
+		initializeServer();
+		
+		//Upload via API server
+		var stage9Upload = postToServer();
+		
+		//If change the alert message either successful upload or failed upload
+		if(stage9Upload){
+			//successfully uploaded
+			$('#stage9-UploadResponse').empty();
+			$('#stage9-UploadResponse').append(languageReplacement['S9P5']);
+		}else{
+			//failed to upload
+			$('#stage9-UploadResponse').empty();
+			$('#stage9-UploadResponse').append(languageReplacement['S9P6']);
+		}
+	}
 
 	//Generate CSV download link
 	outputAllDataCSVFile("#stage9-downloadbutton");
