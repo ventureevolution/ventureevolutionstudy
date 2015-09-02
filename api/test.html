@@ -5,31 +5,57 @@
 		color: brown;
 	}
 </style>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-	<script>
-		$(document).ready(function{
-			$('#thesubmitter').click(function(){
-				$(this).addClass('activeLinkStyle');
-				$.ajax({
-					type: 'GET',
-					url: 'http://api.ventureevolution.com/session.php?request=initialize',
-					data: dataString,
-					dataType: 'json',
-					success: function(data){
-						alert(data.result);
-					}
-				});
-			});
-		});
-	</script>
+
 </head>
 	<body>
 		<form action="session.php?request=save" method="post">
-			Secret Key: <input type="text" name="secretKey" id="secretKey"><br>
-			First Name: <input type="text" name="firstname" id="firstname"><br>
-			Company: <input type="text" name="company" id="companuy"><br>
-			CSV: <input type="text" name="csv" id="csv"><br>
+			Ready Status: <input type="text" name="secretKey" id="secretKey"><br>
+			First Name: <input type="text" name="firstname" id="firstname" value="first name"><br>
+			Company: <input type="text" name="company" id="company" value="company name"><br>
+			CSV: <input type="text" name="csv" id="csv" value="the file, the file, the file"><br>
 			<a href="#" id="thesubmitter">Submit</a>
 		</form>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script>
+	$( document ).ready(function() {
+		
+		var storeInitializationString = '';
+		//First call to get the initialized session
+		$.ajax({
+			type: 'GET',
+			url: 'http://api.ventureevolution.com/session.php?request=initialize',
+			dataType: 'json',
+			success: function(data){
+				storeInitializationString = data.output;
+				$('#secretKey').attr('value',data.output);
+			}
+		});
+		
+		$('#thesubmitter').click(function(){
+			$(this).addClass('activeLinkStyle');
+			
+			if(storeInitializationString != ''){
+				//Second call to post details
+				$.ajax({
+					type: 'POST',
+					url:'http://api.ventureevolution.com/session.php?request=save',
+					data: {secretKey: storeInitializationString, firstname: $("#firstname").val(), company: $("#company").val(), csv: $("#csv").val()},
+					dataType: 'json',
+					success: function(data){
+						if(data.result == "success"){
+							storeInitializationString = data.output;
+							alert(data.output);
+						}else{
+							alert(data.output);
+						}
+					},
+					error: function(errorThrown){
+						alert(errorThrown);
+					}
+				});
+			}
+		});
+	});
+</script>
 	</body>
 </html>

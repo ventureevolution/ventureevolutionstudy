@@ -11,6 +11,7 @@ var stageCurrentStage = 0;
 var competitorNumber = 0;
 
 //Storage for data
+var sessionKey = '';
 var personal = [];
 var mycompanydata = [];
 var relatedBusiness = [];
@@ -492,11 +493,37 @@ function createOutputCSVData(){
 	return csv;
 }
 
-function postToServer(){
-	//GET API SESSION
-	//$.ajax(serverEndpoint+'?request=initialize').done();
+function initializeServer(){
 	
+	$.ajax({
+		type: 'GET',
+		url: 'http://api.ventureevolution.com/session.php?request=initialize',
+		dataType: 'json',
+		success: function(data){
+			sessionKey = data.output;
+		}
+	});
+}
+
+function postToServer(){
 	//POST FILE
+	$.ajax({
+		type: 'POST',
+		url:'http://api.ventureevolution.com/session.php?request=save',
+		data: {secretKey: storeInitializationString, firstname: $("#firstname").val(), company: $("#company").val(), csv: $("#csv").val()},
+		dataType: 'json',
+		success: function(data){
+			if(data.result == "success"){
+				storeInitializationString = data.output;
+				alert(data.output);
+			}else{
+				alert(data.output);
+			}
+		},
+		error: function(errorThrown){
+			alert(errorThrown);
+		}
+	});
 	
 }
 
