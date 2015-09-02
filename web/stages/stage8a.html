@@ -256,7 +256,7 @@ function stageBlockAddTask(stage8aSetNumber){
 		$('#stage8a-add-task-'+buttonNumber).click(function(){
 		
 			var printTask = new stageBlockAddTask(buttonNumber);
-			$(this).parent().append(printTask.Output);
+			$(printTask.Output).insertBefore('#stage8a-add-task-'+buttonNumber);
 		
 		});
 		

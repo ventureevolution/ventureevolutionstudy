@@ -11,6 +11,7 @@ var stageCurrentStage = 0;
 var competitorNumber = 0;
 var postRetryCounter = 5;
 var postErrorHandler = '';
+var postFinalOutcome = false;
 
 //Storage for data
 var sessionKey = '';
@@ -528,8 +529,7 @@ function postToServer(){
 			dataType: 'json',
 			success: function(data){
 				if(data.result == "success"){
-					sessionKey = data.output;
-					return true;
+					postFinalOutcome = true;
 				}else if(data.result == 'error'){
 					//Retry up MAX retries if initialization fails
 					if(data.code == '901'){
@@ -543,32 +543,18 @@ function postToServer(){
 						}else{
 							postErrorHandler = data.output;
 							debug("postToServer() error: "+ postErrorHandler);
-							
-							return false;
 						}
 					}else{
 						postErrorHandler = data.output;
 						debug("postToServer() error: "+ postErrorHandler);
-						
-						if(postRetryCounter <= 0){
-							return false;
-						}
 					}
 				}
 			},
 			error: function(errorThrown){
 				postErrorHandler = errorThrown;
 				debug("postToServer() error: "+ postErrorHandler);
-				
-				if(postRetryCounter <= 0){
-					return false;
-				}
 			}
 		});
-		
-	}else{
-		
-		return false;
 		
 	}
 }
